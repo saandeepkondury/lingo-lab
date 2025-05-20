@@ -5,7 +5,8 @@ import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { BookmarkPlus, Share2, MessageSquare } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { BookmarkPlus, Share2, MessageSquare, TrendingUp } from 'lucide-react';
 import CaseStudyCard from '@/components/CaseStudyCard';
 
 // Sample case studies data (this would come from an API in a real app)
@@ -20,6 +21,18 @@ const caseStudiesData: Record<string, any> = {
       keyPhrase: "Financial Infrastructure",
       outcome: "$600M raised at $95B valuation",
       revenue: "$7.4B annual revenue",
+      employees: "7,000+"
+    },
+    author: {
+      name: "Jamie Smith",
+      role: "Narrative Strategist",
+      image: "/placeholder.svg",
+      twitter: "@jamiesmith"
+    },
+    publishDate: "October 15, 2024",
+    metrics: {
+      revenue: "$7.4B",
+      founders: 2,
       employees: "7,000+"
     },
     content: {
@@ -87,7 +100,7 @@ const CaseStudyDetail = () => {
   
   return (
     <Layout>
-      <article className="py-12">
+      <article className="py-8">
         <div className="container max-w-4xl mx-auto px-6">
           {/* Breadcrumbs */}
           <div className="mb-8">
@@ -98,93 +111,98 @@ const CaseStudyDetail = () => {
             </div>
           </div>
           
-          {/* Header */}
-          <header className="mb-10">
-            <h1 className="text-3xl md:text-4xl font-semibold mb-4">
+          {/* Main title */}
+          <div className="mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               {caseStudy.tagline}
             </h1>
-            
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mt-6">
-              <div className="flex flex-wrap gap-2">
-                <Badge variant="outline" className="bg-muted/50">
-                  {caseStudy.narrativeType}
-                </Badge>
-                <Badge variant="outline" className="bg-muted/50">
-                  {caseStudy.industry}
-                </Badge>
-                <Badge variant="outline" className="bg-muted/50">
-                  {caseStudy.overview.stage}
-                </Badge>
-              </div>
-              
-              <div className="flex items-center space-x-4">
-                <Button variant="outline" size="sm" className="flex items-center space-x-1">
-                  <BookmarkPlus className="h-4 w-4" />
-                  <span>Save</span>
-                </Button>
-                <Button variant="outline" size="sm" className="flex items-center space-x-1">
-                  <Share2 className="h-4 w-4" />
-                  <span>Share</span>
-                </Button>
-              </div>
-            </div>
-          </header>
-          
-          {/* Overview Card */}
-          <section className="mb-12">
-            <div className="apple-card p-6">
-              <h2 className="text-xl font-semibold mb-4">Overview</h2>
-              
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-3">
-                  <div>
-                    <span className="text-sm text-muted-foreground">Industry</span>
-                    <p>{caseStudy.overview.industry}</p>
-                  </div>
-                  <div>
-                    <span className="text-sm text-muted-foreground">Stage</span>
-                    <p>{caseStudy.overview.stage}</p>
-                  </div>
-                  <div>
-                    <span className="text-sm text-muted-foreground">Key Phrase</span>
-                    <p className="font-medium text-primary">"{caseStudy.overview.keyPhrase}"</p>
+            <p className="text-gray-500">{caseStudy.publishDate}</p>
+          </div>
+
+          {/* Category Pills */}
+          <div className="flex flex-wrap gap-2 mb-8">
+            <Badge variant="outline" className="bg-indigo-100 text-indigo-800 hover:bg-indigo-200 border-none">
+              {caseStudy.narrativeType}
+            </Badge>
+            <Badge variant="outline" className="bg-indigo-100 text-indigo-800 hover:bg-indigo-200 border-none">
+              {caseStudy.industry}
+            </Badge>
+            <Badge variant="outline" className="bg-indigo-100 text-indigo-800 hover:bg-indigo-200 border-none">
+              {caseStudy.overview.stage}
+            </Badge>
+          </div>
+
+          {/* Author card (similar to Starter Story) */}
+          <div className="bg-indigo-100 rounded-lg p-6 mb-10">
+            <div className="flex items-start justify-between">
+              <div className="flex space-x-4">
+                <div className="flex flex-col items-center">
+                  <div className="w-16 h-16 rounded-full bg-indigo-200 overflow-hidden">
+                    <img 
+                      src={caseStudy.author?.image || "/placeholder.svg"} 
+                      alt={caseStudy.author?.name || "Author"} 
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 </div>
-                
-                <div className="space-y-3">
-                  <div>
-                    <span className="text-sm text-muted-foreground">Outcome</span>
-                    <p>{caseStudy.overview.outcome}</p>
-                  </div>
-                  <div>
-                    <span className="text-sm text-muted-foreground">Revenue</span>
-                    <p>{caseStudy.overview.revenue}</p>
-                  </div>
-                  <div>
-                    <span className="text-sm text-muted-foreground">Team Size</span>
-                    <p>{caseStudy.overview.employees}</p>
-                  </div>
+                <div>
+                  <h3 className="font-semibold text-lg">{caseStudy.author?.name || "LingoLab Team"}</h3>
+                  <p className="text-sm text-gray-600">{caseStudy.author?.role || "Narrative Analyst"}</p>
+                  {caseStudy.author?.twitter && (
+                    <a href="#" className="text-indigo-600 text-sm flex items-center mt-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+                      {caseStudy.author?.twitter}
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              {/* Metrics */}
+              <div className="hidden md:flex space-x-8 text-center">
+                <div>
+                  <p className="text-xl font-bold">{caseStudy.metrics?.revenue || caseStudy.overview.revenue}</p>
+                  <p className="text-xs text-gray-600">REVENUE</p>
+                </div>
+                <div>
+                  <p className="text-xl font-bold">{caseStudy.metrics?.founders || "1"}</p>
+                  <p className="text-xs text-gray-600">FOUNDERS</p>
+                </div>
+                <div>
+                  <p className="text-xl font-bold">{caseStudy.metrics?.employees || caseStudy.overview.employees}</p>
+                  <p className="text-xs text-gray-600">EMPLOYEES</p>
                 </div>
               </div>
             </div>
-          </section>
+
+            {/* Social buttons */}
+            <div className="flex justify-end mt-4 space-x-3">
+              <Button variant="outline" size="sm" className="flex items-center space-x-1 bg-white">
+                <BookmarkPlus className="h-4 w-4" />
+                <span>Save</span>
+              </Button>
+              <Button variant="outline" size="sm" className="flex items-center space-x-1 bg-white">
+                <Share2 className="h-4 w-4" />
+                <span>Share</span>
+              </Button>
+            </div>
+          </div>
           
           {/* Main Content */}
-          <section className="prose prose-teal max-w-none">
-            <h2>The Lingo That Changed Everything</h2>
-            <p className="lead">{caseStudy.content.lingoExplanation}</p>
+          <section className="prose prose-indigo max-w-none">
+            <h2 className="text-2xl font-semibold">The Lingo That Changed Everything</h2>
+            <p className="text-lg leading-relaxed mb-6">{caseStudy.content.lingoExplanation}</p>
             
-            <h2>Origin Story of the Phrase</h2>
-            <p>{caseStudy.content.originStory}</p>
+            <h2 className="text-2xl font-semibold mt-10">Origin Story of the Phrase</h2>
+            <p className="mb-6">{caseStudy.content.originStory}</p>
             
-            <h2>Channel Breakdown</h2>
-            <p>{caseStudy.content.channelBreakdown}</p>
+            <h2 className="text-2xl font-semibold mt-10">Channel Breakdown</h2>
+            <p className="mb-6">{caseStudy.content.channelBreakdown}</p>
             
-            <h2>Tipping Point</h2>
-            <p>{caseStudy.content.tippingPoint}</p>
+            <h2 className="text-2xl font-semibold mt-10">Tipping Point</h2>
+            <p className="mb-6">{caseStudy.content.tippingPoint}</p>
             
             {/* Founder Quote */}
-            <div className="my-10 bg-muted p-6 rounded-xl border-l-4 border-teal-500">
+            <div className="my-10 bg-gray-50 p-6 rounded-xl border-l-4 border-indigo-500">
               <blockquote className="text-lg italic">
                 {caseStudy.content.founderQuote.split(' - ')[0]}
               </blockquote>
@@ -193,29 +211,33 @@ const CaseStudyDetail = () => {
               </footer>
             </div>
             
-            <h2>Narrative Architecture</h2>
-            <div className="space-y-4">
-              <div>
-                <h4>The Problem</h4>
-                <p>{caseStudy.content.narrativeArchitecture.problem}</p>
-              </div>
-              
-              <div>
-                <h4>The Promise</h4>
-                <p>{caseStudy.content.narrativeArchitecture.promise}</p>
-              </div>
-              
-              <div>
-                <h4>The Proof</h4>
-                <p>{caseStudy.content.narrativeArchitecture.proof}</p>
-              </div>
-            </div>
+            <h2 className="text-2xl font-semibold mt-10">Narrative Architecture</h2>
+            <Card className="my-6 border-none shadow-sm">
+              <CardContent className="p-0">
+                <div className="grid grid-cols-1 divide-y">
+                  <div className="p-4">
+                    <h4 className="font-semibold text-lg text-indigo-700">The Problem</h4>
+                    <p>{caseStudy.content.narrativeArchitecture.problem}</p>
+                  </div>
+                  
+                  <div className="p-4">
+                    <h4 className="font-semibold text-lg text-indigo-700">The Promise</h4>
+                    <p>{caseStudy.content.narrativeArchitecture.promise}</p>
+                  </div>
+                  
+                  <div className="p-4">
+                    <h4 className="font-semibold text-lg text-indigo-700">The Proof</h4>
+                    <p>{caseStudy.content.narrativeArchitecture.proof}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
             
-            <h2>Ripple Effects</h2>
-            <p>{caseStudy.content.rippleEffects}</p>
+            <h2 className="text-2xl font-semibold mt-10">Ripple Effects</h2>
+            <p className="mb-6">{caseStudy.content.rippleEffects}</p>
             
-            <h2>Expert Summary</h2>
-            <p>{caseStudy.content.expertSummary}</p>
+            <h2 className="text-2xl font-semibold mt-10">Expert Summary</h2>
+            <p className="mb-6">{caseStudy.content.expertSummary}</p>
           </section>
           
           <Separator className="my-12" />
@@ -239,7 +261,7 @@ const CaseStudyDetail = () => {
             
             <div className="p-6 border border-border rounded-xl">
               <div className="flex items-center space-x-4 mb-4">
-                <Button className="bg-teal-500 hover:bg-teal-600 flex items-center space-x-2">
+                <Button className="bg-indigo-600 hover:bg-indigo-700 flex items-center space-x-2">
                   <MessageSquare className="h-4 w-4" />
                   <span>Add Comment</span>
                 </Button>
@@ -250,8 +272,8 @@ const CaseStudyDetail = () => {
                 <div className="p-4 bg-muted/30 rounded-lg">
                   <div className="flex justify-between items-start">
                     <div className="flex items-center space-x-2">
-                      <div className="h-8 w-8 rounded-full bg-teal-100 flex items-center justify-center">
-                        <span className="text-teal-600 font-semibold text-sm">JD</span>
+                      <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center">
+                        <span className="text-indigo-600 font-semibold text-sm">JD</span>
                       </div>
                       <span className="font-medium">Jane Doe</span>
                     </div>
