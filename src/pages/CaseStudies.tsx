@@ -5,7 +5,7 @@ import FiltersPanel from '@/components/FiltersPanel';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/AuthContext';
-import { filterGroups } from '@/data/caseStudiesData';
+import { filterGroups } from '@/data/companiesData';
 import { useCaseStudiesFilter } from '@/hooks/useCaseStudiesFilter';
 import SearchArea from '@/components/CaseStudies/SearchArea';
 import CaseStudiesList from '@/components/CaseStudies/CaseStudiesList';
@@ -43,8 +43,11 @@ const CaseStudies = () => {
             </p>
             {!isLoggedIn && (
               <div className="mt-4">
-                <Button className="bg-teal-500 hover:bg-teal-600 text-white" asChild>
+                <Button className="bg-teal-500 hover:bg-teal-600 text-white mr-3" asChild>
                   <Link to="/pricing">Subscribe to Unlock All Case Studies</Link>
+                </Button>
+                <Button variant="outline" asChild>
+                  <Link to="/companies">Browse by Company</Link>
                 </Button>
               </div>
             )}

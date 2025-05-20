@@ -10,6 +10,8 @@ import Index from "./pages/Index";
 import Join from "./pages/Join";
 import CaseStudies from "./pages/CaseStudies";
 import CaseStudyDetail from "./pages/CaseStudyDetail";
+import Companies from "./pages/Companies";
+import CompanyDetail from "./pages/CompanyDetail";
 import Submit from "./pages/Submit";
 import Newsletter from "./pages/Newsletter";
 import Pricing from "./pages/Pricing";
@@ -32,6 +34,8 @@ const App = () => (
               <Route path="/join" element={<Join />} />
               <Route path="/case-studies" element={<CaseStudies />} />
               <Route path="/case-studies/:slug" element={<CaseStudyDetail />} />
+              <Route path="/companies" element={<Companies />} />
+              <Route path="/companies/:slug" element={<CompanyDetail />} />
               <Route path="/search" element={<Navigate to="/case-studies" replace />} />
               <Route path="/submit" element={<Submit />} />
               <Route path="/newsletter" element={<Newsletter />} />

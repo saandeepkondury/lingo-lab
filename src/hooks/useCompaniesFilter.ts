@@ -1,9 +1,8 @@
-
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { allCaseStudies, expandedCaseStudies } from '@/data/companiesData';
+import { allCompanies } from '@/data/companiesData';
 
-export const useCaseStudiesFilter = (companyId?: string) => {
+export const useCompaniesFilter = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
   const { isLoggedIn } = useAuth();
@@ -33,16 +32,11 @@ export const useCaseStudiesFilter = (companyId?: string) => {
     setActiveFilters({});
   };
   
-  // Start with all case studies or just those for a specific company
-  const initialCaseStudies = companyId 
-    ? allCaseStudies.filter(study => study.company === companyId)
-    : allCaseStudies;
-  
   // Apply filters and search
-  const filteredCaseStudies = initialCaseStudies.filter(study => {
+  const filteredCompanies = allCompanies.filter(company => {
     // Search filter
-    if (searchQuery && !study.companyName.toLowerCase().includes(searchQuery.toLowerCase()) && 
-        !study.lingo.toLowerCase().includes(searchQuery.toLowerCase())) {
+    if (searchQuery && !company.name.toLowerCase().includes(searchQuery.toLowerCase()) && 
+        !company.description.toLowerCase().includes(searchQuery.toLowerCase())) {
       return false;
     }
     
@@ -51,18 +45,16 @@ export const useCaseStudiesFilter = (companyId?: string) => {
       if (values.length === 0) continue; // Skip if no filter in this group
       
       // Simple matching for this demo
-      const fieldMap: Record<string, keyof typeof study> = {
-        "Narrative Type": "narrativeType",
+      const fieldMap: Record<string, keyof typeof company> = {
         "Industry": "industry",
-        "Year": "year",
         // Add other mappings as needed
       };
       
       const field = fieldMap[group];
       if (field && values.length > 0) {
-        const studyValue = String(study[field]).toLowerCase();
+        const companyValue = String(company[field]).toLowerCase();
         const hasMatch = values.some(value => 
-          studyValue.includes(value.toLowerCase())
+          companyValue.includes(value.toLowerCase())
         );
         
         if (!hasMatch) return false;
@@ -72,15 +64,8 @@ export const useCaseStudiesFilter = (companyId?: string) => {
     return true;
   });
 
-  // Only show first 4 case studies for non-logged in users
-  const visibleCaseStudies = isLoggedIn 
-    ? filteredCaseStudies 
-    : filteredCaseStudies.slice(0, 4);
-
-  // Any additional case studies that are locked (filtered but beyond the visible limit)
-  const lockedCaseStudies = !isLoggedIn 
-    ? filteredCaseStudies.slice(4) 
-    : [];
+  // We'll always show all companies, but the case studies will be limited
+  const visibleCompanies = filteredCompanies;
     
   return {
     searchQuery,
@@ -88,7 +73,6 @@ export const useCaseStudiesFilter = (companyId?: string) => {
     activeFilters,
     handleFilterChange,
     clearFilters,
-    visibleCaseStudies,
-    lockedCaseStudies
+    visibleCompanies
   };
 };
