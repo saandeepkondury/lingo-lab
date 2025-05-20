@@ -1,56 +1,60 @@
 
 import { Link } from 'react-router-dom';
+import { Mail } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
-  return <footer className="w-full border-t border-border bg-background py-12">
-      <div className="container grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-        <div className="space-y-4">
-          <Link to="/" className="flex items-center space-x-2">
-            <span className="text-xl font-bold bg-gradient-to-r from-teal-500 to-coral-500 bg-clip-text text-transparent">Lingo<span className="text-teal-500">Lab</span></span>
-          </Link>
+  return (
+    <footer className="border-t border-border/40 bg-background">
+      <div className="container max-w-screen-2xl py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="md:col-span-2">
+            <Link to="/" className="flex items-center space-x-2 mb-4">
+              <span className="text-xl font-bold bg-gradient-to-r from-teal-500 to-coral-500 bg-clip-text text-transparent">Lingo<span className="text-teal-500">Lab</span></span>
+            </Link>
+            <p className="text-muted-foreground max-w-xs mb-6">
+              Decoding the language of successful startups and helping founders craft powerful strategic narratives.
+            </p>
+            <Button variant="outline" className="rounded-full flex items-center" asChild>
+              <a href="mailto:hello@lingolab.site">
+                <Mail className="mr-2 h-4 w-4" />
+                hello@lingolab.site
+              </a>
+            </Button>
+          </div>
+          
+          <div>
+            <h3 className="font-medium text-lg mb-4">Pages</h3>
+            <ul className="space-y-2">
+              <li><Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">Home</Link></li>
+              <li><Link to="/case-studies" className="text-muted-foreground hover:text-foreground transition-colors">Case Studies</Link></li>
+              <li><Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">Pricing</Link></li>
+              <li><Link to="/newsletter" className="text-muted-foreground hover:text-foreground transition-colors">Newsletter</Link></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 className="font-medium text-lg mb-4">Resources</h3>
+            <ul className="space-y-2">
+              <li><Link to="/join" className="text-muted-foreground hover:text-foreground transition-colors">Saved Case Studies</Link></li>
+              <li><Link to="/submit" className="text-muted-foreground hover:text-foreground transition-colors">Submit Lingo</Link></li>
+              <li><Link to="/join" className="text-muted-foreground hover:text-foreground transition-colors">Founder Interviews</Link></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div className="border-t border-border/40 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            Discover how top founders used strategic narrative to raise millions and shape markets.
+            &copy; {new Date().getFullYear()} Lingo Lab. All rights reserved.
           </p>
-        </div>
-        
-        <div>
-          <h4 className="mb-4 text-sm font-semibold">Pages</h4>
-          <ul className="space-y-2 text-sm">
-            <li><Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">Home</Link></li>
-            <li><Link to="/case-studies" className="text-muted-foreground hover:text-foreground transition-colors">Case Studies</Link></li>
-            <li><Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">Pricing</Link></li>
-            <li><Link to="/newsletter" className="text-muted-foreground hover:text-foreground transition-colors">Newsletter</Link></li>
-          </ul>
-        </div>
-        
-        <div>
-          <h4 className="mb-4 text-sm font-semibold">Resources</h4>
-          <ul className="space-y-2 text-sm">
-            <li><Link to="/submit" className="text-muted-foreground hover:text-foreground transition-colors">Submit a Lingo</Link></li>
-            <li><Link to="/join" className="text-muted-foreground hover:text-foreground transition-colors">Founder Interviews</Link></li>
-            <li><Link to="/join" className="text-muted-foreground hover:text-foreground transition-colors">Saved Case Studies</Link></li>
-          </ul>
-        </div>
-        
-        <div>
-          <h4 className="mb-4 text-sm font-semibold">Legal</h4>
-          <ul className="space-y-2 text-sm">
-            <li><Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</Link></li>
-            <li><Link to="/terms" className="text-muted-foreground hover:text-foreground transition-colors">Terms of Service</Link></li>
-            <li><a href="mailto:hello@lingolab.site" className="text-muted-foreground hover:text-foreground transition-colors">Contact Us</a></li>
-          </ul>
+          <div className="flex items-center space-x-4 mt-4 md:mt-0">
+            <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Privacy</Link>
+            <Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Terms</Link>
+          </div>
         </div>
       </div>
-      
-      <div className="container mt-8 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 md:flex-row">
-        <p className="text-center text-sm text-muted-foreground md:text-left">
-          © {currentYear} Lingo Lab. All rights reserved.
-        </p>
-        <div className="flex items-center gap-4">
-          <Link to="#" className="text-muted-foreground hover:text-foreground">Twitter</Link>
-          <a href="mailto:hello@lingolab.site" className="text-muted-foreground hover:text-foreground">Contact</a>
-        </div>
-      </div>
-    </footer>;
+    </footer>
+  );
 };
+
 export default Footer;
