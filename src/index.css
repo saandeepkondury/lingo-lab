@@ -49,6 +49,49 @@
     --sidebar-border: 186 16% 90%;
     --sidebar-ring: 186 47% 31%;
   }
+
+  .dark {
+    --background: 186 30% 10%;
+    --foreground: 186 10% 95%;
+    
+    --card: 186 30% 12%;
+    --card-foreground: 186 10% 95%;
+    
+    --popover: 186 30% 10%;
+    --popover-foreground: 186 10% 95%;
+    
+    /* Primary: Teal - brighter in dark mode */
+    --primary: 186 60% 50%;
+    --primary-foreground: 186 30% 10%;
+    
+    /* Secondary: Coral - brighter in dark mode */
+    --secondary: 16 90% 70%;
+    --secondary-foreground: 186 30% 10%;
+    
+    --muted: 186 20% 20%;
+    --muted-foreground: 186 10% 70%;
+    
+    /* Accent: Gold - brighter in dark mode */
+    --accent: 38 90% 72%;
+    --accent-foreground: 186 30% 10%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 186 20% 20%;
+    --input: 186 20% 20%;
+    --ring: 186 60% 50%;
+
+    /* Sidebar styles for dark mode */
+    --sidebar-background: 186 30% 15%;
+    --sidebar-foreground: 186 10% 95%;
+    --sidebar-primary: 186 60% 50%;
+    --sidebar-primary-foreground: 186 30% 10%;
+    --sidebar-accent: 186 20% 20%;
+    --sidebar-accent-foreground: 186 10% 95%;
+    --sidebar-border: 186 20% 25%;
+    --sidebar-ring: 186 60% 50%;
+  }
 }
 
 @layer base {
@@ -65,17 +108,8 @@
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   }
   
-  .apple-card {
-    @apply rounded-2xl bg-white shadow-md border border-border/50 hover:shadow-lg transition-shadow duration-300;
-  }
-  
-  .hover-scale {
-    @apply transition-transform duration-300 hover:scale-[1.02];
-  }
-  
-  /* Typography styles */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-medium tracking-tight text-foreground;
+    @apply font-serif tracking-tight text-foreground;
   }
   
   h1 {
@@ -91,7 +125,7 @@
   }
   
   p {
-    @apply leading-7;
+    @apply leading-7 font-sans;
   }
   
   .subtitle {
@@ -100,6 +134,14 @@
 }
 
 @layer components {
+  .apple-card {
+    @apply rounded-2xl bg-card shadow-md border border-border/50 hover:shadow-lg transition-shadow duration-300;
+  }
+  
+  .hover-scale {
+    @apply transition-transform duration-300 hover:scale-[1.02];
+  }
+  
   .container-section {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20;
   }

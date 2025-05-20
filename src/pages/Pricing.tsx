@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check, X } from 'lucide-react';
+import { Check, X, Mail } from 'lucide-react';
 
 const pricingPlans = [
   {
@@ -218,7 +218,10 @@ const Pricing = () => {
               Need help choosing the right plan? Have special requirements?
             </p>
             <Button variant="outline" size="lg" asChild>
-              <Link to="/contact">Contact Us</Link>
+              <a href="mailto:hello@lingolab.site">
+                <Mail className="mr-2 h-4 w-4" />
+                Contact Us
+              </a>
             </Button>
           </div>
         </div>

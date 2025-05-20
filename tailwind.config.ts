@@ -157,8 +157,8 @@ export default {
         'enter': 'fade-in 0.4s ease-out, scale-in 0.3s ease-out',
 			},
       fontFamily: {
-        sans: ['SF Pro Display', 'Inter', 'sans-serif'],
-        serif: ['SF Pro Text', 'Georgia', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        serif: ['Playfair Display', 'Georgia', 'serif'],
       }
 		}
 	},
