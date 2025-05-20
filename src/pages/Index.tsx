@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import CaseStudyCard from '@/components/CaseStudyCard';
@@ -28,7 +27,6 @@ const featuredCaseStudies = [{
   narrativeType: "Competitive Positioning",
   industry: "Design"
 }];
-
 const Index = () => {
   return <Layout>
       {/* Hero Section - Updated with modern Apple-inspired design */}
@@ -38,7 +36,7 @@ const Index = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight bg-gradient-to-r from-teal-600 via-teal-500 to-coral-500 bg-clip-text text-transparent pb-4 md:pb-6">
               Learn how successful venture backed founders leveraged Lingo
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mt-8">
+            <p className="text-xl md:text-2xl mt-8 text-zinc-700">
               Discover how top founders used strategic narrative to raise millions and shape markets.
             </p>
             <div className="pt-10">
@@ -136,5 +134,4 @@ const Index = () => {
       </section>
     </Layout>;
 };
-
 export default Index;
