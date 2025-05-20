@@ -1,4 +1,5 @@
 
+import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge } from "@/components/ui/badge";
 
@@ -56,4 +57,5 @@ const CaseStudyCard = ({
   );
 };
 
-export default CaseStudyCard;
+// Memoize the component to prevent unnecessary renders
+export default memo(CaseStudyCard);

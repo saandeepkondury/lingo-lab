@@ -1,41 +1,38 @@
 
+import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import CaseStudyCard from '@/components/CaseStudyCard';
 import LockedCaseStudy from './LockedCaseStudy';
 
+// Create type for case study
+type CaseStudy = {
+  id: string;
+  company: string;
+  companyName: string;
+  lingo: string;
+  impact: string;
+  rating: number;
+  narrativeType: string;
+  industry: string;
+  stage?: string;
+  lingoStyle?: string;
+  year?: number;
+  targetAudience?: string;
+};
+
 interface CaseStudiesListProps {
-  visibleCaseStudies: Array<{
-    id: string;
-    company: string;
-    companyName: string;
-    lingo: string;
-    impact: string;
-    rating: number;
-    narrativeType: string;
-    industry: string;
-    stage?: string;
-    lingoStyle?: string;
-    year?: number;
-    targetAudience?: string;
-  }>;
-  lockedCaseStudies: Array<{
-    id: string;
-    company: string;
-    companyName: string;
-    lingo: string;
-    impact: string;
-    rating: number;
-    narrativeType: string;
-    industry: string;
-    stage?: string;
-    lingoStyle?: string;
-    year?: number;
-    targetAudience?: string;
-  }>;
+  visibleCaseStudies: CaseStudy[];
+  lockedCaseStudies: CaseStudy[];
   handleLockedCaseStudyClick: () => void;
   clearFilters: () => void;
 }
+
+// Memoized CaseStudyCard component to prevent unnecessary re-renders
+const MemoizedCaseStudyCard = memo(CaseStudyCard);
+
+// Memoized LockedCaseStudy component
+const MemoizedLockedCaseStudy = memo(LockedCaseStudy);
 
 const CaseStudiesList = ({ 
   visibleCaseStudies, 
@@ -50,12 +47,12 @@ const CaseStudiesList = ({
       {visibleCaseStudies.length > 0 ? (
         <>
           {visibleCaseStudies.map((study) => (
-            <CaseStudyCard key={study.id} {...study} />
+            <MemoizedCaseStudyCard key={study.id} {...study} />
           ))}
           
           {/* Locked case studies */}
           {lockedCaseStudies.map((study) => (
-            <LockedCaseStudy 
+            <MemoizedLockedCaseStudy 
               key={study.id}
               study={study}
               onClick={handleLockedCaseStudyClick}
@@ -78,4 +75,4 @@ const CaseStudiesList = ({
   );
 };
 
-export default CaseStudiesList;
+export default memo(CaseStudiesList);

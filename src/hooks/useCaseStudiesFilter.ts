@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { allCaseStudies } from '@/data/caseStudiesData';
 
@@ -36,65 +36,68 @@ export const useCaseStudiesFilter = (companyId?: string) => {
   };
   
   // Start with all case studies or just those for a specific company
-  const initialCaseStudies = companyId 
-    ? allCaseStudies.filter(study => study.company === companyId)
-    : allCaseStudies;
+  const initialCaseStudies = useMemo(() => {
+    return companyId 
+      ? allCaseStudies.filter(study => study.company === companyId)
+      : allCaseStudies;
+  }, [companyId]);
   
-  // Apply filters and search
-  const filteredCaseStudies = initialCaseStudies.filter(study => {
-    // Search filter
-    if (searchQuery && !study.companyName.toLowerCase().includes(searchQuery.toLowerCase()) && 
-        !study.lingo.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
-    }
-    
-    // Check if all active filters match
-    for (const [group, values] of Object.entries(activeFilters)) {
-      if (values.length === 0) continue; // Skip if no filter in this group
+  // Apply filters and search - memoized to prevent unnecessary recalculations
+  const filteredCaseStudies = useMemo(() => {
+    return initialCaseStudies.filter(study => {
+      // Search filter
+      if (searchQuery && !study.companyName.toLowerCase().includes(searchQuery.toLowerCase()) && 
+          !study.lingo.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return false;
+      }
       
-      // Special handling for Company filter
-      if (group === "Company") {
-        if (!values.includes(study.company)) {
-          return false;
+      // Check if all active filters match
+      for (const [group, values] of Object.entries(activeFilters)) {
+        if (values.length === 0) continue; // Skip if no filter in this group
+        
+        // Special handling for Company filter
+        if (group === "Company") {
+          if (!values.includes(study.company)) {
+            return false;
+          }
+          continue;
         }
-        continue;
+        
+        // Map the filter group names to the case study object properties
+        const fieldMap: Record<string, keyof typeof study> = {
+          "Narrative Type": "narrativeType",
+          "Industry": "industry",
+          "Stage": "stage",
+          "Lingo Style": "lingoStyle",
+          "Target Audience": "targetAudience"
+        };
+        
+        const field = fieldMap[group];
+        if (field && values.length > 0) {
+          // Make sure the field exists on the study object
+          if (study[field] === undefined) continue;
+          
+          const studyValue = String(study[field]).toLowerCase();
+          const hasMatch = values.some(value => 
+            studyValue === value.toLowerCase()
+          );
+          
+          if (!hasMatch) return false;
+        }
       }
       
-      // Map the filter group names to the case study object properties
-      const fieldMap: Record<string, keyof typeof study> = {
-        "Narrative Type": "narrativeType",
-        "Industry": "industry",
-        "Stage": "stage",
-        "Lingo Style": "lingoStyle",
-        "Target Audience": "targetAudience"
-      };
-      
-      const field = fieldMap[group];
-      if (field && values.length > 0) {
-        // Make sure the field exists on the study object
-        if (study[field] === undefined) continue;
-        
-        const studyValue = String(study[field]).toLowerCase();
-        const hasMatch = values.some(value => 
-          studyValue === value.toLowerCase()
-        );
-        
-        if (!hasMatch) return false;
-      }
-    }
-    
-    return true;
-  });
+      return true;
+    });
+  }, [initialCaseStudies, searchQuery, activeFilters]);
 
-  // Only show first 4 case studies for non-logged in users
-  const visibleCaseStudies = isLoggedIn 
-    ? filteredCaseStudies 
-    : filteredCaseStudies.slice(0, 4);
+  // Memoize the visible and locked case studies to prevent unnecessary calculations
+  const visibleCaseStudies = useMemo(() => {
+    return isLoggedIn ? filteredCaseStudies : filteredCaseStudies.slice(0, 4);
+  }, [isLoggedIn, filteredCaseStudies]);
 
-  // Any additional case studies that are locked (filtered but beyond the visible limit)
-  const lockedCaseStudies = !isLoggedIn 
-    ? filteredCaseStudies.slice(4) 
-    : [];
+  const lockedCaseStudies = useMemo(() => {
+    return !isLoggedIn ? filteredCaseStudies.slice(4) : [];
+  }, [isLoggedIn, filteredCaseStudies]);
     
   return {
     searchQuery,

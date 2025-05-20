@@ -1,3 +1,4 @@
+
 // Sample case studies data
 export const allCaseStudies = [
   {
@@ -86,7 +87,7 @@ export const allCaseStudies = [
   },
 ];
 
-// Updated filter groups with more relevant options, Year filter removed
+// Normalized filter groups with unique values for better performance
 export const filterGroups = [
   {
     name: "Narrative Type",
@@ -149,3 +150,20 @@ export const filterGroups = [
     ]
   }
 ];
+
+// Create lookup maps for faster filtering
+export const getFilterOptions = () => {
+  const narrativeTypes = new Set(allCaseStudies.map(study => study.narrativeType));
+  const industries = new Set(allCaseStudies.map(study => study.industry));
+  const stages = new Set(allCaseStudies.map(study => study.stage).filter(Boolean));
+  const lingoStyles = new Set(allCaseStudies.map(study => study.lingoStyle).filter(Boolean));
+  const targetAudiences = new Set(allCaseStudies.map(study => study.targetAudience).filter(Boolean));
+  
+  return {
+    narrativeTypes: Array.from(narrativeTypes),
+    industries: Array.from(industries),
+    stages: Array.from(stages),
+    lingoStyles: Array.from(lingoStyles),
+    targetAudiences: Array.from(targetAudiences)
+  };
+};

@@ -1,4 +1,5 @@
-import { useState } from 'react';
+
+import { useState, useMemo } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { allCompanies } from '@/data/companiesData';
 
@@ -32,40 +33,47 @@ export const useCompaniesFilter = () => {
     setActiveFilters({});
   };
   
-  // Apply filters and search
-  const filteredCompanies = allCompanies.filter(company => {
-    // Search filter
-    if (searchQuery && !company.name.toLowerCase().includes(searchQuery.toLowerCase()) && 
-        !company.description.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
-    }
-    
-    // Check if all active filters match
-    for (const [group, values] of Object.entries(activeFilters)) {
-      if (values.length === 0) continue; // Skip if no filter in this group
-      
-      // Simple matching for this demo
-      const fieldMap: Record<string, keyof typeof company> = {
-        "Industry": "industry",
-        // Add other mappings as needed
-      };
-      
-      const field = fieldMap[group];
-      if (field && values.length > 0) {
-        const companyValue = String(company[field]).toLowerCase();
-        const hasMatch = values.some(value => 
-          companyValue.includes(value.toLowerCase())
-        );
-        
-        if (!hasMatch) return false;
+  // Apply filters and search - memoized to prevent unnecessary recalculations
+  const filteredCompanies = useMemo(() => {
+    return allCompanies.filter(company => {
+      // Search filter
+      if (searchQuery) {
+        const searchLower = searchQuery.toLowerCase();
+        if (!company.name.toLowerCase().includes(searchLower) && 
+            !company.description.toLowerCase().includes(searchLower)) {
+          return false;
+        }
       }
-    }
-    
-    return true;
-  });
+      
+      // Check if all active filters match
+      for (const [group, values] of Object.entries(activeFilters)) {
+        if (values.length === 0) continue; // Skip if no filter in this group
+        
+        // Simple matching for this demo
+        const fieldMap: Record<string, keyof typeof company> = {
+          "Industry": "industry",
+          // Add other mappings as needed
+        };
+        
+        const field = fieldMap[group];
+        if (field && values.length > 0) {
+          const companyValue = String(company[field]).toLowerCase();
+          const hasMatch = values.some(value => 
+            companyValue.includes(value.toLowerCase())
+          );
+          
+          if (!hasMatch) return false;
+        }
+      }
+      
+      return true;
+    });
+  }, [searchQuery, activeFilters]);
 
-  // We'll always show all companies, but the case studies will be limited
-  const visibleCompanies = filteredCompanies;
+  // Memoize visibleCompanies to prevent unnecessary re-renders
+  const visibleCompanies = useMemo(() => {
+    return filteredCompanies;
+  }, [filteredCompanies]);
     
   return {
     searchQuery,
