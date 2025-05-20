@@ -16,9 +16,10 @@ interface FiltersPanelProps {
   filters: FilterGroup[];
   activeFilters: Record<string, string[]>;
   onFilterChange: (group: string, value: string) => void;
+  clearFilters: () => void;
 }
 
-const FiltersPanel = ({ filters, activeFilters, onFilterChange }: FiltersPanelProps) => {
+const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: FiltersPanelProps) => {
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>(
     Object.fromEntries(filters.map(filter => [filter.name, true]))
   );
@@ -86,7 +87,7 @@ const FiltersPanel = ({ filters, activeFilters, onFilterChange }: FiltersPanelPr
       <Button 
         variant="outline" 
         className="w-full mt-4 text-muted-foreground"
-        onClick={() => console.log('Clear all filters')}
+        onClick={clearFilters}
       >
         Clear all filters
       </Button>

@@ -175,6 +175,13 @@ export const allCaseStudies = Object.values(expandedCaseStudies);
 // Sample filter data
 export const filterGroups = [
   {
+    name: "Company",
+    options: allCompanies.map(company => ({
+      value: company.id,
+      label: company.name
+    }))
+  },
+  {
     name: "Narrative Type",
     options: [
       { value: "market-creation", label: "Market Creation" },
@@ -209,4 +216,3 @@ export const filterGroups = [
     ]
   }
 ];
-

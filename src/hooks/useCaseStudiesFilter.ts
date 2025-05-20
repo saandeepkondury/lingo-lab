@@ -1,11 +1,13 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { allCaseStudies, expandedCaseStudies } from '@/data/companiesData';
+import { allCaseStudies, expandedCaseStudies, allCompanies } from '@/data/companiesData';
 
 export const useCaseStudiesFilter = (companyId?: string) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
+  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
+    companyId ? { 'Company': [companyId] } : {}
+  );
   const { isLoggedIn } = useAuth();
   
   const handleFilterChange = (group: string, value: string) => {
@@ -50,7 +52,15 @@ export const useCaseStudiesFilter = (companyId?: string) => {
     for (const [group, values] of Object.entries(activeFilters)) {
       if (values.length === 0) continue; // Skip if no filter in this group
       
-      // Simple matching for this demo
+      // Special handling for Company filter
+      if (group === "Company") {
+        if (!values.includes(study.company)) {
+          return false;
+        }
+        continue;
+      }
+      
+      // Simple matching for other filters
       const fieldMap: Record<string, keyof typeof study> = {
         "Narrative Type": "narrativeType",
         "Industry": "industry",

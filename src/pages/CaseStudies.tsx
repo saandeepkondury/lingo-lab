@@ -44,10 +44,7 @@ const CaseStudies = () => {
             {!isLoggedIn && (
               <div className="mt-4">
                 <Button className="bg-teal-500 hover:bg-teal-600 text-white mr-3" asChild>
-                  <Link to="/pricing">Subscribe to Unlock All Case Studies</Link>
-                </Button>
-                <Button variant="outline" asChild>
-                  <Link to="/companies">Browse by Company</Link>
+                  <Link to="/join">Subscribe to Unlock All Case Studies</Link>
                 </Button>
               </div>
             )}
@@ -61,6 +58,7 @@ const CaseStudies = () => {
                   filters={filterGroups}
                   activeFilters={activeFilters}
                   onFilterChange={handleFilterChange}
+                  clearFilters={clearFilters}
                 />
               </div>
             </div>
