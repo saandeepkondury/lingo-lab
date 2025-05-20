@@ -1,11 +1,7 @@
-
 import { Link } from 'react-router-dom';
-
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  
-  return (
-    <footer className="w-full border-t border-border bg-background py-12">
+  return <footer className="w-full border-t border-border bg-background py-12">
       <div className="container grid gap-8 md:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-4">
           <Link to="/" className="flex items-center space-x-2">
@@ -51,11 +47,9 @@ const Footer = () => {
         <div className="flex items-center gap-4">
           <Link to="#" className="text-muted-foreground hover:text-foreground">Twitter</Link>
           <Link to="#" className="text-muted-foreground hover:text-foreground">LinkedIn</Link>
-          <Link to="#" className="text-muted-foreground hover:text-foreground">Instagram</Link>
+          
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
