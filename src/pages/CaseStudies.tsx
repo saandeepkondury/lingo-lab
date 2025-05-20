@@ -1,11 +1,15 @@
+
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import CaseStudyCard from '@/components/CaseStudyCard';
 import FiltersPanel from '@/components/FiltersPanel';
 import VoiceSearch from '@/components/VoiceSearch';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search } from 'lucide-react';
+import { Search, Lock } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/context/AuthContext';
 
 // Sample filter data
 const filterGroups = [
@@ -111,6 +115,8 @@ const CaseStudies = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
   const [showVoiceSearch, setShowVoiceSearch] = useState(false);
+  const { isLoggedIn } = useAuth();
+  const { toast } = useToast();
   
   const handleFilterChange = (group: string, value: string) => {
     setActiveFilters(prev => {
@@ -135,6 +141,14 @@ const CaseStudies = () => {
   const handleVoiceSearchResult = (transcript: string) => {
     setSearchQuery(transcript);
     setShowVoiceSearch(false);
+  };
+
+  const handleLockedCaseStudyClick = () => {
+    toast({
+      title: "Premium Case Study",
+      description: "Subscribe to access our full library of case studies.",
+      action: <Button className="bg-teal-500 hover:bg-teal-600 text-white" size="sm" asChild><Link to="/pricing">View Plans</Link></Button>
+    });
   };
   
   // Apply filters and search
@@ -170,6 +184,16 @@ const CaseStudies = () => {
     return true;
   });
 
+  // Only show first 4 case studies for non-logged in users
+  const visibleCaseStudies = isLoggedIn 
+    ? filteredCaseStudies 
+    : filteredCaseStudies.slice(0, 4);
+
+  // Any additional case studies that are locked (filtered but beyond the visible limit)
+  const lockedCaseStudies = !isLoggedIn 
+    ? filteredCaseStudies.slice(4) 
+    : [];
+
   return (
     <Layout>
       <section className="py-12">
@@ -179,6 +203,13 @@ const CaseStudies = () => {
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Explore how the world's most successful startups used strategic narrative to drive growth
             </p>
+            {!isLoggedIn && (
+              <div className="mt-4">
+                <Button className="bg-teal-500 hover:bg-teal-600 text-white" asChild>
+                  <Link to="/pricing">Subscribe to Unlock All Case Studies</Link>
+                </Button>
+              </div>
+            )}
           </div>
           
           <div className="relative flex flex-col md:flex-row gap-8">
@@ -243,16 +274,42 @@ const CaseStudies = () => {
               {/* Results count */}
               <div className="mb-6">
                 <p className="text-sm text-muted-foreground">
-                  Showing {filteredCaseStudies.length} case studies
+                  Showing {visibleCaseStudies.length} case studies
+                  {!isLoggedIn && lockedCaseStudies.length > 0 && ` (${lockedCaseStudies.length} locked)`}
                 </p>
               </div>
               
               {/* Results grid */}
               <div className="grid md:grid-cols-2 gap-6">
-                {filteredCaseStudies.length > 0 ? (
-                  filteredCaseStudies.map((study) => (
-                    <CaseStudyCard key={study.id} {...study} />
-                  ))
+                {visibleCaseStudies.length > 0 ? (
+                  <>
+                    {visibleCaseStudies.map((study) => (
+                      <CaseStudyCard key={study.id} {...study} />
+                    ))}
+                    
+                    {/* Locked case studies */}
+                    {lockedCaseStudies.map((study) => (
+                      <div 
+                        key={study.id} 
+                        className="relative rounded-lg border border-border bg-card/30 overflow-hidden group cursor-pointer"
+                        onClick={handleLockedCaseStudyClick}
+                      >
+                        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10 flex items-center justify-center">
+                          <div className="text-center p-6">
+                            <Lock className="h-10 w-10 mx-auto mb-4 text-teal-500" />
+                            <h3 className="font-semibold text-lg mb-2">{study.company}</h3>
+                            <p className="text-muted-foreground mb-4">Subscribe to unlock this case study</p>
+                            <Button className="bg-teal-500 hover:bg-teal-600 text-white" asChild>
+                              <Link to="/pricing">View Plans</Link>
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="opacity-50">
+                          <CaseStudyCard {...study} />
+                        </div>
+                      </div>
+                    ))}
+                  </>
                 ) : (
                   <div className="col-span-2 py-20 text-center">
                     <p className="text-lg text-muted-foreground">No case studies found matching your filters</p>

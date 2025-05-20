@@ -1,188 +1,118 @@
-
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
+import { useAuth } from '@/context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import CaseStudyCard from '@/components/CaseStudyCard';
-
-// Sample locked case studies
-const lockedCaseStudies = [
-  {
-    id: "open-ai-chatgpt",
-    company: "OpenAI",
-    lingo: "ChatGPT",
-    impact: "Created a new product category that reached 100M users in 2 months",
-    narrativeType: "Product Launch",
-    industry: "AI"
-  },
-  {
-    id: "airbnb-belong-anywhere",
-    company: "Airbnb",
-    lingo: "Belong Anywhere",
-    impact: "Transformed from rental marketplace to global hospitality brand",
-    narrativeType: "Brand Positioning",
-    industry: "Consumer"
-  }
-];
-
-// Sample founder interviews
-const founderInterviews = [
-  {
-    name: "Jessica Matthews",
-    company: "Uncharted Power",
-    title: "How We Created a New Category in Clean Energy",
-    image: "/placeholder.svg"
-  },
-  {
-    name: "Tom Preston-Werner",
-    company: "GitHub",
-    title: "Scaling Developer Communities Through Language",
-    image: "/placeholder.svg"
-  }
-];
+import { useToast } from '@/hooks/use-toast';
+import { Shield } from 'lucide-react';
 
 const Join = () => {
-  const [activeTab, setActiveTab] = useState('signin');
-  
-  return (
-    <Layout>
-      <section className="py-12">
-        <div className="container max-w-6xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-semibold mb-6">
-                Join the Lingo Lab
-              </h1>
-              
-              <p className="text-lg text-muted-foreground mb-8">
-                Get instant access to high-impact case studies and language strategies from the world's most successful companies.
-              </p>
-              
-              <Tabs defaultValue="signin" className="w-full" onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="signin">Sign In</TabsTrigger>
-                  <TabsTrigger value="signup">Sign Up</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="signin" className="space-y-4 py-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="name@example.com" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="password">Password</Label>
-                      <Link to="/forgot-password" className="text-xs text-teal-600 hover:underline">
-                        Forgot password?
-                      </Link>
-                    </div>
-                    <Input id="password" type="password" />
-                  </div>
-                  <Button className="w-full bg-teal-500 hover:bg-teal-600">Sign In</Button>
-                  
-                  <div className="relative my-6">
-                    <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t"></span>
-                    </div>
-                    <div className="relative flex justify-center text-xs">
-                      <span className="bg-background px-2 text-muted-foreground">or continue with</span>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 gap-4">
-                    <Button variant="outline">Google</Button>
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="signup" className="space-y-4 py-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-name">Full Name</Label>
-                    <Input id="signup-name" type="text" placeholder="Jane Smith" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
-                    <Input id="signup-email" type="email" placeholder="name@example.com" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-password">Password</Label>
-                    <Input id="signup-password" type="password" placeholder="Create a password" />
-                  </div>
-                  <Button className="w-full bg-teal-500 hover:bg-teal-600">Create Account</Button>
-                  
-                  <div className="relative my-6">
-                    <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t"></span>
-                    </div>
-                    <div className="relative flex justify-center text-xs">
-                      <span className="bg-background px-2 text-muted-foreground">or continue with</span>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 gap-4">
-                    <Button variant="outline">Google</Button>
-                  </div>
-                </TabsContent>
-              </Tabs>
-              
-              <p className="text-center text-sm text-muted-foreground mt-6">
-                By signing up, you agree to our{' '}
-                <Link to="/terms" className="text-teal-600 hover:underline">
-                  Terms of Service
-                </Link>{' '}
-                and{' '}
-                <Link to="/privacy" className="text-teal-600 hover:underline">
-                  Privacy Policy
-                </Link>
-              </p>
-            </div>
-            
-            <div className="hidden md:block space-y-6">
-              <div className="mb-8">
-                <h2 className="text-xl font-medium mb-4">Unlock these case studies:</h2>
-                {lockedCaseStudies.map((study) => (
-                  <div key={study.id} className="relative mb-4">
-                    <CaseStudyCard {...study} />
-                    <div className="absolute inset-0 bg-background/70 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-                      <div className="bg-white p-3 rounded-lg shadow-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-teal-500 mx-auto">
-                          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
-                          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              <div>
-                <h2 className="text-xl font-medium mb-4">Exclusive Founder Interviews</h2>
-                <div className="space-y-4">
-                  {founderInterviews.map((interview, idx) => (
-                    <div key={idx} className="flex items-center gap-4 p-4 rounded-lg border border-border/50 bg-muted/20">
-                      <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden">
-                        <img src={interview.image} alt={interview.name} className="w-full h-full object-cover" />
-                      </div>
-                      <div>
-                        <h3 className="font-medium">{interview.name}</h3>
-                        <p className="text-sm text-muted-foreground">{interview.company}</p>
-                        <p className="text-sm font-medium text-teal-600 mt-1">{interview.title}</p>
-                      </div>
-                    </div>
-                  ))}
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-background/70 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                      <p className="bg-white px-3 py-1 rounded text-sm font-medium">Sign in to access</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+  const { isLoggedIn, login, logout } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    // Mock login - in a real app, this would be an API call
+    setTimeout(() => {
+      login();
+      toast({
+        title: "Welcome to LingoLab",
+        description: "You've successfully logged in."
+      });
+      navigate('/case-studies');
+      setIsLoading(false);
+    }, 1500);
+  };
+
+  const handleLogout = () => {
+    logout();
+    toast({
+      title: "Logged out",
+      description: "You've been successfully logged out."
+    });
+  };
+
+  if (isLoggedIn) {
+    return (
+      <Layout>
+        <div className="container max-w-md mx-auto px-6 py-24">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-6">You're Already Logged In</h1>
+            <p className="mb-8 text-muted-foreground">
+              You are currently logged into LingoLab.
+            </p>
+            <div className="flex flex-col gap-4">
+              <Button 
+                onClick={() => navigate('/case-studies')}
+                className="bg-teal-500 hover:bg-teal-600 text-white"
+              >
+                View Case Studies
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={handleLogout}
+              >
+                Log Out
+              </Button>
             </div>
           </div>
         </div>
-      </section>
+      </Layout>
+    );
+  }
+
+  return (
+    <Layout>
+      <div className="container max-w-md mx-auto px-6 py-24">
+        <div className="text-center mb-8">
+          <Shield className="h-12 w-12 mx-auto mb-4 text-teal-500" />
+          <h1 className="text-3xl font-bold mb-2">Welcome to LingoLab</h1>
+          <p className="text-muted-foreground">
+            Enter your credentials to access all case studies and features
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <Input
+              type="email"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <Button 
+            type="submit" 
+            className="w-full bg-teal-500 hover:bg-teal-600 text-white"
+            disabled={isLoading}
+          >
+            {isLoading ? "Logging in..." : "Log In"}
+          </Button>
+        </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-sm text-muted-foreground">
+            For demo purposes, you can enter any email and password
+          </p>
+        </div>
+      </div>
     </Layout>
   );
 };
