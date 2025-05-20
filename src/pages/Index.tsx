@@ -8,7 +8,8 @@ import { ArrowRight } from 'lucide-react';
 const featuredCaseStudies = [{
   id: "stripe-financial-infrastructure",
   company: "stripe",
-  companyName: "Stripe", // Add companyName property
+  companyName: "Stripe",
+  // Add companyName property
   lingo: "Financial Infrastructure",
   impact: "Raised $600M at $95B valuation by positioning as infrastructure rather than payments",
   narrativeType: "Market Creation",
@@ -16,7 +17,8 @@ const featuredCaseStudies = [{
 }, {
   id: "notion-all-in-one-workspace",
   company: "notion",
-  companyName: "Notion", // Add companyName property
+  companyName: "Notion",
+  // Add companyName property
   lingo: "All-in-one Workspace",
   impact: "Grew to 20M+ users with a narrative that unified multiple product categories",
   narrativeType: "Product Positioning",
@@ -24,7 +26,8 @@ const featuredCaseStudies = [{
 }, {
   id: "figma-multiplayer-design",
   company: "figma",
-  companyName: "Figma", // Add companyName property
+  companyName: "Figma",
+  // Add companyName property
   lingo: "Multiplayer Design",
   impact: "Differentiated from Adobe by focusing on collaboration, acquired for $20B",
   narrativeType: "Competitive Positioning",
@@ -90,7 +93,7 @@ const Index = () => {
               <div className="h-12 w-12 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center mb-4">
                 1
               </div>
-              <h3 className="text-lg font-medium mb-2">Deep Case Studies</h3>
+              <h3 className="text-lg font-medium mb-2 text-gray-900">Deep Case Studies</h3>
               <p className="text-muted-foreground">
                 Get inside successful narrative strategies with detailed breakdowns of what worked, why, and how.
               </p>
@@ -100,7 +103,7 @@ const Index = () => {
               <div className="h-12 w-12 rounded-full bg-coral-100 text-coral-600 flex items-center justify-center mb-4">
                 2
               </div>
-              <h3 className="text-lg font-medium mb-2">VC Insights</h3>
+              <h3 className="text-lg font-medium mb-2 text-gray-900">VC Insights</h3>
               <p className="text-muted-foreground">
                 Every case study includes expert commentary from venture capitalists on why the narrative worked.
               </p>
@@ -110,7 +113,7 @@ const Index = () => {
               <div className="h-12 w-12 rounded-full bg-gold-100 text-gold-600 flex items-center justify-center mb-4">
                 3
               </div>
-              <h3 className="text-lg font-medium mb-2">Actionable Templates</h3>
+              <h3 className="text-lg font-medium mb-2 text-gray-900">Actionable Templates</h3>
               <p className="text-muted-foreground">
                 Apply these frameworks to your own company with templates and step-by-step guides.
               </p>
