@@ -8,25 +8,26 @@ import { Check, X, Mail } from 'lucide-react';
 
 const pricingPlans = [
   {
-    name: "Free",
-    description: "Basic access to case studies",
-    price: 0,
+    name: "Basic",
+    description: "For founders and startup teams",
+    price: 49,
+    frequency: "month",
     features: [
-      { included: true, text: "10 case studies per month" },
-      { included: true, text: "Basic search functionality" },
+      { included: true, text: "Unlimited case studies" },
+      { included: true, text: "Advanced search functionality" },
       { included: true, text: "Weekly newsletter" },
-      { included: false, text: "Full case study library" },
-      { included: false, text: "Downloadable content" },
+      { included: true, text: "Full case study library" },
+      { included: true, text: "Downloadable content" },
+      { included: false, text: "Private Slack community" },
       { included: false, text: "Founder interviews" },
-      { included: false, text: "Advanced filters" },
-      { included: false, text: "Private research" },
+      { included: false, text: "Private mentorship sessions" },
     ],
-    cta: "Sign Up Free"
+    cta: "Start Basic"
   },
   {
     name: "Pro",
-    description: "For founders and marketers",
-    price: 19,
+    description: "For serious founders and marketers",
+    price: 99,
     frequency: "month",
     popular: true,
     features: [
@@ -35,17 +36,17 @@ const pricingPlans = [
       { included: true, text: "Download pitch decks & assets" },
       { included: true, text: "Exclusive founder interviews" },
       { included: true, text: "Save to personal library" },
-      { included: true, text: "Premium newsletter" },
-      { included: false, text: "Investor-only insights" },
-      { included: false, text: "Private research sessions" },
+      { included: true, text: "Private Slack community" },
+      { included: true, text: "Monthly trend reports" },
+      { included: false, text: "Private mentorship sessions" },
     ],
-    cta: "Start Pro Trial"
+    cta: "Start Pro"
   },
   {
     name: "Investor",
     description: "For VCs and strategic investors",
-    price: 99,
-    frequency: "month",
+    price: 4999,
+    oneTime: true,
     features: [
       { included: true, text: "All Pro plan features" },
       { included: true, text: "Emerging narrative trends" },
@@ -54,9 +55,9 @@ const pricingPlans = [
       { included: true, text: "Strategic narrative workshops" },
       { included: true, text: "Early access to new trends" },
       { included: true, text: "Founder matchmaking" },
-      { included: true, text: "Private consulting sessions" },
+      { included: true, text: "Private mentorship sessions" },
     ],
-    cta: "Contact Sales"
+    cta: "Start Investor"
   }
 ];
 
@@ -117,13 +118,16 @@ const Pricing = () => {
                   <div className="mt-4 mb-6">
                     <div className="flex items-baseline">
                       <span className="text-4xl font-bold">${plan.price}</span>
-                      {plan.price > 0 && (
+                      {!plan.oneTime && (
                         <span className="text-muted-foreground ml-1">
                           /{billingFrequency === 'year' ? 'year' : plan.frequency}
                         </span>
                       )}
+                      {plan.oneTime && (
+                        <span className="text-muted-foreground ml-1">one-time</span>
+                      )}
                     </div>
-                    {plan.price > 0 && billingFrequency === 'year' && (
+                    {!plan.oneTime && plan.price > 0 && billingFrequency === 'year' && (
                       <p className="text-sm text-muted-foreground mt-1">
                         ${Math.round(plan.price * 12 * 0.8)} billed annually
                       </p>
