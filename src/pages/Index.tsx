@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import CaseStudyCard from '@/components/CaseStudyCard';
@@ -34,7 +35,7 @@ const Index = () => {
       <section className="bg-gradient-to-b from-teal-50 to-white py-24 md:py-32">
         <div className="container max-w-6xl mx-auto px-6">
           <div className="text-center animate-fade-in mx-auto max-w-4xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight bg-gradient-to-r from-teal-600 via-teal-500 to-coral-500 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight bg-gradient-to-r from-teal-600 via-teal-500 to-coral-500 bg-clip-text text-transparent pb-4 md:pb-6">
               Learn how successful venture backed founders leveraged Lingo
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground mt-8">
