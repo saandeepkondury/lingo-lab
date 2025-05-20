@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import CaseStudyCard from '@/components/CaseStudyCard';
@@ -28,7 +27,6 @@ const featuredCaseStudies = [{
   narrativeType: "Competitive Positioning",
   industry: "Design"
 }];
-
 const Index = () => {
   return <Layout>
       {/* Hero Section */}
@@ -52,12 +50,7 @@ const Index = () => {
             <div className="flex justify-center">
               <div className="relative">
                 <div className="absolute -inset-1 bg-gradient-to-r from-teal-400 to-coral-400 rounded-3xl blur opacity-30"></div>
-                <div className="relative bg-white rounded-3xl shadow-xl p-6 md:p-8 border border-border/50">
-                  <img src="/placeholder.svg" alt="Case Study Preview" className="w-full h-64 object-cover rounded-xl" />
-                  <p className="text-center text-sm text-muted-foreground mt-4">
-                    Join now to access our collection of strategic narratives
-                  </p>
-                </div>
+                
               </div>
             </div>
           </div>
