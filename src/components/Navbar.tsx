@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Mic, Search, Menu, X } from "lucide-react";
+import { Search, Menu, X } from "lucide-react";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,7 +12,7 @@ const Navbar = () => {
       <div className="container flex h-16 max-w-screen-2xl items-center">
         <div className="mr-4 flex">
           <Link to="/" className="mr-6 flex items-center space-x-2">
-            <span className="text-xl font-bold bg-gradient-to-r from-teal-500 to-coral-500 bg-clip-text text-transparent">Lingo<span className="text-teal-500">Library</span></span>
+            <span className="text-xl font-bold bg-gradient-to-r from-teal-500 to-coral-500 bg-clip-text text-transparent">Lingo<span className="text-teal-500">Lab</span></span>
           </Link>
           <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
             <Link to="/case-studies" className="transition-colors hover:text-teal-600">Case Studies</Link>
@@ -27,11 +27,6 @@ const Navbar = () => {
             <Button variant="outline" size="icon" className="rounded-full mr-2" asChild>
               <Link to="/search" aria-label="Search">
                 <Search className="h-4 w-4" />
-              </Link>
-            </Button>
-            <Button variant="outline" size="icon" className="rounded-full" asChild>
-              <Link to="/search" aria-label="Voice search">
-                <Mic className="h-4 w-4" />
               </Link>
             </Button>
           </div>
@@ -65,11 +60,6 @@ const Navbar = () => {
               <Button variant="outline" size="icon" className="rounded-full" asChild>
                 <Link to="/search" aria-label="Search" onClick={() => setIsMenuOpen(false)}>
                   <Search className="h-4 w-4" />
-                </Link>
-              </Button>
-              <Button variant="outline" size="icon" className="rounded-full" asChild>
-                <Link to="/search" aria-label="Voice search" onClick={() => setIsMenuOpen(false)}>
-                  <Mic className="h-4 w-4" />
                 </Link>
               </Button>
             </div>

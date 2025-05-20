@@ -1,7 +1,7 @@
+
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import CaseStudyCard from '@/components/CaseStudyCard';
-import VoiceSearch from '@/components/VoiceSearch';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 
@@ -11,7 +11,6 @@ const featuredCaseStudies = [{
   company: "Stripe",
   lingo: "Financial Infrastructure",
   impact: "Raised $600M at $95B valuation by positioning as infrastructure rather than payments",
-  rating: 5,
   narrativeType: "Market Creation",
   industry: "Fintech"
 }, {
@@ -19,7 +18,6 @@ const featuredCaseStudies = [{
   company: "Notion",
   lingo: "All-in-one Workspace",
   impact: "Grew to 20M+ users with a narrative that unified multiple product categories",
-  rating: 4.8,
   narrativeType: "Product Positioning",
   industry: "SaaS"
 }, {
@@ -27,10 +25,10 @@ const featuredCaseStudies = [{
   company: "Figma",
   lingo: "Multiplayer Design",
   impact: "Differentiated from Adobe by focusing on collaboration, acquired for $20B",
-  rating: 4.9,
   narrativeType: "Competitive Positioning",
   industry: "Design"
 }];
+
 const Index = () => {
   return <Layout>
       {/* Hero Section */}
@@ -38,17 +36,15 @@ const Index = () => {
         <div className="container max-w-6xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6 text-center md:text-left animate-fade-in">
-              <h1 className="text-5xl md:text-6xl font-semibold tracking-tight bg-gradient-to-r from-teal-600 via-teal-500 to-coral-500 bg-clip-text text-transparent">Turn Language Into Leverage
-            </h1>
+              <h1 className="text-5xl md:text-6xl font-semibold tracking-tight bg-gradient-to-r from-teal-600 via-teal-500 to-coral-500 bg-clip-text text-transparent">
+                Learn how successful venture backed founders leveraged Lingo
+              </h1>
               <p className="text-xl md:text-2xl text-muted-foreground max-w-xl">
                 Discover how top founders used strategic narrative to raise millions and shape markets.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center md:justify-start">
                 <Button size="lg" className="rounded-full bg-teal-500 hover:bg-teal-600 text-white px-8" asChild>
                   <Link to="/join">Join to Read Case Studies</Link>
-                </Button>
-                <Button size="lg" variant="outline" className="rounded-full" asChild>
-                  <Link to="/submit">Submit Your Lingo</Link>
                 </Button>
               </div>
             </div>
@@ -57,9 +53,9 @@ const Index = () => {
               <div className="relative">
                 <div className="absolute -inset-1 bg-gradient-to-r from-teal-400 to-coral-400 rounded-3xl blur opacity-30"></div>
                 <div className="relative bg-white rounded-3xl shadow-xl p-6 md:p-8 border border-border/50">
-                  <VoiceSearch redirectOnResult={true} className="py-8" />
+                  <img src="/placeholder.svg" alt="Case Study Preview" className="w-full h-64 object-cover rounded-xl" />
                   <p className="text-center text-sm text-muted-foreground mt-4">
-                    Try searching "category creation" or "meme marketing"
+                    Join now to access our collection of strategic narratives
                   </p>
                 </div>
               </div>
@@ -96,7 +92,7 @@ const Index = () => {
       <section className="bg-muted py-20">
         <div className="container max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-semibold mb-4">Why Lingo Library?</h2>
+            <h2 className="text-3xl font-semibold mb-4">Why Lingo Lab?</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               The smartest founders know language shapes markets. We've decoded their playbooks.
             </p>
@@ -144,7 +140,7 @@ const Index = () => {
               Ready to master strategic narrative?
             </h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-              Join thousands of founders using Lingo Library to craft compelling company narratives.
+              Join thousands of founders using Lingo Lab to craft compelling company narratives.
             </p>
             <Button size="lg" className="rounded-full bg-white text-teal-600 hover:bg-teal-50 px-8" asChild>
               <Link to="/join">Get Started Today</Link>

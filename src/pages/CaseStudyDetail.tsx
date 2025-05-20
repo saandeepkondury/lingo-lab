@@ -5,7 +5,7 @@ import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { BookmarkPlus, Share2, MessageSquare, Star } from 'lucide-react';
+import { BookmarkPlus, Share2, MessageSquare } from 'lucide-react';
 import CaseStudyCard from '@/components/CaseStudyCard';
 
 // Sample case studies data (this would come from an API in a real app)
@@ -34,9 +34,8 @@ const caseStudiesData: Record<string, any> = {
         proof: "Processing billions in payments annually for millions of businesses in 120+ countries."
       },
       rippleEffects: "The 'infrastructure' framing led to entirely new product categories (Stripe Treasury, Stripe Issuing) and forced competitors to reposition themselves. The narrative also attracted engineering talent who wanted to work on 'infrastructure' rather than 'payments'.",
-      analystNotes: "Stripe's greatest narrative achievement was making payments seem like just the beginning of their TAM rather than its limitation. By positioning as infrastructure, they justifiably command SaaS multiples rather than financial services multiples."
+      expertSummary: "Stripe's greatest narrative achievement was making payments seem like just the beginning of their TAM rather than its limitation. By positioning as infrastructure, they justifiably command SaaS multiples rather than financial services multiples."
     },
-    rating: 5,
     narrativeType: "Market Creation",
     industry: "Fintech",
     relatedCaseStudies: [
@@ -45,7 +44,6 @@ const caseStudiesData: Record<string, any> = {
         company: "Plaid",
         lingo: "Financial Connectivity",
         impact: "Grew to $13.4B valuation by positioning as the crucial connection layer for fintech",
-        rating: 4.7,
         narrativeType: "Market Creation",
         industry: "Fintech"
       },
@@ -54,7 +52,6 @@ const caseStudiesData: Record<string, any> = {
         company: "Square/Block",
         lingo: "Economic Empowerment",
         impact: "Expanded from payments to multiple financial products under a unified mission",
-        rating: 4.6,
         narrativeType: "Mission Narrative",
         industry: "Fintech"
       }
@@ -216,30 +213,9 @@ const CaseStudyDetail = () => {
             
             <h2>Ripple Effects</h2>
             <p>{caseStudy.content.rippleEffects}</p>
-          </section>
-          
-          {/* Expert Analysis */}
-          <section className="my-12 p-6 bg-muted/30 rounded-xl border border-border">
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="h-10 w-10 rounded-full bg-teal-100 flex items-center justify-center">
-                <span className="text-teal-600 font-semibold">S</span>
-              </div>
-              <div>
-                <h3 className="font-medium">Sandeep's Notes</h3>
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star 
-                      key={i} 
-                      className={`h-4 w-4 ${i < caseStudy.rating ? 'fill-accent text-accent' : 'text-muted-foreground'}`}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
             
-            <p className="text-muted-foreground">
-              {caseStudy.content.analystNotes}
-            </p>
+            <h2>Expert Summary</h2>
+            <p>{caseStudy.content.expertSummary}</p>
           </section>
           
           <Separator className="my-12" />

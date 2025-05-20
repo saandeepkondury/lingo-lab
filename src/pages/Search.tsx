@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
-import VoiceSearch from '@/components/VoiceSearch';
 import CaseStudyCard from '@/components/CaseStudyCard';
 import FiltersPanel from '@/components/FiltersPanel';
 import { Input } from '@/components/ui/input';
@@ -38,7 +37,6 @@ const allCaseStudies = [
     company: "Stripe",
     lingo: "Financial Infrastructure",
     impact: "Raised $600M at $95B valuation by positioning as infrastructure rather than payments",
-    rating: 5,
     narrativeType: "Market Creation",
     industry: "Fintech"
   },
@@ -47,7 +45,6 @@ const allCaseStudies = [
     company: "Notion",
     lingo: "All-in-one Workspace",
     impact: "Grew to 20M+ users with a narrative that unified multiple product categories",
-    rating: 4.8,
     narrativeType: "Product Positioning",
     industry: "SaaS"
   },
@@ -56,7 +53,6 @@ const allCaseStudies = [
     company: "Figma",
     lingo: "Multiplayer Design",
     impact: "Differentiated from Adobe by focusing on collaboration, acquired for $20B",
-    rating: 4.9,
     narrativeType: "Competitive Positioning",
     industry: "Design"
   },
@@ -68,7 +64,6 @@ const SearchPage = () => {
   
   const [searchQuery, setSearchQuery] = useState(queryParam);
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({});
-  const [showVoiceSearch, setShowVoiceSearch] = useState(false);
   
   // Update search input when URL query param changes
   useEffect(() => {
@@ -96,12 +91,6 @@ const SearchPage = () => {
         [group]: [...currentGroupFilters, value]
       };
     });
-  };
-  
-  const handleVoiceSearchResult = (transcript: string) => {
-    setSearchQuery(transcript);
-    setSearchParams({ q: transcript });
-    setShowVoiceSearch(false);
   };
   
   // Filter case studies based on search query and filters
@@ -153,45 +142,21 @@ const SearchPage = () => {
           </div>
           
           <div className="mb-10">
-            {!showVoiceSearch ? (
-              <form onSubmit={handleSearch} className="flex gap-2">
-                <div className="relative flex-1">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <SearchIcon className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                  <Input
-                    type="search"
-                    placeholder="Search case studies..."
-                    className="pl-10"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
+            <form onSubmit={handleSearch} className="flex gap-2">
+              <div className="relative flex-1">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <SearchIcon className="h-4 w-4 text-muted-foreground" />
                 </div>
-                <Button type="submit" className="bg-teal-500 hover:bg-teal-600">Search</Button>
-                <Button 
-                  type="button"
-                  variant="outline" 
-                  onClick={() => setShowVoiceSearch(true)}
-                >
-                  Voice Search
-                </Button>
-              </form>
-            ) : (
-              <div className="flex flex-col items-center py-10 bg-muted/30 rounded-lg border border-border">
-                <VoiceSearch 
-                  onSearchResult={handleVoiceSearchResult}
-                  redirectOnResult={false}
+                <Input
+                  type="search"
+                  placeholder="Search case studies..."
+                  className="pl-10"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowVoiceSearch(false)}
-                  className="mt-4"
-                >
-                  Cancel
-                </Button>
               </div>
-            )}
+              <Button type="submit" className="bg-teal-500 hover:bg-teal-600">Search</Button>
+            </form>
           </div>
           
           {/* Did you mean suggestions */}

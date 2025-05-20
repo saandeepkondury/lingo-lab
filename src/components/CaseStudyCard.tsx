@@ -1,6 +1,5 @@
 
 import { Link } from 'react-router-dom';
-import { Star } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 
 interface CaseStudyCardProps {
@@ -18,7 +17,6 @@ const CaseStudyCard = ({
   company,
   lingo,
   impact,
-  rating,
   narrativeType,
   industry
 }: CaseStudyCardProps) => {
@@ -27,12 +25,6 @@ const CaseStudyCard = ({
       <div className="apple-card h-full p-6 hover-scale">
         <div className="flex justify-between items-start mb-4">
           <h3 className="text-lg font-semibold">{company}</h3>
-          {rating && (
-            <div className="flex items-center space-x-1">
-              <Star className="h-4 w-4 fill-accent text-accent" />
-              <span className="text-sm font-medium">{rating}</span>
-            </div>
-          )}
         </div>
         
         <div className="space-y-3 mb-6">

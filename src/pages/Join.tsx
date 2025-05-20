@@ -15,7 +15,6 @@ const lockedCaseStudies = [
     company: "OpenAI",
     lingo: "ChatGPT",
     impact: "Created a new product category that reached 100M users in 2 months",
-    rating: 5,
     narrativeType: "Product Launch",
     industry: "AI"
   },
@@ -24,18 +23,24 @@ const lockedCaseStudies = [
     company: "Airbnb",
     lingo: "Belong Anywhere",
     impact: "Transformed from rental marketplace to global hospitality brand",
-    rating: 4.7,
     narrativeType: "Brand Positioning",
     industry: "Consumer"
+  }
+];
+
+// Sample founder interviews
+const founderInterviews = [
+  {
+    name: "Jessica Matthews",
+    company: "Uncharted Power",
+    title: "How We Created a New Category in Clean Energy",
+    image: "/placeholder.svg"
   },
   {
-    id: "slack-where-work-happens",
-    company: "Slack",
-    lingo: "Where Work Happens",
-    impact: "Grew to $27B valuation by positioning as the future of workplace communication",
-    rating: 4.8,
-    narrativeType: "Market Creation",
-    industry: "SaaS"
+    name: "Tom Preston-Werner",
+    company: "GitHub",
+    title: "Scaling Developer Communities Through Language",
+    image: "/placeholder.svg"
   }
 ];
 
@@ -49,7 +54,7 @@ const Join = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-3xl md:text-4xl font-semibold mb-6">
-                Join the Lingo Library
+                Join the Lingo Lab
               </h1>
               
               <p className="text-lg text-muted-foreground mb-8">
@@ -87,9 +92,8 @@ const Join = () => {
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4">
                     <Button variant="outline">Google</Button>
-                    <Button variant="outline">LinkedIn</Button>
                   </div>
                 </TabsContent>
                 
@@ -117,9 +121,8 @@ const Join = () => {
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4">
                     <Button variant="outline">Google</Button>
-                    <Button variant="outline">LinkedIn</Button>
                   </div>
                 </TabsContent>
               </Tabs>
@@ -137,20 +140,45 @@ const Join = () => {
             </div>
             
             <div className="hidden md:block space-y-6">
-              <h2 className="text-xl font-medium mb-4">Unlock these case studies:</h2>
-              {lockedCaseStudies.map((study) => (
-                <div key={study.id} className="relative">
-                  <CaseStudyCard {...study} />
-                  <div className="absolute inset-0 bg-background/70 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-                    <div className="bg-white p-3 rounded-lg shadow-lg">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-teal-500 mx-auto">
-                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                      </svg>
+              <div className="mb-8">
+                <h2 className="text-xl font-medium mb-4">Unlock these case studies:</h2>
+                {lockedCaseStudies.map((study) => (
+                  <div key={study.id} className="relative mb-4">
+                    <CaseStudyCard {...study} />
+                    <div className="absolute inset-0 bg-background/70 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+                      <div className="bg-white p-3 rounded-lg shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-teal-500 mx-auto">
+                          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div>
+                <h2 className="text-xl font-medium mb-4">Exclusive Founder Interviews</h2>
+                <div className="space-y-4">
+                  {founderInterviews.map((interview, idx) => (
+                    <div key={idx} className="flex items-center gap-4 p-4 rounded-lg border border-border/50 bg-muted/20">
+                      <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden">
+                        <img src={interview.image} alt={interview.name} className="w-full h-full object-cover" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium">{interview.name}</h3>
+                        <p className="text-sm text-muted-foreground">{interview.company}</p>
+                        <p className="text-sm font-medium text-teal-600 mt-1">{interview.title}</p>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-background/70 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                      <p className="bg-white px-3 py-1 rounded text-sm font-medium">Sign in to access</p>
                     </div>
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </div>
