@@ -39,12 +39,12 @@
     
     --radius: 1rem;
 
-    /* Sidebar styles */
-    --sidebar-background: 186 27% 98%;
+    /* Sidebar styles - solid background in light mode */
+    --sidebar-background: 186 27% 95%;
     --sidebar-foreground: 186 27% 25%;
     --sidebar-primary: 186 47% 31%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 186 20% 94%;
+    --sidebar-accent: 186 20% 90%;
     --sidebar-accent-foreground: 186 47% 15%;
     --sidebar-border: 186 16% 90%;
     --sidebar-ring: 186 47% 31%;
@@ -85,7 +85,7 @@
     --input: 186 20% 30%;
     --ring: 186 70% 65%;
 
-    /* Sidebar styles for dark mode with improved contrast */
+    /* Sidebar styles for dark mode with solid background */
     --sidebar-background: 186 30% 15%;
     --sidebar-foreground: 186 10% 98%;
     --sidebar-primary: 186 70% 65%;

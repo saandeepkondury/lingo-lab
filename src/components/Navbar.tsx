@@ -84,14 +84,9 @@ const Navbar = () => {
                   Sign Out
                 </Button>
               ) : (
-                <>
-                  <Button variant="outline" className="rounded-full w-full" asChild>
-                    <Link to="/join" onClick={() => setIsMenuOpen(false)}>Log In</Link>
-                  </Button>
-                  <Button className="rounded-full w-full bg-teal-500 hover:bg-teal-600 text-white" asChild>
-                    <Link to="/join" onClick={() => setIsMenuOpen(false)}>Join Now</Link>
-                  </Button>
-                </>
+                <Button variant="outline" className="rounded-full w-full" asChild>
+                  <Link to="/join" onClick={() => setIsMenuOpen(false)}>Log In</Link>
+                </Button>
               )}
             </div>
           </nav>

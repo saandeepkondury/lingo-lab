@@ -157,7 +157,7 @@ const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: 
               <span>Filters</span>
             </Button>
           </DrawerTrigger>
-          <DrawerContent className="p-4 max-h-[80vh] overflow-auto bg-background">
+          <DrawerContent className="p-4 max-h-[80vh] overflow-auto bg-sidebar">
             <FiltersPanelContent />
           </DrawerContent>
         </Drawer>
