@@ -1,7 +1,6 @@
-
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { allCaseStudies, expandedCaseStudies, allCompanies } from '@/data/companiesData';
+import { allCaseStudies } from '@/data/caseStudiesData';
 
 export const useCaseStudiesFilter = (companyId?: string) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -60,19 +59,24 @@ export const useCaseStudiesFilter = (companyId?: string) => {
         continue;
       }
       
-      // Simple matching for other filters
+      // Map the filter group names to the case study object properties
       const fieldMap: Record<string, keyof typeof study> = {
         "Narrative Type": "narrativeType",
         "Industry": "industry",
         "Year": "year",
-        // Add other mappings as needed
+        "Stage": "stage",
+        "Lingo Style": "lingoStyle",
+        "Target Audience": "targetAudience"
       };
       
       const field = fieldMap[group];
       if (field && values.length > 0) {
+        // Make sure the field exists on the study object
+        if (study[field] === undefined) continue;
+        
         const studyValue = String(study[field]).toLowerCase();
         const hasMatch = values.some(value => 
-          studyValue.includes(value.toLowerCase())
+          studyValue === value.toLowerCase()
         );
         
         if (!hasMatch) return false;
