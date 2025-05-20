@@ -1,6 +1,6 @@
 
 import { Lock } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import CaseStudyCard from '@/components/CaseStudyCard';
 
@@ -18,6 +18,12 @@ interface LockedCaseStudyProps {
 }
 
 const LockedCaseStudy = ({ study, onClick }: LockedCaseStudyProps) => {
+  const navigate = useNavigate();
+  
+  const handleViewPlans = () => {
+    navigate('/pricing');
+  };
+  
   return (
     <div 
       className="relative rounded-lg border border-border bg-card/30 overflow-hidden group cursor-pointer"
@@ -28,8 +34,14 @@ const LockedCaseStudy = ({ study, onClick }: LockedCaseStudyProps) => {
           <Lock className="h-10 w-10 mx-auto mb-4 text-teal-500" />
           <h3 className="font-semibold text-lg mb-2">{study.company}</h3>
           <p className="text-muted-foreground mb-4">Subscribe to unlock this case study</p>
-          <Button className="bg-teal-500 hover:bg-teal-600 text-white" asChild>
-            <Link to="/pricing">View Plans</Link>
+          <Button 
+            className="bg-teal-500 hover:bg-teal-600 text-white"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleViewPlans();
+            }}
+          >
+            View Plans
           </Button>
         </div>
       </div>

@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -10,6 +9,8 @@ import { BookmarkPlus, MessageSquare, TrendingUp } from 'lucide-react';
 import CaseStudyCard from '@/components/CaseStudyCard';
 import ShareOptions from '@/components/ShareOptions';
 import SEOHead from '@/components/SEOHead';
+import PricingPopup from '@/components/PricingPopup';
+import { useAuth } from '@/context/AuthContext';
 
 // Sample case studies data (this would come from an API in a real app)
 const caseStudiesData: Record<string, any> = {
@@ -84,6 +85,8 @@ const CaseStudyDetail = () => {
     window.scrollTo(0, 0);
   }, [slug]);
   
+  const { isLoggedIn } = useAuth();
+
   if (!caseStudy) {
     return (
       <Layout>
@@ -108,6 +111,8 @@ const CaseStudyDetail = () => {
   
   return (
     <Layout>
+      {isLoggedIn && <PricingPopup threshold={50} />}
+      
       <SEOHead
         title={seoTitle}
         description={seoDescription}

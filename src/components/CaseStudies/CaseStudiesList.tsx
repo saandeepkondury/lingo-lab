@@ -1,4 +1,5 @@
 
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import CaseStudyCard from '@/components/CaseStudyCard';
 import LockedCaseStudy from './LockedCaseStudy';
@@ -32,6 +33,8 @@ const CaseStudiesList = ({
   handleLockedCaseStudyClick, 
   clearFilters 
 }: CaseStudiesListProps) => {
+  const navigate = useNavigate();
+  
   return (
     <div className="grid md:grid-cols-2 gap-6">
       {visibleCaseStudies.length > 0 ? (

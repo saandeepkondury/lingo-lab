@@ -1,10 +1,19 @@
+
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Search, Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useAuth } from '@/context/AuthContext';
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isLoggedIn, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
+
   return <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center">
         <div className="mr-4 flex">
@@ -30,12 +39,18 @@ const Navbar = () => {
           </div>
           
           <div className="hidden md:flex space-x-2">
-            <Button variant="outline" className="rounded-full" asChild>
-              
-            </Button>
-            <Button className="rounded-full bg-teal-500 hover:bg-teal-600 text-white" asChild>
-              <Link to="/join">Login</Link>
-            </Button>
+            {isLoggedIn ? (
+              <Button 
+                variant="outline" 
+                className="rounded-full" 
+                onClick={handleLogout}>
+                Sign out
+              </Button>
+            ) : (
+              <Button className="rounded-full bg-teal-500 hover:bg-teal-600 text-white" asChild>
+                <Link to="/join">Login</Link>
+              </Button>
+            )}
           </div>
           
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -63,15 +78,27 @@ const Navbar = () => {
             </div>
             
             <div className="flex flex-col space-y-2">
-              <Button variant="outline" className="rounded-full w-full" asChild>
-                <Link to="/join" onClick={() => setIsMenuOpen(false)}>Log In</Link>
-              </Button>
-              <Button className="rounded-full w-full bg-teal-500 hover:bg-teal-600 text-white" asChild>
-                <Link to="/join" onClick={() => setIsMenuOpen(false)}>Join Now</Link>
-              </Button>
+              {isLoggedIn ? (
+                <Button variant="outline" className="rounded-full w-full" onClick={() => {
+                  handleLogout();
+                  setIsMenuOpen(false);
+                }}>
+                  Sign Out
+                </Button>
+              ) : (
+                <>
+                  <Button variant="outline" className="rounded-full w-full" asChild>
+                    <Link to="/join" onClick={() => setIsMenuOpen(false)}>Log In</Link>
+                  </Button>
+                  <Button className="rounded-full w-full bg-teal-500 hover:bg-teal-600 text-white" asChild>
+                    <Link to="/join" onClick={() => setIsMenuOpen(false)}>Join Now</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </nav>
         </div>}
     </header>;
 };
+
 export default Navbar;
