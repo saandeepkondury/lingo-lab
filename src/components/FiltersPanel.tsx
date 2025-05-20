@@ -146,7 +146,7 @@ const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: 
     </div>
   );
 
-  // Use drawer for mobile view
+  // Use drawer for mobile view with solid background
   if (isMobile) {
     return (
       <>
