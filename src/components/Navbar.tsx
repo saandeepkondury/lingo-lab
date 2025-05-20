@@ -1,14 +1,10 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Search, Menu, X } from "lucide-react";
-
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
-  return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+  return <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center">
         <div className="mr-4 flex">
           <Link to="/" className="mr-6 flex items-center space-x-2">
@@ -33,7 +29,7 @@ const Navbar = () => {
           
           <div className="hidden md:flex space-x-2">
             <Button variant="outline" className="rounded-full" asChild>
-              <Link to="/join">Log In</Link>
+              
             </Button>
             <Button className="rounded-full bg-teal-500 hover:bg-teal-600 text-white" asChild>
               <Link to="/join">Join Now</Link>
@@ -47,8 +43,7 @@ const Navbar = () => {
       </div>
       
       {/* Mobile menu */}
-      {isMenuOpen && (
-        <div className="md:hidden fixed inset-0 top-16 z-50 bg-background animate-fade-in">
+      {isMenuOpen && <div className="md:hidden fixed inset-0 top-16 z-50 bg-background animate-fade-in">
           <nav className="container py-8 flex flex-col space-y-6 text-lg font-medium">
             <Link to="/" className="hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Home</Link>
             <Link to="/case-studies" className="hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Case Studies</Link>
@@ -73,10 +68,7 @@ const Navbar = () => {
               </Button>
             </div>
           </nav>
-        </div>
-      )}
-    </header>
-  );
+        </div>}
+    </header>;
 };
-
 export default Navbar;
