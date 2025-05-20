@@ -8,20 +8,24 @@ interface CaseStudiesListProps {
   visibleCaseStudies: Array<{
     id: string;
     company: string;
+    companyName: string; // Ensure companyName is included in the type
     lingo: string;
     impact: string;
     rating: number;
     narrativeType: string;
     industry: string;
+    year?: number;
   }>;
   lockedCaseStudies: Array<{
     id: string;
     company: string;
+    companyName: string; // Ensure companyName is included in the type
     lingo: string;
     impact: string;
     rating: number;
     narrativeType: string;
     industry: string;
+    year?: number;
   }>;
   handleLockedCaseStudyClick: () => void;
   clearFilters: () => void;

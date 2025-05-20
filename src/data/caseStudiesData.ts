@@ -3,7 +3,8 @@
 export const allCaseStudies = [
   {
     id: "stripe-financial-infrastructure",
-    company: "Stripe",
+    company: "stripe",
+    companyName: "Stripe", // Add companyName
     lingo: "Financial Infrastructure",
     impact: "Raised $600M at $95B valuation by positioning as infrastructure rather than payments",
     rating: 5,
@@ -12,7 +13,8 @@ export const allCaseStudies = [
   },
   {
     id: "notion-all-in-one-workspace",
-    company: "Notion",
+    company: "notion",
+    companyName: "Notion", // Add companyName
     lingo: "All-in-one Workspace",
     impact: "Grew to 20M+ users with a narrative that unified multiple product categories",
     rating: 4.8,
@@ -21,7 +23,8 @@ export const allCaseStudies = [
   },
   {
     id: "figma-multiplayer-design",
-    company: "Figma",
+    company: "figma",
+    companyName: "Figma", // Add companyName
     lingo: "Multiplayer Design",
     impact: "Differentiated from Adobe by focusing on collaboration, acquired for $20B",
     rating: 4.9,
@@ -30,7 +33,8 @@ export const allCaseStudies = [
   },
   {
     id: "open-ai-chatgpt",
-    company: "OpenAI",
+    company: "openai",
+    companyName: "OpenAI", // Add companyName
     lingo: "ChatGPT",
     impact: "Created a new product category that reached 100M users in 2 months",
     rating: 5,
@@ -39,7 +43,8 @@ export const allCaseStudies = [
   },
   {
     id: "airbnb-belong-anywhere",
-    company: "Airbnb",
+    company: "airbnb",
+    companyName: "Airbnb", // Add companyName
     lingo: "Belong Anywhere",
     impact: "Transformed from rental marketplace to global hospitality brand",
     rating: 4.7,
@@ -48,7 +53,8 @@ export const allCaseStudies = [
   },
   {
     id: "slack-where-work-happens",
-    company: "Slack",
+    company: "slack",
+    companyName: "Slack", // Add companyName
     lingo: "Where Work Happens",
     impact: "Grew to $27B valuation by positioning as the future of workplace communication",
     rating: 4.8,

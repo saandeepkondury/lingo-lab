@@ -7,21 +7,24 @@ import { ArrowRight } from 'lucide-react';
 // Sample data for the homepage
 const featuredCaseStudies = [{
   id: "stripe-financial-infrastructure",
-  company: "Stripe",
+  company: "stripe",
+  companyName: "Stripe", // Add companyName property
   lingo: "Financial Infrastructure",
   impact: "Raised $600M at $95B valuation by positioning as infrastructure rather than payments",
   narrativeType: "Market Creation",
   industry: "Fintech"
 }, {
   id: "notion-all-in-one-workspace",
-  company: "Notion",
+  company: "notion",
+  companyName: "Notion", // Add companyName property
   lingo: "All-in-one Workspace",
   impact: "Grew to 20M+ users with a narrative that unified multiple product categories",
   narrativeType: "Product Positioning",
   industry: "SaaS"
 }, {
   id: "figma-multiplayer-design",
-  company: "Figma",
+  company: "figma",
+  companyName: "Figma", // Add companyName property
   lingo: "Multiplayer Design",
   impact: "Differentiated from Adobe by focusing on collaboration, acquired for $20B",
   narrativeType: "Competitive Positioning",
