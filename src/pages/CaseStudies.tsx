@@ -51,7 +51,7 @@ const CaseStudies = () => {
           </div>
           
           <div className="relative flex flex-col md:flex-row gap-8">
-            {/* Filters sidebar */}
+            {/* Filters - shown as sidebar on desktop, drawer on mobile */}
             <div className="md:w-64 flex-shrink-0">
               <div className="md:sticky md:top-20">
                 <FiltersPanel 

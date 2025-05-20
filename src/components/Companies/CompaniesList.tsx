@@ -1,9 +1,9 @@
 
-import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 import CompanyCard from '@/components/CompanyCard';
 
 interface CompaniesListProps {
-  companies: Array<{
+  companies: {
     id: string;
     name: string;
     logo: string;
@@ -11,34 +11,31 @@ interface CompaniesListProps {
     industry: string;
     founded: number;
     caseStudies: string[];
-  }>;
-  clearFilters: () => void;
+  }[];
 }
 
-const CompaniesList = ({ 
-  companies, 
-  clearFilters 
-}: CompaniesListProps) => {
+const CompaniesList = ({ companies }: CompaniesListProps) => {
+  if (companies.length === 0) {
+    return (
+      <div className="text-center py-20">
+        <p className="text-lg text-muted-foreground mb-4">No companies found</p>
+      </div>
+    );
+  }
+
   return (
     <div className="grid md:grid-cols-2 gap-6">
-      {companies.length > 0 ? (
-        <>
-          {companies.map((company) => (
-            <CompanyCard key={company.id} {...company} />
-          ))}
-        </>
-      ) : (
-        <div className="col-span-2 py-20 text-center">
-          <p className="text-lg text-muted-foreground">No companies found matching your filters</p>
-          <Button 
-            variant="outline" 
-            className="mt-4"
-            onClick={clearFilters}
-          >
-            Clear All Filters
-          </Button>
-        </div>
-      )}
+      {companies.map((company) => (
+        <Link to={`/companies/${company.id}`} key={company.id} className="block">
+          <CompanyCard 
+            name={company.name}
+            description={company.description}
+            logo={company.logo}
+            industry={company.industry}
+            studies={company.caseStudies.length}
+          />
+        </Link>
+      ))}
     </div>
   );
 };

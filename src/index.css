@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -50,7 +51,7 @@
   }
 
   .dark {
-    /* Improved dark mode contrast */
+    /* Improved dark mode with higher contrast */
     --background: 186 30% 10%;
     --foreground: 186 10% 98%; /* Brighter foreground for better contrast */
     
@@ -75,9 +76,11 @@
     --accent: 38 95% 80%; /* Increased brightness for contrast */
     --accent-foreground: 186 30% 10%;
     
+    /* Destructive with better contrast */
     --destructive: 0 90% 65%;
     --destructive-foreground: 0 0% 98%;
     
+    /* Higher contrast borders and inputs */
     --border: 186 20% 30%; /* Brighter border for better visibility */
     --input: 186 20% 30%;
     --ring: 186 70% 65%;
@@ -161,5 +164,24 @@
   
   .btn-outline {
     @apply border border-input bg-background hover:bg-muted rounded-full px-6 py-2.5 font-medium transition-colors;
+  }
+
+  /* Dark mode specific classes for better contrast in specific sections */
+  .dark .why-section {
+    @apply bg-teal-900/80 text-white;
+  }
+  
+  .dark .newsletter-section {
+    @apply bg-teal-900/80 text-white;
+  }
+  
+  .dark .why-section h2,
+  .dark .newsletter-section h2 {
+    @apply text-white;
+  }
+  
+  .dark .why-section p,
+  .dark .newsletter-section p {
+    @apply text-white/90;
   }
 }
