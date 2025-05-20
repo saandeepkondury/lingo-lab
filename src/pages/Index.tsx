@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import CaseStudyCard from '@/components/CaseStudyCard';
@@ -34,34 +33,17 @@ const Index = () => {
       {/* Hero Section - Updated with modern Apple-inspired design */}
       <section className="bg-gradient-to-b from-teal-50 to-white py-24 md:py-32">
         <div className="container max-w-6xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8 text-center md:text-left animate-fade-in">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight bg-gradient-to-r from-teal-600 via-teal-500 to-coral-500 bg-clip-text text-transparent">
-                Learn how successful venture backed founders leveraged Lingo
-              </h1>
-              <p className="text-xl md:text-2xl text-muted-foreground">
-                Discover how top founders used strategic narrative to raise millions and shape markets.
-              </p>
-              <div className="pt-6">
-                <Button size="lg" className="rounded-full bg-teal-500 hover:bg-teal-600 text-white px-10 py-6 text-lg shadow-md" asChild>
-                  <Link to="/join">Join to Read Case Studies</Link>
-                </Button>
-              </div>
-            </div>
-            
-            <div className="flex justify-center md:justify-end">
-              <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-teal-400 to-coral-400 rounded-3xl blur opacity-30"></div>
-                <div className="relative bg-white p-8 rounded-3xl shadow-xl border border-teal-100 min-h-[300px] flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-24 h-24 mx-auto mb-6 bg-teal-50 rounded-full flex items-center justify-center">
-                      <span className="text-5xl text-teal-500">L</span>
-                    </div>
-                    <p className="text-2xl font-medium text-teal-600">Lingo Lab</p>
-                    <p className="text-muted-foreground mt-2">Decoding the language of success</p>
-                  </div>
-                </div>
-              </div>
+          <div className="text-center animate-fade-in mx-auto max-w-4xl">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight bg-gradient-to-r from-teal-600 via-teal-500 to-coral-500 bg-clip-text text-transparent">
+              Learn how successful venture backed founders leveraged Lingo
+            </h1>
+            <p className="text-xl md:text-2xl text-muted-foreground mt-8">
+              Discover how top founders used strategic narrative to raise millions and shape markets.
+            </p>
+            <div className="pt-10">
+              <Button size="lg" className="rounded-full bg-teal-500 hover:bg-teal-600 text-white px-10 py-6 text-lg shadow-md" asChild>
+                <Link to="/join">Join to Read Case Studies</Link>
+              </Button>
             </div>
           </div>
         </div>
