@@ -6,10 +6,11 @@ import { Button } from '@/components/ui/button';
 
 interface PricingPopupProps {
   threshold?: number; // Percentage of page scrolled before showing popup
+  forceShow?: boolean; // For cases where we want to show it immediately (like in locked sections)
 }
 
-const PricingPopup = ({ threshold = 60 }: PricingPopupProps) => {
-  const [isVisible, setIsVisible] = useState(false);
+const PricingPopup = ({ threshold = 60, forceShow = false }: PricingPopupProps) => {
+  const [isVisible, setIsVisible] = useState(forceShow);
   const [dismissed, setDismissed] = useState(false);
   const navigate = useNavigate();
 
@@ -18,6 +19,12 @@ const PricingPopup = ({ threshold = 60 }: PricingPopupProps) => {
     const popupDismissed = localStorage.getItem('pricingPopupDismissed');
     if (popupDismissed && Date.now() - parseInt(popupDismissed) < 24 * 60 * 60 * 1000) {
       // If popup was dismissed less than 24 hours ago
+      return;
+    }
+
+    // If forceShow is true, show the popup immediately
+    if (forceShow) {
+      setIsVisible(true);
       return;
     }
 
@@ -35,7 +42,14 @@ const PricingPopup = ({ threshold = 60 }: PricingPopupProps) => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [threshold, dismissed]);
+  }, [threshold, dismissed, forceShow]);
+
+  // If forceShow changes to true, update isVisible
+  useEffect(() => {
+    if (forceShow) {
+      setIsVisible(true);
+    }
+  }, [forceShow]);
 
   const handleDismiss = () => {
     setIsVisible(false);

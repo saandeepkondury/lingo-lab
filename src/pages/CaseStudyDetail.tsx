@@ -1,16 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { BookmarkPlus, MessageSquare, TrendingUp } from 'lucide-react';
+import { BookmarkPlus, MessageSquare, TrendingUp, Lock } from 'lucide-react';
 import CaseStudyCard from '@/components/CaseStudyCard';
 import ShareOptions from '@/components/ShareOptions';
 import SEOHead from '@/components/SEOHead';
 import PricingPopup from '@/components/PricingPopup';
 import { useAuth } from '@/context/AuthContext';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 // Sample case studies data (this would come from an API in a real app)
 const caseStudiesData: Record<string, any> = {
@@ -79,14 +81,32 @@ const caseStudiesData: Record<string, any> = {
 const CaseStudyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const caseStudy = slug ? caseStudiesData[slug] : null;
+  const [showLockOverlay, setShowLockOverlay] = useState(false);
+  const [showPricingPopup, setShowPricingPopup] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  
+  const { isLoggedIn } = useAuth();
   
   useEffect(() => {
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
-  }, [slug]);
+    
+    // Add scroll event listener to detect when user scrolls to locked content
+    const handleScroll = () => {
+      if (!isLoggedIn && contentRef.current) {
+        const rect = contentRef.current.getBoundingClientRect();
+        // If the locked content section is in view
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          setShowPricingPopup(true);
+          setShowLockOverlay(true);
+        }
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [slug, isLoggedIn]);
   
-  const { isLoggedIn } = useAuth();
-
   if (!caseStudy) {
     return (
       <Layout>
@@ -111,8 +131,6 @@ const CaseStudyDetail = () => {
   
   return (
     <Layout>
-      {isLoggedIn && <PricingPopup threshold={50} />}
-      
       <SEOHead
         title={seoTitle}
         description={seoDescription}
@@ -212,7 +230,7 @@ const CaseStudyDetail = () => {
             </div>
           </div>
           
-          {/* Main Content */}
+          {/* Main Content - First sections (always visible) */}
           <section className="prose prose-indigo dark:prose-invert max-w-none">
             <h2 className="text-2xl font-semibold">The Lingo That Changed Everything</h2>
             <p className="text-lg leading-relaxed mb-6">{caseStudy.content.lingoExplanation}</p>
@@ -220,49 +238,74 @@ const CaseStudyDetail = () => {
             <h2 className="text-2xl font-semibold mt-10">Origin Story of the Phrase</h2>
             <p className="mb-6">{caseStudy.content.originStory}</p>
             
-            <h2 className="text-2xl font-semibold mt-10">Channel Breakdown</h2>
-            <p className="mb-6">{caseStudy.content.channelBreakdown}</p>
-            
-            <h2 className="text-2xl font-semibold mt-10">Tipping Point</h2>
-            <p className="mb-6">{caseStudy.content.tippingPoint}</p>
-            
-            {/* Founder Quote */}
-            <div className="my-10 bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border-l-4 border-indigo-500">
-              <blockquote className="text-lg italic dark:text-gray-200">
-                {caseStudy.content.founderQuote.split(' - ')[0]}
-              </blockquote>
-              <footer className="mt-2 text-right font-medium dark:text-gray-300">
-                - {caseStudy.content.founderQuote.split(' - ')[1]}
-              </footer>
-            </div>
-            
-            <h2 className="text-2xl font-semibold mt-10">Narrative Architecture</h2>
-            <Card className="my-6 border-none shadow-sm dark:bg-gray-800/50">
-              <CardContent className="p-0">
-                <div className="grid grid-cols-1 divide-y dark:divide-gray-700">
-                  <div className="p-4">
-                    <h4 className="font-semibold text-lg text-indigo-700 dark:text-indigo-300">The Problem</h4>
-                    <p className="dark:text-gray-300">{caseStudy.content.narrativeArchitecture.problem}</p>
-                  </div>
-                  
-                  <div className="p-4">
-                    <h4 className="font-semibold text-lg text-indigo-700 dark:text-indigo-300">The Promise</h4>
-                    <p className="dark:text-gray-300">{caseStudy.content.narrativeArchitecture.promise}</p>
-                  </div>
-                  
-                  <div className="p-4">
-                    <h4 className="font-semibold text-lg text-indigo-700 dark:text-indigo-300">The Proof</h4>
-                    <p className="dark:text-gray-300">{caseStudy.content.narrativeArchitecture.proof}</p>
+            {/* Reference point for locking content */}
+            <div ref={contentRef} className="relative">
+              {/* Lock overlay for non-subscribers */}
+              {showLockOverlay && !isLoggedIn && (
+                <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg">
+                  <div className="text-center p-6 max-w-md">
+                    <Lock className="h-12 w-12 mx-auto mb-4 text-teal-500" />
+                    <h3 className="text-xl font-bold mb-3">Premium Content</h3>
+                    <p className="text-muted-foreground mb-6">
+                      Subscribe to unlock the full case study and get access to all premium content.
+                    </p>
+                    <Button 
+                      className="bg-teal-500 hover:bg-teal-600 text-white px-6"
+                      onClick={() => window.location.href = '/pricing'}
+                    >
+                      View Pricing Plans
+                    </Button>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-            
-            <h2 className="text-2xl font-semibold mt-10">Ripple Effects</h2>
-            <p className="mb-6">{caseStudy.content.rippleEffects}</p>
-            
-            <h2 className="text-2xl font-semibold mt-10">Expert Summary</h2>
-            <p className="mb-6">{caseStudy.content.expertSummary}</p>
+              )}
+              
+              {/* Locked content - visible for subscribers only without blur */}
+              <div className={!isLoggedIn ? "filter blur-sm select-none pointer-events-none" : ""}>
+                <h2 className="text-2xl font-semibold mt-10">Channel Breakdown</h2>
+                <p className="mb-6">{caseStudy.content.channelBreakdown}</p>
+                
+                <h2 className="text-2xl font-semibold mt-10">Tipping Point</h2>
+                <p className="mb-6">{caseStudy.content.tippingPoint}</p>
+                
+                {/* Founder Quote */}
+                <div className="my-10 bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border-l-4 border-indigo-500">
+                  <blockquote className="text-lg italic dark:text-gray-200">
+                    {caseStudy.content.founderQuote.split(' - ')[0]}
+                  </blockquote>
+                  <footer className="mt-2 text-right font-medium dark:text-gray-300">
+                    - {caseStudy.content.founderQuote.split(' - ')[1]}
+                  </footer>
+                </div>
+                
+                <h2 className="text-2xl font-semibold mt-10">Narrative Architecture</h2>
+                <Card className="my-6 border-none shadow-sm dark:bg-gray-800/50">
+                  <CardContent className="p-0">
+                    <div className="grid grid-cols-1 divide-y dark:divide-gray-700">
+                      <div className="p-4">
+                        <h4 className="font-semibold text-lg text-indigo-700 dark:text-indigo-300">The Problem</h4>
+                        <p className="dark:text-gray-300">{caseStudy.content.narrativeArchitecture.problem}</p>
+                      </div>
+                      
+                      <div className="p-4">
+                        <h4 className="font-semibold text-lg text-indigo-700 dark:text-indigo-300">The Promise</h4>
+                        <p className="dark:text-gray-300">{caseStudy.content.narrativeArchitecture.promise}</p>
+                      </div>
+                      
+                      <div className="p-4">
+                        <h4 className="font-semibold text-lg text-indigo-700 dark:text-indigo-300">The Proof</h4>
+                        <p className="dark:text-gray-300">{caseStudy.content.narrativeArchitecture.proof}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <h2 className="text-2xl font-semibold mt-10">Ripple Effects</h2>
+                <p className="mb-6">{caseStudy.content.rippleEffects}</p>
+                
+                <h2 className="text-2xl font-semibold mt-10">Expert Summary</h2>
+                <p className="mb-6">{caseStudy.content.expertSummary}</p>
+              </div>
+            </div>
           </section>
           
           <Separator className="my-12" />
@@ -313,6 +356,9 @@ const CaseStudyDetail = () => {
           </section>
         </div>
       </article>
+      
+      {/* Show pricing popup when the user scrolls to locked content or if showPricingPopup is true */}
+      {showPricingPopup && !isLoggedIn && <PricingPopup forceShow={true} />}
     </Layout>
   );
 };

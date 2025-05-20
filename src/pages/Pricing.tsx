@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -89,7 +88,7 @@ const Pricing = () => {
               >
                 Annual Billing
                 <Badge variant="outline" className="ml-2 bg-coral-50 text-coral-500 border-coral-200">
-                  Save 20%
+                  Save 10%
                 </Badge>
               </Button>
             </div>
@@ -117,10 +116,16 @@ const Pricing = () => {
                   
                   <div className="mt-4 mb-6">
                     <div className="flex items-baseline">
-                      <span className="text-4xl font-bold">${plan.price}</span>
+                      <span className="text-4xl font-bold">
+                        ${plan.oneTime 
+                          ? plan.price 
+                          : billingFrequency === 'year' 
+                            ? Math.round(plan.price * 0.9) 
+                            : plan.price}
+                      </span>
                       {!plan.oneTime && (
                         <span className="text-muted-foreground ml-1">
-                          /{billingFrequency === 'year' ? 'year' : plan.frequency}
+                          /{billingFrequency}
                         </span>
                       )}
                       {plan.oneTime && (
@@ -129,7 +134,7 @@ const Pricing = () => {
                     </div>
                     {!plan.oneTime && plan.price > 0 && billingFrequency === 'year' && (
                       <p className="text-sm text-muted-foreground mt-1">
-                        ${Math.round(plan.price * 12 * 0.8)} billed annually
+                        ${Math.round(plan.price * 12 * 0.9)} billed annually (10% off)
                       </p>
                     )}
                   </div>

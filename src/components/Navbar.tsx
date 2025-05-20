@@ -22,7 +22,6 @@ const Navbar = () => {
           </Link>
           <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
             <Link to="/case-studies" className="transition-colors hover:text-teal-600">Case Studies</Link>
-            <Link to="/pricing" className="transition-colors hover:text-teal-600">Pricing</Link>
             <Link to="/submit" className="transition-colors hover:text-teal-600">Submit Lingo</Link>
             <Link to="/newsletter" className="transition-colors hover:text-teal-600">Newsletter</Link>
           </nav>
@@ -64,7 +63,6 @@ const Navbar = () => {
           <nav className="container py-8 flex flex-col space-y-6 text-lg font-medium">
             <Link to="/" className="hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Home</Link>
             <Link to="/case-studies" className="hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Case Studies</Link>
-            <Link to="/pricing" className="hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Pricing</Link>
             <Link to="/submit" className="hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Submit Lingo</Link>
             <Link to="/newsletter" className="hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Newsletter</Link>
             
