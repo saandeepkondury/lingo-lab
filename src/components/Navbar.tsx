@@ -1,17 +1,23 @@
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Search, Menu, X } from "lucide-react";
+import { Search, Menu } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from '@/context/AuthContext';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isLoggedIn, logout } = useAuth();
+  const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
+  };
+
+  const handleMenuClick = () => {
+    navigate('/mobile-sidebar');
   };
 
   return <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -52,45 +58,16 @@ const Navbar = () => {
             )}
           </div>
           
-          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="md:hidden" 
+            onClick={handleMenuClick}
+          >
+            <Menu className="h-5 w-5" />
           </Button>
         </div>
       </div>
-      
-      {/* Mobile menu */}
-      {isMenuOpen && <div className="md:hidden fixed inset-0 top-16 z-50 bg-background animate-fade-in">
-          <nav className="container py-8 flex flex-col space-y-6 text-lg font-medium">
-            <Link to="/" className="hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Home</Link>
-            <Link to="/case-studies" className="hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Case Studies</Link>
-            <Link to="/submit" className="hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Submit Lingo</Link>
-            <Link to="/newsletter" className="hover:text-teal-600" onClick={() => setIsMenuOpen(false)}>Newsletter</Link>
-            
-            <div className="flex items-center space-x-4 py-4">
-              <ThemeToggle />
-              <Button variant="outline" size="icon" className="rounded-full" asChild>
-                <Link to="/case-studies" aria-label="Search" onClick={() => setIsMenuOpen(false)}>
-                  <Search className="h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-            
-            <div className="flex flex-col space-y-2">
-              {isLoggedIn ? (
-                <Button variant="outline" className="rounded-full w-full" onClick={() => {
-                  handleLogout();
-                  setIsMenuOpen(false);
-                }}>
-                  Sign Out
-                </Button>
-              ) : (
-                <Button variant="outline" className="rounded-full w-full" asChild>
-                  <Link to="/join" onClick={() => setIsMenuOpen(false)}>Log In</Link>
-                </Button>
-              )}
-            </div>
-          </nav>
-        </div>}
     </header>;
 };
 
