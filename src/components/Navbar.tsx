@@ -1,13 +1,10 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Search, Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
-
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   return <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center">
         <div className="mr-4 flex">
@@ -37,7 +34,7 @@ const Navbar = () => {
               
             </Button>
             <Button className="rounded-full bg-teal-500 hover:bg-teal-600 text-white" asChild>
-              <Link to="/join">Join Now</Link>
+              <Link to="/join">Login</Link>
             </Button>
           </div>
           
@@ -77,5 +74,4 @@ const Navbar = () => {
         </div>}
     </header>;
 };
-
 export default Navbar;
