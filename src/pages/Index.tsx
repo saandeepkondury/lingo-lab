@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import CaseStudyCard from '@/components/CaseStudyCard';
@@ -7,47 +6,40 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 
 // Sample data for the homepage
-const featuredCaseStudies = [
-  {
-    id: "stripe-financial-infrastructure",
-    company: "Stripe",
-    lingo: "Financial Infrastructure",
-    impact: "Raised $600M at $95B valuation by positioning as infrastructure rather than payments",
-    rating: 5,
-    narrativeType: "Market Creation",
-    industry: "Fintech"
-  },
-  {
-    id: "notion-all-in-one-workspace",
-    company: "Notion",
-    lingo: "All-in-one Workspace",
-    impact: "Grew to 20M+ users with a narrative that unified multiple product categories",
-    rating: 4.8,
-    narrativeType: "Product Positioning",
-    industry: "SaaS"
-  },
-  {
-    id: "figma-multiplayer-design",
-    company: "Figma",
-    lingo: "Multiplayer Design",
-    impact: "Differentiated from Adobe by focusing on collaboration, acquired for $20B",
-    rating: 4.9,
-    narrativeType: "Competitive Positioning",
-    industry: "Design"
-  }
-];
-
+const featuredCaseStudies = [{
+  id: "stripe-financial-infrastructure",
+  company: "Stripe",
+  lingo: "Financial Infrastructure",
+  impact: "Raised $600M at $95B valuation by positioning as infrastructure rather than payments",
+  rating: 5,
+  narrativeType: "Market Creation",
+  industry: "Fintech"
+}, {
+  id: "notion-all-in-one-workspace",
+  company: "Notion",
+  lingo: "All-in-one Workspace",
+  impact: "Grew to 20M+ users with a narrative that unified multiple product categories",
+  rating: 4.8,
+  narrativeType: "Product Positioning",
+  industry: "SaaS"
+}, {
+  id: "figma-multiplayer-design",
+  company: "Figma",
+  lingo: "Multiplayer Design",
+  impact: "Differentiated from Adobe by focusing on collaboration, acquired for $20B",
+  rating: 4.9,
+  narrativeType: "Competitive Positioning",
+  industry: "Design"
+}];
 const Index = () => {
-  return (
-    <Layout>
+  return <Layout>
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-teal-50 to-white py-20 md:py-32">
         <div className="container max-w-6xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6 text-center md:text-left animate-fade-in">
-              <h1 className="text-5xl md:text-6xl font-semibold tracking-tight bg-gradient-to-r from-teal-600 via-teal-500 to-coral-500 bg-clip-text text-transparent">
-                Turn Language Into Leverage
-              </h1>
+              <h1 className="text-5xl md:text-6xl font-semibold tracking-tight bg-gradient-to-r from-teal-600 via-teal-500 to-coral-500 bg-clip-text text-transparent">Turn Language Into Leverage
+            </h1>
               <p className="text-xl md:text-2xl text-muted-foreground max-w-xl">
                 Discover how top founders used strategic narrative to raise millions and shape markets.
               </p>
@@ -87,9 +79,7 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-            {featuredCaseStudies.map((study) => (
-              <CaseStudyCard key={study.id} {...study} />
-            ))}
+            {featuredCaseStudies.map(study => <CaseStudyCard key={study.id} {...study} />)}
           </div>
           
           <div className="flex justify-center">
@@ -162,8 +152,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default Index;
