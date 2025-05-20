@@ -18,12 +18,20 @@ const Submit = () => {
     company: '',
     lingo: '',
     url: '',
-    story: ''
+    story: '',
+    role: '',
+    availability: '',
+    interviewWillingness: false
   });
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+  
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    setFormData(prev => ({ ...prev, [name]: checked }));
   };
   
   const handleSubmit = (e: React.FormEvent) => {
@@ -35,8 +43,8 @@ const Submit = () => {
       setIsSubmitting(false);
       setIsSubmitted(true);
       toast({
-        title: "Submission successful",
-        description: "Your lingo has been submitted for review.",
+        title: "Request submitted",
+        description: "We'll review your lingo submission and reach out for an interview soon.",
       });
     }, 1500);
   };
@@ -46,16 +54,16 @@ const Submit = () => {
       <section className="py-12 md:py-20">
         <div className="container max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-semibold mb-4">Submit Your Lingo</h1>
+            <h1 className="text-4xl font-semibold mb-4">Request a Lingo Feature</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Share your strategic narrative that helped your company grow. Get featured as a Lingo Leader.
+              Share your strategic narrative that helped your company grow. Get featured as a Lingo Leader through our interview process.
             </p>
           </div>
           
           <div className="grid md:grid-cols-5 gap-10">
             <div className="md:col-span-2 space-y-6">
               <div className="apple-card p-6">
-                <h3 className="text-lg font-medium mb-4">Why Submit Your Lingo?</h3>
+                <h3 className="text-lg font-medium mb-4">Why Request a Feature?</h3>
                 <ul className="space-y-4">
                   <li className="flex gap-3">
                     <div className="flex-shrink-0 h-6 w-6 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center">
@@ -85,12 +93,15 @@ const Submit = () => {
               </div>
               
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">What makes a great submission?</h3>
+                <h3 className="text-lg font-medium">Our Interview Process</h3>
                 <p className="text-muted-foreground">
-                  The best submissions include specific phrases or terms you've created, how they've been used, and the measurable impact they've had on your business.
+                  We carefully review all submissions and select the most compelling strategic narratives for a featured interview.
                 </p>
                 <p className="text-muted-foreground">
-                  We're especially interested in language that has helped with fundraising, sales, hiring, or creating new market categories.
+                  If selected, our team will reach out to schedule a 30-minute interview to dive deeper into your lingo story, discussing the strategy behind it and measuring its impact.
+                </p>
+                <p className="text-muted-foreground">
+                  After the interview, we'll create a professionally written case study that highlights your company's strategic narrative success.
                 </p>
               </div>
             </div>
@@ -124,16 +135,29 @@ const Submit = () => {
                     </div>
                   </div>
                   
-                  <div className="space-y-2">
-                    <Label htmlFor="company">Company Name</Label>
-                    <Input
-                      id="company"
-                      name="company"
-                      placeholder="Acme Inc."
-                      required
-                      value={formData.company}
-                      onChange={handleChange}
-                    />
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="company">Company Name</Label>
+                      <Input
+                        id="company"
+                        name="company"
+                        placeholder="Acme Inc."
+                        required
+                        value={formData.company}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="role">Your Role</Label>
+                      <Input
+                        id="role"
+                        name="role"
+                        placeholder="Founder, CMO, Head of Marketing, etc."
+                        required
+                        value={formData.role}
+                        onChange={handleChange}
+                      />
+                    </div>
                   </div>
                   
                   <div className="space-y-2">
@@ -175,17 +199,43 @@ const Submit = () => {
                     <p className="text-xs text-muted-foreground">Tell us about the impact this language had on your business</p>
                   </div>
                   
+                  <div className="space-y-2">
+                    <Label htmlFor="availability">Interview Availability</Label>
+                    <Input
+                      id="availability"
+                      name="availability"
+                      placeholder="E.g., 'Weekday afternoons' or 'Tuesdays and Thursdays'"
+                      value={formData.availability}
+                      onChange={handleChange}
+                    />
+                    <p className="text-xs text-muted-foreground">When would you generally be available for a 30-minute interview if selected?</p>
+                  </div>
+                  
+                  <div className="flex items-start space-x-2">
+                    <input
+                      type="checkbox"
+                      id="interviewWillingness"
+                      name="interviewWillingness"
+                      checked={formData.interviewWillingness}
+                      onChange={handleCheckboxChange}
+                      className="mt-1"
+                    />
+                    <Label htmlFor="interviewWillingness" className="text-sm">
+                      I'm willing to participate in an interview about my lingo story if selected
+                    </Label>
+                  </div>
+                  
                   <Button
                     type="submit"
                     className="w-full bg-teal-500 hover:bg-teal-600"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Submitting..." : "Submit Your Lingo"}
+                    {isSubmitting ? "Submitting..." : "Submit Your Request"}
                   </Button>
                   
                   <p className="text-center text-xs text-muted-foreground">
                     By submitting, you agree that your story may be featured in our case study library.
-                    We'll contact you before publishing.
+                    We'll contact you before publishing any details about your company.
                   </p>
                 </form>
               ) : (
@@ -193,10 +243,10 @@ const Submit = () => {
                   <div className="mx-auto w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center">
                     <CheckCircle className="h-8 w-8 text-teal-600" />
                   </div>
-                  <h3 className="text-2xl font-semibold">Submission Received!</h3>
+                  <h3 className="text-2xl font-semibold">Request Received!</h3>
                   <p className="text-muted-foreground">
-                    Thank you for sharing your lingo story. Our team will review your submission and may
-                    reach out for additional details.
+                    Thank you for sharing your lingo story. Our team will review your submission and reach
+                    out to schedule an interview if your narrative is selected for a feature.
                   </p>
                   <Button 
                     variant="outline" 
@@ -208,7 +258,10 @@ const Submit = () => {
                         company: '',
                         lingo: '',
                         url: '',
-                        story: ''
+                        story: '',
+                        role: '',
+                        availability: '',
+                        interviewWillingness: false
                       });
                     }}
                   >

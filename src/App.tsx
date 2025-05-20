@@ -13,6 +13,8 @@ import Submit from "./pages/Submit";
 import Newsletter from "./pages/Newsletter";
 import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +33,8 @@ const App = () => (
           <Route path="/submit" element={<Submit />} />
           <Route path="/newsletter" element={<Newsletter />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

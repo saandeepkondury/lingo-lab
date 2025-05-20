@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { Mail } from 'lucide-react';
+import { Mail, Twitter, Linkedin } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 const Footer = () => {
@@ -48,6 +48,17 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} Lingo Lab. All rights reserved.
           </p>
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
+            <div className="flex items-center space-x-4 mr-4">
+              <a href="https://x.com/LingoLabSite" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Twitter className="h-5 w-5" />
+              </a>
+              <a href="https://www.linkedin.com/company/lingolab-site/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Linkedin className="h-5 w-5" />
+              </a>
+              <a href="mailto:hello@lingolab.site" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Mail className="h-5 w-5" />
+              </a>
+            </div>
             <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Privacy</Link>
             <Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Terms</Link>
           </div>
