@@ -32,7 +32,7 @@ export const useCaseStudiesFilter = (companyId?: string) => {
 
   const clearFilters = () => {
     setSearchQuery('');
-    setActiveFilters({});
+    setActiveFilters(companyId ? { 'Company': [companyId] } : {});
   };
   
   // Start with all case studies or just those for a specific company

@@ -119,6 +119,7 @@ const CompanyDetail = () => {
                   filters={filterGroups.filter(g => g.name !== "Industry")} // Remove industry filter since we're already on a company page
                   activeFilters={activeFilters}
                   onFilterChange={handleFilterChange}
+                  clearFilters={clearFilters}
                 />
               </div>
             </div>
