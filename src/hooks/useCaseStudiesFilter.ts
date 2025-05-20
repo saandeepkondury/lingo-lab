@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { allCaseStudies } from '@/data/caseStudiesData';
@@ -63,7 +64,6 @@ export const useCaseStudiesFilter = (companyId?: string) => {
       const fieldMap: Record<string, keyof typeof study> = {
         "Narrative Type": "narrativeType",
         "Industry": "industry",
-        "Year": "year",
         "Stage": "stage",
         "Lingo Style": "lingoStyle",
         "Target Audience": "targetAudience"

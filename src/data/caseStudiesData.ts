@@ -1,4 +1,3 @@
-
 // Sample case studies data
 export const allCaseStudies = [
   {
@@ -87,7 +86,7 @@ export const allCaseStudies = [
   },
 ];
 
-// Updated filter groups with more relevant options
+// Updated filter groups with more relevant options, Year filter removed
 export const filterGroups = [
   {
     name: "Narrative Type",
@@ -136,17 +135,6 @@ export const filterGroups = [
       { value: "Healthtech", label: "Healthtech" },
       { value: "E-commerce", label: "E-commerce" },
       { value: "Education", label: "Education" }
-    ]
-  },
-  {
-    name: "Year",
-    options: [
-      { value: "2023", label: "2023" },
-      { value: "2022", label: "2022" },
-      { value: "2021", label: "2021" },
-      { value: "2020", label: "2020" },
-      { value: "2019", label: "2019" },
-      { value: "2014", label: "2014" }
     ]
   },
   {
