@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,44 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+        // Custom brand colors
+        teal: {
+          50: '#E6F0F1',
+          100: '#C0D9DC',
+          200: '#97C0C4',
+          300: '#6EA7AC',
+          400: '#4C9199',
+          500: '#2A6B73',
+          600: '#25636B',
+          700: '#1F575F',
+          800: '#194B53',
+          900: '#0F3840',
+        },
+        coral: {
+          50: '#FFF0EB',
+          100: '#FFDACC',
+          200: '#FFC2AA',
+          300: '#FFAA88',
+          400: '#FF976F',
+          500: '#FF7F50',
+          600: '#FF7749',
+          700: '#FF6C40',
+          800: '#FF6237',
+          900: '#FF4F27',
+        },
+        gold: {
+          50: '#FFFAEB',
+          100: '#FFF2CC',
+          200: '#FFEAAA',
+          300: '#FFE188',
+          400: '#FFDA6F',
+          500: '#FFBD59',
+          600: '#FFB751',
+          700: '#FFAE48',
+          800: '#FFA73E',
+          900: '#FF992D',
+        }
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,12 +122,44 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+        'fade-in': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(10px)'
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0)'
+          }
+        },
+        'scale-in': {
+          '0%': {
+            transform: 'scale(0.95)',
+            opacity: '0'
+          },
+          '100%': {
+            transform: 'scale(1)',
+            opacity: '1'
+          }
+        },
+        'slide-in-right': {
+          '0%': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(0)' }
+        }
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
-			}
+				'accordion-up': 'accordion-up 0.2s ease-out',
+        'fade-in': 'fade-in 0.4s ease-out',
+        'scale-in': 'scale-in 0.3s ease-out',
+        'slide-in-right': 'slide-in-right 0.3s ease-out',
+        'enter': 'fade-in 0.4s ease-out, scale-in 0.3s ease-out',
+			},
+      fontFamily: {
+        sans: ['SF Pro Display', 'Inter', 'sans-serif'],
+        serif: ['SF Pro Text', 'Georgia', 'serif'],
+      }
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
