@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -51,46 +50,47 @@
   }
 
   .dark {
+    /* Improved dark mode contrast */
     --background: 186 30% 10%;
-    --foreground: 186 10% 95%;
+    --foreground: 186 10% 98%; /* Brighter foreground for better contrast */
     
     --card: 186 30% 12%;
-    --card-foreground: 186 10% 95%;
+    --card-foreground: 186 10% 98%;
     
     --popover: 186 30% 10%;
-    --popover-foreground: 186 10% 95%;
+    --popover-foreground: 186 10% 98%;
     
     /* Primary: Teal - brighter in dark mode */
-    --primary: 186 60% 50%;
+    --primary: 186 70% 65%; /* Increased brightness for contrast */
     --primary-foreground: 186 30% 10%;
     
     /* Secondary: Coral - brighter in dark mode */
-    --secondary: 16 90% 70%;
+    --secondary: 16 95% 75%; /* Increased brightness for contrast */
     --secondary-foreground: 186 30% 10%;
     
     --muted: 186 20% 20%;
-    --muted-foreground: 186 10% 70%;
+    --muted-foreground: 186 10% 85%; /* Brighter for better contrast */
     
     /* Accent: Gold - brighter in dark mode */
-    --accent: 38 90% 72%;
+    --accent: 38 95% 80%; /* Increased brightness for contrast */
     --accent-foreground: 186 30% 10%;
     
-    --destructive: 0 84% 60%;
+    --destructive: 0 90% 65%;
     --destructive-foreground: 0 0% 98%;
     
-    --border: 186 20% 20%;
-    --input: 186 20% 20%;
-    --ring: 186 60% 50%;
+    --border: 186 20% 30%; /* Brighter border for better visibility */
+    --input: 186 20% 30%;
+    --ring: 186 70% 65%;
 
-    /* Sidebar styles for dark mode */
+    /* Sidebar styles for dark mode with improved contrast */
     --sidebar-background: 186 30% 15%;
-    --sidebar-foreground: 186 10% 95%;
-    --sidebar-primary: 186 60% 50%;
+    --sidebar-foreground: 186 10% 98%;
+    --sidebar-primary: 186 70% 65%;
     --sidebar-primary-foreground: 186 30% 10%;
-    --sidebar-accent: 186 20% 20%;
-    --sidebar-accent-foreground: 186 10% 95%;
-    --sidebar-border: 186 20% 25%;
-    --sidebar-ring: 186 60% 50%;
+    --sidebar-accent: 186 20% 25%;
+    --sidebar-accent-foreground: 186 10% 98%;
+    --sidebar-border: 186 20% 35%;
+    --sidebar-ring: 186 70% 65%;
   }
 }
 

@@ -6,8 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { BookmarkPlus, Share2, MessageSquare, TrendingUp } from 'lucide-react';
+import { BookmarkPlus, MessageSquare, TrendingUp } from 'lucide-react';
 import CaseStudyCard from '@/components/CaseStudyCard';
+import ShareOptions from '@/components/ShareOptions';
+import SEOHead from '@/components/SEOHead';
 
 // Sample case studies data (this would come from an API in a real app)
 const caseStudiesData: Record<string, any> = {
@@ -98,8 +100,22 @@ const CaseStudyDetail = () => {
     );
   }
   
+  // Prepare SEO metadata
+  const seoTitle = `${caseStudy.company}: ${caseStudy.lingo} Case Study | LingoLab`;
+  const seoDescription = `Learn how ${caseStudy.company} used "${caseStudy.lingo}" to ${caseStudy.tagline.toLowerCase()}. Strategic narrative case study with detailed analysis.`;
+  const seoKeywords = `${caseStudy.company}, ${caseStudy.lingo}, strategic narrative, case study, ${caseStudy.industry}, ${caseStudy.narrativeType}`;
+  const canonicalUrl = `${window.location.origin}/case-studies/${slug}`;
+  
   return (
     <Layout>
+      <SEOHead
+        title={seoTitle}
+        description={seoDescription}
+        keywords={seoKeywords}
+        canonicalUrl={canonicalUrl}
+        type="article"
+      />
+      
       <article className="py-8">
         <div className="container max-w-4xl mx-auto px-6">
           {/* Breadcrumbs */}
@@ -113,31 +129,31 @@ const CaseStudyDetail = () => {
           
           {/* Main title */}
           <div className="mb-6">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-50 mb-6">
               {caseStudy.tagline}
             </h1>
-            <p className="text-gray-500">{caseStudy.publishDate}</p>
+            <p className="text-gray-500 dark:text-gray-400">{caseStudy.publishDate}</p>
           </div>
 
           {/* Category Pills */}
           <div className="flex flex-wrap gap-2 mb-8">
-            <Badge variant="outline" className="bg-indigo-100 text-indigo-800 hover:bg-indigo-200 border-none">
+            <Badge variant="outline" className="bg-indigo-100 text-indigo-800 hover:bg-indigo-200 border-none dark:bg-indigo-900 dark:text-indigo-100 dark:hover:bg-indigo-800">
               {caseStudy.narrativeType}
             </Badge>
-            <Badge variant="outline" className="bg-indigo-100 text-indigo-800 hover:bg-indigo-200 border-none">
+            <Badge variant="outline" className="bg-indigo-100 text-indigo-800 hover:bg-indigo-200 border-none dark:bg-indigo-900 dark:text-indigo-100 dark:hover:bg-indigo-800">
               {caseStudy.industry}
             </Badge>
-            <Badge variant="outline" className="bg-indigo-100 text-indigo-800 hover:bg-indigo-200 border-none">
+            <Badge variant="outline" className="bg-indigo-100 text-indigo-800 hover:bg-indigo-200 border-none dark:bg-indigo-900 dark:text-indigo-100 dark:hover:bg-indigo-800">
               {caseStudy.overview.stage}
             </Badge>
           </div>
 
           {/* Author card (similar to Starter Story) */}
-          <div className="bg-indigo-100 rounded-lg p-6 mb-10">
+          <div className="bg-indigo-100 dark:bg-indigo-900/70 rounded-lg p-6 mb-10">
             <div className="flex items-start justify-between">
               <div className="flex space-x-4">
                 <div className="flex flex-col items-center">
-                  <div className="w-16 h-16 rounded-full bg-indigo-200 overflow-hidden">
+                  <div className="w-16 h-16 rounded-full bg-indigo-200 dark:bg-indigo-800 overflow-hidden">
                     <img 
                       src={caseStudy.author?.image || "/placeholder.svg"} 
                       alt={caseStudy.author?.name || "Author"} 
@@ -146,10 +162,10 @@ const CaseStudyDetail = () => {
                   </div>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">{caseStudy.author?.name || "LingoLab Team"}</h3>
-                  <p className="text-sm text-gray-600">{caseStudy.author?.role || "Narrative Analyst"}</p>
+                  <h3 className="font-semibold text-lg dark:text-white">{caseStudy.author?.name || "LingoLab Team"}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">{caseStudy.author?.role || "Narrative Analyst"}</p>
                   {caseStudy.author?.twitter && (
-                    <a href="#" className="text-indigo-600 text-sm flex items-center mt-1">
+                    <a href="#" className="text-indigo-600 dark:text-indigo-300 text-sm flex items-center mt-1">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
                       {caseStudy.author?.twitter}
                     </a>
@@ -160,35 +176,39 @@ const CaseStudyDetail = () => {
               {/* Metrics */}
               <div className="hidden md:flex space-x-8 text-center">
                 <div>
-                  <p className="text-xl font-bold">{caseStudy.metrics?.revenue || caseStudy.overview.revenue}</p>
-                  <p className="text-xs text-gray-600">REVENUE</p>
+                  <p className="text-xl font-bold dark:text-white">{caseStudy.metrics?.revenue || caseStudy.overview.revenue}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-300">REVENUE</p>
                 </div>
                 <div>
-                  <p className="text-xl font-bold">{caseStudy.metrics?.founders || "1"}</p>
-                  <p className="text-xs text-gray-600">FOUNDERS</p>
+                  <p className="text-xl font-bold dark:text-white">{caseStudy.metrics?.founders || "1"}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-300">FOUNDERS</p>
                 </div>
                 <div>
-                  <p className="text-xl font-bold">{caseStudy.metrics?.employees || caseStudy.overview.employees}</p>
-                  <p className="text-xs text-gray-600">EMPLOYEES</p>
+                  <p className="text-xl font-bold dark:text-white">{caseStudy.metrics?.employees || caseStudy.overview.employees}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-300">EMPLOYEES</p>
                 </div>
               </div>
             </div>
 
             {/* Social buttons */}
             <div className="flex justify-end mt-4 space-x-3">
-              <Button variant="outline" size="sm" className="flex items-center space-x-1 bg-white">
+              <Button variant="outline" size="sm" className="flex items-center space-x-1 bg-white dark:bg-gray-800">
                 <BookmarkPlus className="h-4 w-4" />
                 <span>Save</span>
               </Button>
-              <Button variant="outline" size="sm" className="flex items-center space-x-1 bg-white">
-                <Share2 className="h-4 w-4" />
-                <span>Share</span>
-              </Button>
+              
+              <ShareOptions 
+                caseStudy={{
+                  company: caseStudy.company,
+                  lingo: caseStudy.lingo,
+                  id: slug || ''
+                }}
+              />
             </div>
           </div>
           
           {/* Main Content */}
-          <section className="prose prose-indigo max-w-none">
+          <section className="prose prose-indigo dark:prose-invert max-w-none">
             <h2 className="text-2xl font-semibold">The Lingo That Changed Everything</h2>
             <p className="text-lg leading-relaxed mb-6">{caseStudy.content.lingoExplanation}</p>
             
@@ -202,32 +222,32 @@ const CaseStudyDetail = () => {
             <p className="mb-6">{caseStudy.content.tippingPoint}</p>
             
             {/* Founder Quote */}
-            <div className="my-10 bg-gray-50 p-6 rounded-xl border-l-4 border-indigo-500">
-              <blockquote className="text-lg italic">
+            <div className="my-10 bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border-l-4 border-indigo-500">
+              <blockquote className="text-lg italic dark:text-gray-200">
                 {caseStudy.content.founderQuote.split(' - ')[0]}
               </blockquote>
-              <footer className="mt-2 text-right font-medium">
+              <footer className="mt-2 text-right font-medium dark:text-gray-300">
                 - {caseStudy.content.founderQuote.split(' - ')[1]}
               </footer>
             </div>
             
             <h2 className="text-2xl font-semibold mt-10">Narrative Architecture</h2>
-            <Card className="my-6 border-none shadow-sm">
+            <Card className="my-6 border-none shadow-sm dark:bg-gray-800/50">
               <CardContent className="p-0">
-                <div className="grid grid-cols-1 divide-y">
+                <div className="grid grid-cols-1 divide-y dark:divide-gray-700">
                   <div className="p-4">
-                    <h4 className="font-semibold text-lg text-indigo-700">The Problem</h4>
-                    <p>{caseStudy.content.narrativeArchitecture.problem}</p>
+                    <h4 className="font-semibold text-lg text-indigo-700 dark:text-indigo-300">The Problem</h4>
+                    <p className="dark:text-gray-300">{caseStudy.content.narrativeArchitecture.problem}</p>
                   </div>
                   
                   <div className="p-4">
-                    <h4 className="font-semibold text-lg text-indigo-700">The Promise</h4>
-                    <p>{caseStudy.content.narrativeArchitecture.promise}</p>
+                    <h4 className="font-semibold text-lg text-indigo-700 dark:text-indigo-300">The Promise</h4>
+                    <p className="dark:text-gray-300">{caseStudy.content.narrativeArchitecture.promise}</p>
                   </div>
                   
                   <div className="p-4">
-                    <h4 className="font-semibold text-lg text-indigo-700">The Proof</h4>
-                    <p>{caseStudy.content.narrativeArchitecture.proof}</p>
+                    <h4 className="font-semibold text-lg text-indigo-700 dark:text-indigo-300">The Proof</h4>
+                    <p className="dark:text-gray-300">{caseStudy.content.narrativeArchitecture.proof}</p>
                   </div>
                 </div>
               </CardContent>
@@ -244,7 +264,7 @@ const CaseStudyDetail = () => {
           
           {/* Related Case Studies */}
           <section className="my-12">
-            <h2 className="text-2xl font-semibold mb-6">Related Case Studies</h2>
+            <h2 className="text-2xl font-semibold mb-6 dark:text-white">Related Case Studies</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {caseStudy.relatedCaseStudies.map((study: any) => (
                 <CaseStudyCard key={study.id} {...study} />
@@ -255,11 +275,11 @@ const CaseStudyDetail = () => {
           {/* Comment/Discussion Section */}
           <section className="my-12">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-semibold">Discussion</h2>
+              <h2 className="text-2xl font-semibold dark:text-white">Discussion</h2>
               <span className="text-muted-foreground">2 comments</span>
             </div>
             
-            <div className="p-6 border border-border rounded-xl">
+            <div className="p-6 border border-border rounded-xl dark:border-gray-700">
               <div className="flex items-center space-x-4 mb-4">
                 <Button className="bg-indigo-600 hover:bg-indigo-700 flex items-center space-x-2">
                   <MessageSquare className="h-4 w-4" />
@@ -269,17 +289,17 @@ const CaseStudyDetail = () => {
               </div>
               
               <div className="space-y-6">
-                <div className="p-4 bg-muted/30 rounded-lg">
+                <div className="p-4 bg-muted/30 dark:bg-gray-800/50 rounded-lg">
                   <div className="flex justify-between items-start">
                     <div className="flex items-center space-x-2">
-                      <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center">
-                        <span className="text-indigo-600 font-semibold text-sm">JD</span>
+                      <div className="h-8 w-8 rounded-full bg-indigo-100 dark:bg-indigo-800 flex items-center justify-center">
+                        <span className="text-indigo-600 dark:text-indigo-200 font-semibold text-sm">JD</span>
                       </div>
-                      <span className="font-medium">Jane Doe</span>
+                      <span className="font-medium dark:text-white">Jane Doe</span>
                     </div>
                     <span className="text-xs text-muted-foreground">2 days ago</span>
                   </div>
-                  <p className="mt-2 text-sm">
+                  <p className="mt-2 text-sm dark:text-gray-300">
                     This case study was incredibly insightful. We're currently repositioning our fintech product and the narrative architecture breakdown is exactly what we needed.
                   </p>
                 </div>
