@@ -28,10 +28,12 @@ const CompaniesList = ({ companies }: CompaniesListProps) => {
       {companies.map((company) => (
         <Link to={`/companies/${company.id}`} key={company.id} className="block">
           <CompanyCard 
+            id={company.id}
             name={company.name}
             description={company.description}
             logo={company.logo}
             industry={company.industry}
+            founded={company.founded}
             studies={company.caseStudies.length}
           />
         </Link>
