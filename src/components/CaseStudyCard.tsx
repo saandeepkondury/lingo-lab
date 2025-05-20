@@ -22,21 +22,21 @@ const CaseStudyCard = ({
 }: CaseStudyCardProps) => {
   return (
     <Link to={`/case-studies/${id}`} className="block">
-      <div className="apple-card h-full p-6 hover-scale">
+      <div className="apple-card h-full p-6 hover-scale border-t-4 border-t-teal-500 transition-all duration-300">
         <div className="flex justify-between items-start mb-4">
           <h3 className="text-lg font-semibold">{company}</h3>
         </div>
         
         <div className="space-y-3 mb-6">
-          <p className="text-2xl font-medium text-primary">"{lingo}"</p>
+          <p className="text-2xl font-medium text-teal-600 drop-shadow-sm">"{lingo}"</p>
           <p className="text-sm text-muted-foreground">{impact}</p>
         </div>
         
         <div className="flex flex-wrap gap-2">
-          <Badge variant="outline" className="bg-muted/50 hover:bg-muted">
+          <Badge variant="outline" className="bg-teal-50 text-teal-700 hover:bg-teal-100 border-teal-200">
             {narrativeType}
           </Badge>
-          <Badge variant="outline" className="bg-muted/50 hover:bg-muted">
+          <Badge variant="outline" className="bg-coral-50 text-coral-700 hover:bg-coral-100 border-coral-200">
             {industry}
           </Badge>
         </div>

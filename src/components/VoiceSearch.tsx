@@ -42,7 +42,7 @@ const VoiceSearch = ({
       }
       
       if (redirectOnResult) {
-        navigate(`/search?q=${encodeURIComponent(mockTranscript)}`);
+        navigate(`/case-studies`);
       }
     }, 2000);
   };

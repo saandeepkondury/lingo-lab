@@ -1,9 +1,12 @@
+
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Search, Menu, X } from "lucide-react";
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center">
         <div className="mr-4 flex">
@@ -21,7 +24,7 @@ const Navbar = () => {
         <div className="flex flex-1 items-center justify-end space-x-2">
           <div className="hidden md:flex">
             <Button variant="outline" size="icon" className="rounded-full mr-2" asChild>
-              <Link to="/search" aria-label="Search">
+              <Link to="/case-studies" aria-label="Search">
                 <Search className="h-4 w-4" />
               </Link>
             </Button>
@@ -53,7 +56,7 @@ const Navbar = () => {
             
             <div className="flex space-x-4 py-4">
               <Button variant="outline" size="icon" className="rounded-full" asChild>
-                <Link to="/search" aria-label="Search" onClick={() => setIsMenuOpen(false)}>
+                <Link to="/case-studies" aria-label="Search" onClick={() => setIsMenuOpen(false)}>
                   <Search className="h-4 w-4" />
                 </Link>
               </Button>
@@ -71,4 +74,5 @@ const Navbar = () => {
         </div>}
     </header>;
 };
+
 export default Navbar;
