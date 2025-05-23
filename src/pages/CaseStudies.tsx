@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import FiltersPanel from '@/components/FiltersPanel';
@@ -9,21 +8,22 @@ import { filterGroups } from '@/data/companiesData';
 import { useCaseStudiesFilter } from '@/hooks/useCaseStudiesFilter';
 import SearchArea from '@/components/CaseStudies/SearchArea';
 import CaseStudiesList from '@/components/CaseStudies/CaseStudiesList';
-
 const CaseStudies = () => {
-  const { 
-    searchQuery, 
-    setSearchQuery, 
-    activeFilters, 
+  const {
+    searchQuery,
+    setSearchQuery,
+    activeFilters,
     handleFilterChange,
     clearFilters,
-    visibleCaseStudies, 
-    lockedCaseStudies 
+    visibleCaseStudies,
+    lockedCaseStudies
   } = useCaseStudiesFilter();
-  
-  const { isLoggedIn } = useAuth();
-  const { toast } = useToast();
-  
+  const {
+    isLoggedIn
+  } = useAuth();
+  const {
+    toast
+  } = useToast();
   const handleLockedCaseStudyClick = () => {
     toast({
       title: "Premium Case Study",
@@ -31,9 +31,7 @@ const CaseStudies = () => {
       action: <Button className="bg-teal-500 hover:bg-teal-600 text-white" size="sm" asChild><Link to="/pricing">View Plans</Link></Button>
     });
   };
-
-  return (
-    <Layout>
+  return <Layout>
       <section className="py-12">
         <div className="container max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
@@ -41,35 +39,25 @@ const CaseStudies = () => {
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Explore how the world's most successful startups used strategic narrative to drive growth
             </p>
-            {!isLoggedIn && (
-              <div className="mt-4">
+            {!isLoggedIn && <div className="mt-4">
                 <Button className="bg-teal-500 hover:bg-teal-600 text-white mr-3" asChild>
-                  <Link to="/join">Subscribe to Unlock All Case Studies</Link>
+                  <Link to="/join">Join to Unlock All Case Studies</Link>
                 </Button>
-              </div>
-            )}
+              </div>}
           </div>
           
           <div className="relative flex flex-col md:flex-row gap-8">
             {/* Filters - shown as sidebar on desktop, drawer on mobile */}
             <div className="md:w-64 flex-shrink-0">
               <div className="md:sticky md:top-20">
-                <FiltersPanel 
-                  filters={filterGroups}
-                  activeFilters={activeFilters}
-                  onFilterChange={handleFilterChange}
-                  clearFilters={clearFilters}
-                />
+                <FiltersPanel filters={filterGroups} activeFilters={activeFilters} onFilterChange={handleFilterChange} clearFilters={clearFilters} />
               </div>
             </div>
             
             {/* Main content */}
             <div className="flex-1">
               {/* Search area */}
-              <SearchArea 
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-              />
+              <SearchArea searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
               
               {/* Results count */}
               <div className="mb-6">
@@ -80,18 +68,11 @@ const CaseStudies = () => {
               </div>
               
               {/* Results grid */}
-              <CaseStudiesList 
-                visibleCaseStudies={visibleCaseStudies}
-                lockedCaseStudies={lockedCaseStudies}
-                handleLockedCaseStudyClick={handleLockedCaseStudyClick}
-                clearFilters={clearFilters}
-              />
+              <CaseStudiesList visibleCaseStudies={visibleCaseStudies} lockedCaseStudies={lockedCaseStudies} handleLockedCaseStudyClick={handleLockedCaseStudyClick} clearFilters={clearFilters} />
             </div>
           </div>
         </div>
       </section>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default CaseStudies;
