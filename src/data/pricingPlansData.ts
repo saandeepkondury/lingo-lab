@@ -1,3 +1,4 @@
+
 import { PlanFeature } from "@/components/pricing/PricingPlan";
 
 export interface PricingPlan {
@@ -16,7 +17,7 @@ export const pricingPlansData: PricingPlan[] = [
     name: "Basic",
     description: "For founders and startup teams",
     price: 49,
-    frequency: "month",
+    frequency: "quarter",
     features: [
       { included: true, text: "Unlimited case studies" },
       { included: true, text: "Advanced search functionality" },
@@ -32,7 +33,7 @@ export const pricingPlansData: PricingPlan[] = [
     name: "Pro",
     description: "For serious founders and marketers",
     price: 99,
-    frequency: "month",
+    frequency: "quarter",
     popular: true,
     features: [
       { included: true, text: "Unlimited case studies" },

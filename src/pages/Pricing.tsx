@@ -8,7 +8,7 @@ import ContactSection from '@/components/pricing/ContactSection';
 import { pricingPlansData } from '@/data/pricingPlansData';
 
 const Pricing = () => {
-  const [billingFrequency, setBillingFrequency] = useState<'month' | 'year'>('month');
+  const [billingFrequency, setBillingFrequency] = useState<'quarter' | 'year'>('quarter');
   
   return (
     <Layout>

@@ -2,8 +2,8 @@
 import BillingFrequencySelector from './BillingFrequencySelector';
 
 interface PricingHeaderProps {
-  billingFrequency: 'month' | 'year';
-  setBillingFrequency: (frequency: 'month' | 'year') => void;
+  billingFrequency: 'quarter' | 'year';
+  setBillingFrequency: (frequency: 'quarter' | 'year') => void;
 }
 
 const PricingHeader = ({ billingFrequency, setBillingFrequency }: PricingHeaderProps) => {

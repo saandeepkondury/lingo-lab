@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
 interface BillingFrequencySelectorProps {
-  billingFrequency: 'month' | 'year';
-  setBillingFrequency: (frequency: 'month' | 'year') => void;
+  billingFrequency: 'quarter' | 'year';
+  setBillingFrequency: (frequency: 'quarter' | 'year') => void;
 }
 
 const BillingFrequencySelector = ({ 
@@ -14,11 +14,11 @@ const BillingFrequencySelector = ({
   return (
     <div className="flex items-center justify-center gap-4 mt-8">
       <Button
-        variant={billingFrequency === 'month' ? 'default' : 'outline'}
-        className={billingFrequency === 'month' ? 'bg-teal-500 hover:bg-teal-600' : ''}
-        onClick={() => setBillingFrequency('month')}
+        variant={billingFrequency === 'quarter' ? 'default' : 'outline'}
+        className={billingFrequency === 'quarter' ? 'bg-teal-500 hover:bg-teal-600' : ''}
+        onClick={() => setBillingFrequency('quarter')}
       >
-        Monthly Billing
+        Quarterly Billing
       </Button>
       <Button
         variant={billingFrequency === 'year' ? 'default' : 'outline'}

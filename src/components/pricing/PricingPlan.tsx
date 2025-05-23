@@ -18,7 +18,7 @@ export interface PricingPlanProps {
   popular?: boolean;
   features: PlanFeature[];
   cta: string;
-  billingFrequency: 'month' | 'year';
+  billingFrequency: 'quarter' | 'year';
 }
 
 const PricingPlan = ({ 
@@ -56,8 +56,8 @@ const PricingPlan = ({
               ${oneTime 
                 ? price 
                 : billingFrequency === 'year' 
-                  ? Math.round(price * 0.9) 
-                  : price}
+                  ? Math.round(price * 4 * 0.9) 
+                  : (price * 3)}
             </span>
             {!oneTime && (
               <span className="text-muted-foreground ml-1">
@@ -68,6 +68,11 @@ const PricingPlan = ({
               <span className="text-muted-foreground ml-1">one-time</span>
             )}
           </div>
+          {!oneTime && price > 0 && billingFrequency === 'quarter' && (
+            <p className="text-sm text-muted-foreground mt-1">
+              ${price} per month, billed quarterly (${price * 3})
+            </p>
+          )}
           {!oneTime && price > 0 && billingFrequency === 'year' && (
             <p className="text-sm text-muted-foreground mt-1">
               ${Math.round(price * 12 * 0.9)} billed annually (10% off)
