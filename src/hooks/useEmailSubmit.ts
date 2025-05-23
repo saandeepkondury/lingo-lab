@@ -32,8 +32,8 @@ export const useEmailSubmit = () => {
       setIsSubmitting(false);
       setEmail('');
       
-      // Navigate to pricing page after successful submission
-      navigate('/pricing');
+      // Navigate to join page after successful submission
+      navigate('/join');
       
       toast({
         title: "Successfully subscribed!",
