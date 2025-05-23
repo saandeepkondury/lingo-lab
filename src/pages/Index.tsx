@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import CaseStudyCard from '@/components/CaseStudyCard';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Mail } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
@@ -40,15 +40,19 @@ const featuredCaseStudies = [{
 }];
 const Index = () => {
   const [email, setEmail] = useState('');
+  const [featuredEmail, setFeaturedEmail] = useState('');
+  const [ctaEmail, setCtaEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingFeatured, setIsSubmittingFeatured] = useState(false);
+  const [isSubmittingCta, setIsSubmittingCta] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent, emailValue: string, setSubmittingState: React.Dispatch<React.SetStateAction<boolean>>, setEmailState: React.Dispatch<React.SetStateAction<string>>) => {
     e.preventDefault();
     
     // Simple email validation
-    if (!email || !email.includes('@')) {
+    if (!emailValue || !emailValue.includes('@')) {
       toast({
         title: "Invalid email",
         description: "Please enter a valid email address.",
@@ -57,12 +61,12 @@ const Index = () => {
       return;
     }
 
-    setIsSubmitting(true);
+    setSubmittingState(true);
 
     // Simulate submission processing
     setTimeout(() => {
-      setIsSubmitting(false);
-      setEmail('');
+      setSubmittingState(false);
+      setEmailState('');
       
       // Navigate to pricing page after successful submission
       navigate('/pricing');
@@ -74,12 +78,16 @@ const Index = () => {
     }, 800);
   };
 
-  const handleViewCaseStudiesClick = () => {
-    navigate('/pricing');
-    toast({
-      title: "Join our community",
-      description: "Sign up to view all case studies."
-    });
+  const handleHeroSubmit = (e: React.FormEvent) => {
+    handleSubmit(e, email, setIsSubmitting, setEmail);
+  };
+
+  const handleFeaturedSubmit = (e: React.FormEvent) => {
+    handleSubmit(e, featuredEmail, setIsSubmittingFeatured, setFeaturedEmail);
+  };
+
+  const handleCtaSubmit = (e: React.FormEvent) => {
+    handleSubmit(e, ctaEmail, setIsSubmittingCta, setCtaEmail);
   };
 
   return <Layout>
@@ -94,7 +102,7 @@ const Index = () => {
               Discover how top founders used strategic narrative to raise millions and shape markets.
             </p>
             <div className="pt-10 flex justify-center">
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
+              <form onSubmit={handleHeroSubmit} className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
                 <Input
                   type="email"
                   placeholder="Enter your email"
@@ -130,13 +138,24 @@ const Index = () => {
             {featuredCaseStudies.map(study => <CaseStudyCard key={study.id} {...study} />)}
           </div>
           
-          <div className="flex justify-center">
-            <Button 
-              className="h-12 rounded-md bg-teal-500 hover:bg-teal-600 text-white px-6 text-base"
-              onClick={handleViewCaseStudiesClick}
-            >
-              Join Our Community <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+          <div className="flex flex-col items-center">
+            <form onSubmit={handleFeaturedSubmit} className="flex flex-col sm:flex-row gap-3 w-full max-w-lg mb-6">
+              <Input
+                type="email"
+                placeholder="Enter your email for access"
+                value={featuredEmail}
+                onChange={(e) => setFeaturedEmail(e.target.value)}
+                className="h-12 px-4 text-base"
+                required
+              />
+              <Button 
+                type="submit" 
+                className="h-12 rounded-md bg-teal-500 hover:bg-teal-600 text-white px-6 text-base"
+                disabled={isSubmittingFeatured}
+              >
+                {isSubmittingFeatured ? "Submitting..." : "View All Case Studies"} <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </form>
           </div>
         </div>
       </section>
@@ -195,17 +214,26 @@ const Index = () => {
             <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
               Join thousands of founders using Lingo Lab to craft compelling company narratives.
             </p>
-            <Button 
-              size="lg" 
-              className="rounded-md bg-white text-teal-600 hover:bg-teal-50 px-8 h-12 text-base" 
-              onClick={() => navigate('/pricing')}
-            >
-              Join Our Community
-            </Button>
+            <form onSubmit={handleCtaSubmit} className="flex flex-col sm:flex-row gap-3 w-full max-w-md mx-auto mb-6">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={ctaEmail}
+                onChange={(e) => setCtaEmail(e.target.value)}
+                className="h-12 px-4 text-base bg-white/20 border-white/40 text-white placeholder:text-white/70"
+                required
+              />
+              <Button 
+                type="submit" 
+                className="h-12 rounded-md bg-white text-teal-600 hover:bg-teal-50 px-6"
+                disabled={isSubmittingCta}
+              >
+                {isSubmittingCta ? "Submitting..." : "Join Community"} <Mail className="ml-2 h-4 w-4" />
+              </Button>
+            </form>
           </div>
         </div>
       </section>
     </Layout>;
 };
 export default Index;
-
