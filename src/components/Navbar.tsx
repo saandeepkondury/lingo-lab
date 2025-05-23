@@ -1,8 +1,6 @@
 
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from '@/context/AuthContext';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -10,14 +8,9 @@ import { useIsMobile } from '@/hooks/use-mobile';
 const Navbar = () => {
   const { isLoggedIn, logout } = useAuth();
   const isMobile = useIsMobile();
-  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-  };
-
-  const handleMenuClick = () => {
-    navigate('/mobile-sidebar');
   };
 
   return <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -33,7 +26,7 @@ const Navbar = () => {
           <ThemeToggle />
           {/* Search button removed */}
           
-          <div className="hidden md:flex space-x-2">
+          <div className="flex space-x-2">
             {isLoggedIn ? (
               <Button 
                 variant="outline" 
@@ -47,15 +40,6 @@ const Navbar = () => {
               </Button>
             )}
           </div>
-          
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="md:hidden" 
-            onClick={handleMenuClick}
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
         </div>
       </div>
     </header>;

@@ -17,7 +17,6 @@ import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
-import MobileSidebar from "./pages/MobileSidebar";
 
 const queryClient = new QueryClient();
 
@@ -42,7 +41,6 @@ const App = () => (
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
-              <Route path="/mobile-sidebar" element={<MobileSidebar />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
