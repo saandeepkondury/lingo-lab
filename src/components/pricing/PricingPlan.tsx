@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Check, X } from 'lucide-react';
@@ -32,6 +32,9 @@ const PricingPlan = ({
   cta, 
   billingFrequency 
 }: PricingPlanProps) => {
+  const location = useLocation();
+  const isFromSignup = location.state?.fromSignup || document.referrer.includes('/join');
+
   return (
     <div 
       className={`relative rounded-xl border ${
@@ -42,7 +45,9 @@ const PricingPlan = ({
     >
       {popular && (
         <div className="absolute -top-4 inset-x-0 flex justify-center">
-          <Badge className="bg-teal-500 hover:bg-teal-600">Most Popular</Badge>
+          <Badge className="bg-teal-500 hover:bg-teal-600">
+            {isFromSignup ? 'Recommended' : 'Most Popular'}
+          </Badge>
         </div>
       )}
       
@@ -101,7 +106,7 @@ const PricingPlan = ({
           asChild
         >
           <Link to="/join">
-            {cta}
+            {isFromSignup ? `Activate ${name} Plan` : cta}
           </Link>
         </Button>
       </div>

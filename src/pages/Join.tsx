@@ -1,4 +1,3 @@
-
 import Layout from '@/components/Layout';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -22,11 +21,26 @@ const Join = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Mock login - in a real app, this would be an API call
+    // Mock login - simulate checking if user has paid subscription
     setTimeout(() => {
+      // For demo purposes, simulate that users without a subscription can't login
+      // In a real app, this would check the subscription status
+      const hasSubscription = Math.random() > 0.7; // 30% chance of having subscription for demo
+      
+      if (!hasSubscription) {
+        toast({
+          title: "Subscription Required",
+          description: "Please complete your subscription to access your account.",
+          variant: "destructive"
+        });
+        navigate('/pricing');
+        setIsLoading(false);
+        return;
+      }
+
       login();
       toast({
-        title: "Welcome to LingoLab",
+        title: "Welcome back to LingoLab",
         description: "You've successfully logged in."
       });
       navigate('/case-studies');
@@ -38,14 +52,13 @@ const Join = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Mock signup - in a real app, this would be an API call
+    // Mock signup - redirect to pricing to complete account setup
     setTimeout(() => {
-      login();
       toast({
-        title: "Welcome to LingoLab",
-        description: "Your account has been created successfully."
+        title: "Account Created",
+        description: "Please choose a plan to complete your account setup."
       });
-      navigate('/case-studies');
+      navigate('/pricing');
       setIsLoading(false);
     }, 1500);
   };
@@ -98,47 +111,17 @@ const Join = () => {
           </p>
         </div>
 
-        <Tabs defaultValue="signin" className="w-full">
+        <Tabs defaultValue="signup" className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="signin" className="flex items-center gap-2">
-              <LogIn className="h-4 w-4" />
-              Sign In
-            </TabsTrigger>
             <TabsTrigger value="signup" className="flex items-center gap-2">
               <UserPlus className="h-4 w-4" />
               Sign Up
             </TabsTrigger>
+            <TabsTrigger value="signin" className="flex items-center gap-2">
+              <LogIn className="h-4 w-4" />
+              Sign In
+            </TabsTrigger>
           </TabsList>
-
-          <TabsContent value="signin">
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <Input
-                  type="email"
-                  placeholder="Email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <Button 
-                type="submit" 
-                className="w-full bg-teal-500 hover:bg-teal-600 text-white"
-                disabled={isLoading}
-              >
-                {isLoading ? "Signing in..." : "Sign In"}
-              </Button>
-            </form>
-          </TabsContent>
 
           <TabsContent value="signup">
             <form onSubmit={handleSignup} className="space-y-4">
@@ -174,9 +157,49 @@ const Join = () => {
                 className="w-full bg-teal-500 hover:bg-teal-600 text-white"
                 disabled={isLoading}
               >
-                {isLoading ? "Creating account..." : "Create Account"}
+                {isLoading ? "Creating account..." : "Create Account & Choose Plan"}
               </Button>
             </form>
+            <div className="mt-4 text-center">
+              <p className="text-sm text-muted-foreground">
+                After signup, you'll choose a plan to complete your account
+              </p>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="signin">
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <Input
+                  type="email"
+                  placeholder="Email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <Button 
+                type="submit" 
+                className="w-full bg-teal-500 hover:bg-teal-600 text-white"
+                disabled={isLoading}
+              >
+                {isLoading ? "Signing in..." : "Sign In"}
+              </Button>
+            </form>
+            <div className="mt-4 text-center">
+              <p className="text-sm text-muted-foreground">
+                Only users with active subscriptions can sign in
+              </p>
+            </div>
           </TabsContent>
         </Tabs>
 
