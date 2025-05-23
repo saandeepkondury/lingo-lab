@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import FiltersPanel from '@/components/FiltersPanel';
 import { Button } from '@/components/ui/button';
@@ -21,20 +21,29 @@ const CaseStudies = () => {
     visibleCaseStudies,
     lockedCaseStudies
   } = useCaseStudiesFilter();
-  const {
-    isLoggedIn
-  } = useAuth();
-  const {
-    toast
-  } = useToast();
+  const { isLoggedIn } = useAuth();
+  const { toast } = useToast();
+  const location = useLocation();
+
+  // If user is not logged in and came from pricing page, show only locked case studies
+  const isFromPricing = location.state?.fromPricing || document.referrer.includes('/pricing');
+  const displayVisibleCaseStudies = (!isLoggedIn && isFromPricing) ? [] : visibleCaseStudies;
+  const displayLockedCaseStudies = (!isLoggedIn && isFromPricing) ? lockedCaseStudies : (isLoggedIn ? [] : lockedCaseStudies);
+
   const handleLockedCaseStudyClick = () => {
     toast({
       title: "Premium Case Study",
       description: "Subscribe to access our full library of case studies.",
-      action: <Button className="bg-teal-500 hover:bg-teal-600 text-white" size="sm" asChild><Link to="/pricing">View Plans</Link></Button>
+      action: (
+        <Button className="bg-teal-500 hover:bg-teal-600 text-white" size="sm" asChild>
+          <Link to="/pricing">View Plans</Link>
+        </Button>
+      )
     });
   };
-  return <Layout>
+
+  return (
+    <Layout>
       <section className="py-12">
         <div className="container max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
@@ -63,7 +72,12 @@ const CaseStudies = () => {
             {/* Filters - shown as sidebar on desktop, drawer on mobile */}
             <div className="md:w-64 flex-shrink-0">
               <div className="md:sticky md:top-20">
-                <FiltersPanel filters={filterGroups} activeFilters={activeFilters} onFilterChange={handleFilterChange} clearFilters={clearFilters} />
+                <FiltersPanel 
+                  filters={filterGroups} 
+                  activeFilters={activeFilters} 
+                  onFilterChange={handleFilterChange} 
+                  clearFilters={clearFilters} 
+                />
               </div>
             </div>
             
@@ -75,17 +89,24 @@ const CaseStudies = () => {
               {/* Results count */}
               <div className="mb-6">
                 <p className="text-sm text-muted-foreground">
-                  Showing {visibleCaseStudies.length} case studies
-                  {!isLoggedIn && lockedCaseStudies.length > 0 && ` (${lockedCaseStudies.length} locked)`}
+                  Showing {displayVisibleCaseStudies.length + displayLockedCaseStudies.length} case studies
+                  {!isLoggedIn && displayLockedCaseStudies.length > 0 && ` (${displayLockedCaseStudies.length} locked)`}
                 </p>
               </div>
               
               {/* Results grid */}
-              <CaseStudiesList visibleCaseStudies={visibleCaseStudies} lockedCaseStudies={lockedCaseStudies} handleLockedCaseStudyClick={handleLockedCaseStudyClick} clearFilters={clearFilters} />
+              <CaseStudiesList 
+                visibleCaseStudies={displayVisibleCaseStudies} 
+                lockedCaseStudies={displayLockedCaseStudies} 
+                handleLockedCaseStudyClick={handleLockedCaseStudyClick} 
+                clearFilters={clearFilters} 
+              />
             </div>
           </div>
         </div>
       </section>
-    </Layout>;
+    </Layout>
+  );
 };
+
 export default CaseStudies;
