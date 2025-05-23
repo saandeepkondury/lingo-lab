@@ -53,15 +53,11 @@ const PricingPlan = ({
         <div className="mt-4 mb-6">
           <div className="flex items-baseline">
             <span className="text-4xl font-bold">
-              ${oneTime 
-                ? price 
-                : billingFrequency === 'year' 
-                  ? Math.round(price * 4 * 0.9) 
-                  : (price * 3)}
+              ${oneTime ? price : price}
             </span>
             {!oneTime && (
               <span className="text-muted-foreground ml-1">
-                /{billingFrequency}
+                /month
               </span>
             )}
             {oneTime && (
@@ -70,12 +66,12 @@ const PricingPlan = ({
           </div>
           {!oneTime && price > 0 && billingFrequency === 'quarter' && (
             <p className="text-sm text-muted-foreground mt-1">
-              ${price} per month, billed quarterly (${price * 3})
+              Billed quarterly (${price * 3})
             </p>
           )}
           {!oneTime && price > 0 && billingFrequency === 'year' && (
             <p className="text-sm text-muted-foreground mt-1">
-              ${Math.round(price * 12 * 0.9)} billed annually (10% off)
+              Billed annually with 10% discount (${Math.round(price * 12 * 0.9)})
             </p>
           )}
         </div>
