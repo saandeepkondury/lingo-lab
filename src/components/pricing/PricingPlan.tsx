@@ -1,11 +1,8 @@
+
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Check, X } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
-import { createClient } from '@supabase/supabase-js';
-import { useToast } from '@/hooks/use-toast';
-import { useState } from 'react';
 
 export interface PlanFeature {
   included: boolean;
@@ -37,76 +34,6 @@ const PricingPlan = ({
 }: PricingPlanProps) => {
   const location = useLocation();
   const isFromSignup = location.state?.fromSignup || document.referrer.includes('/join');
-  const { isLoggedIn } = useAuth();
-  const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const supabase = createClient(
-    import.meta.env.VITE_SUPABASE_URL,
-    import.meta.env.VITE_SUPABASE_ANON_KEY
-  );
-
-  const handlePlanSelection = async () => {
-    if (!isLoggedIn) {
-      toast({
-        title: "Authentication Required",
-        description: "Please log in to subscribe to a plan.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        throw new Error("No active session");
-      }
-
-      let functionName;
-      let payload = {};
-
-      if (oneTime) {
-        // Investor plan - one-time payment
-        functionName = 'create-payment-checkout';
-      } else {
-        // Basic/Pro plans - subscription
-        functionName = 'create-subscription-checkout';
-        payload = {
-          planName: name,
-          billingFrequency: billingFrequency
-        };
-      }
-
-      const { data, error } = await supabase.functions.invoke(functionName, {
-        body: payload,
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-        },
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      if (data.url) {
-        // Open Stripe checkout in a new tab
-        window.open(data.url, '_blank');
-      } else {
-        throw new Error("No checkout URL received");
-      }
-    } catch (error) {
-      console.error('Error creating checkout session:', error);
-      toast({
-        title: "Error",
-        description: "Failed to start checkout process. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <div 
@@ -176,10 +103,11 @@ const PricingPlan = ({
               : ''
           }`} 
           variant={popular ? 'default' : 'outline'}
-          onClick={handlePlanSelection}
-          disabled={isLoading}
+          asChild
         >
-          {isLoading ? "Loading..." : (isFromSignup ? `Activate ${name} Plan` : cta)}
+          <Link to="/join">
+            {isFromSignup ? `Activate ${name} Plan` : cta}
+          </Link>
         </Button>
       </div>
     </div>
