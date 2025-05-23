@@ -1,4 +1,3 @@
-
 // Sample case studies data
 export const allCaseStudies = [
   {
@@ -84,7 +83,7 @@ export const allCaseStudies = [
     lingoStyle: "Anti-villain",
     year: 2019,
     targetAudience: "Businesses"
-  },
+  }
 ];
 
 // Normalized filter groups with unique values for better performance

@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { allCaseStudies } from '@/data/caseStudiesData';

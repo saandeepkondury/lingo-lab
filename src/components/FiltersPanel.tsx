@@ -28,6 +28,7 @@ const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: 
   );
   const isMobile = useIsMobile();
   const [companySearchQuery, setCompanySearchQuery] = useState('');
+  const [industrySearchQuery, setIndustrySearchQuery] = useState('');
 
   const toggleGroup = (groupName: string) => {
     setExpandedGroups(prev => ({
@@ -74,6 +75,50 @@ const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: 
                   </div>
                   {group.options
                     .filter(option => option.label.toLowerCase().includes(companySearchQuery.toLowerCase()))
+                    .map((option) => {
+                      const isActive = activeFilters[group.name]?.includes(option.value);
+                      
+                      return (
+                        <Button
+                          key={option.value}
+                          variant="ghost"
+                          className={`w-full justify-start px-2 py-1.5 h-auto text-sm ${
+                            isActive ? 'font-medium text-sidebar-primary' : 'font-normal text-sidebar-foreground/80 hover:text-sidebar-foreground'
+                          }`}
+                          onClick={() => onFilterChange(group.name, option.value)}
+                        >
+                          <div className="flex items-center">
+                            <div className={`flex h-4 w-4 items-center justify-center rounded-sm border ${
+                              isActive 
+                                ? 'border-sidebar-primary bg-sidebar-primary text-sidebar-primary-foreground' 
+                                : 'border-sidebar-foreground/60'
+                            } mr-2`}>
+                              {isActive && <Check className="h-3 w-3" />}
+                            </div>
+                            {option.label}
+                          </div>
+                        </Button>
+                      );
+                    })
+                  }
+                </div>
+              ) : group.name === "Industry" ? (
+                // Searchable Industry filter
+                <div className="px-2 mb-2">
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-2 flex items-center pointer-events-none">
+                      <Search className="h-3.5 w-3.5 text-sidebar-foreground/70" />
+                    </div>
+                    <Input 
+                      type="text"
+                      placeholder="Search industries..." 
+                      className="pl-8 py-1 h-8 text-sm bg-sidebar-accent/50 border-sidebar-border"
+                      value={industrySearchQuery}
+                      onChange={(e) => setIndustrySearchQuery(e.target.value)} 
+                    />
+                  </div>
+                  {group.options
+                    .filter(option => option.label.toLowerCase().includes(industrySearchQuery.toLowerCase()))
                     .map((option) => {
                       const isActive = activeFilters[group.name]?.includes(option.value);
                       
