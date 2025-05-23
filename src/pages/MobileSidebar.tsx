@@ -30,8 +30,6 @@ const MobileSidebar = () => {
       <nav className="flex-1 py-8 px-6 flex flex-col space-y-6 text-lg font-medium">
         <Link to="/" className="hover:text-teal-600">Home</Link>
         <Link to="/case-studies" className="hover:text-teal-600">Case Studies</Link>
-        <Link to="/submit" className="hover:text-teal-600">Submit Lingo</Link>
-        <Link to="/newsletter" className="hover:text-teal-600">Newsletter</Link>
         
         <div className="flex items-center space-x-4 py-4">
           <ThemeToggle />
@@ -58,6 +56,17 @@ const MobileSidebar = () => {
           )}
         </div>
       </nav>
+      
+      {/* Footer links in mobile sidebar */}
+      <div className="border-t border-border/40 p-6">
+        <div className="space-y-4">
+          <h3 className="text-sm font-medium">More</h3>
+          <ul className="space-y-3">
+            <li><Link to="/submit" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Submit Lingo</Link></li>
+            <li><Link to="/newsletter" className="text-muted-foreground hover:text-foreground transition-colors text-sm">Newsletter</Link></li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };

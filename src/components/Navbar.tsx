@@ -28,8 +28,6 @@ const Navbar = () => {
           </Link>
           <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
             <Link to="/case-studies" className="transition-colors hover:text-teal-600">Case Studies</Link>
-            <Link to="/submit" className="transition-colors hover:text-teal-600">Submit Lingo</Link>
-            <Link to="/newsletter" className="transition-colors hover:text-teal-600">Newsletter</Link>
           </nav>
         </div>
         
