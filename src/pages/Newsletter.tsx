@@ -1,17 +1,16 @@
-
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { CheckCircle } from 'lucide-react';
-
 const Newsletter = () => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -27,9 +26,7 @@ const Newsletter = () => {
       });
     }, 1500);
   };
-
-  return (
-    <Layout>
+  return <Layout>
       <section className="py-16 md:py-24 bg-gradient-to-b from-teal-50 to-white dark:from-teal-900/80 dark:to-background dark:text-white">
         <div className="container max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
@@ -40,26 +37,12 @@ const Newsletter = () => {
           </div>
           
           <div className="max-w-xl mx-auto">
-            {!isSubscribed ? (
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 mb-4">
-                <Input 
-                  type="email" 
-                  placeholder="Your email address" 
-                  value={email} 
-                  onChange={e => setEmail(e.target.value)} 
-                  required 
-                  className="flex-1 dark:bg-teal-900/40 dark:border-teal-700"
-                />
-                <Button 
-                  type="submit" 
-                  disabled={isSubmitting} 
-                  className="bg-teal-500 hover:bg-teal-600 text-white"
-                >
+            {!isSubscribed ? <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 mb-4">
+                <Input type="email" placeholder="Your email address" value={email} onChange={e => setEmail(e.target.value)} required className="flex-1 dark:bg-teal-900/40 dark:border-teal-700" />
+                <Button type="submit" disabled={isSubmitting} className="bg-teal-500 hover:bg-teal-600 text-white">
                   {isSubmitting ? "Subscribing..." : "Subscribe Free"}
                 </Button>
-              </form>
-            ) : (
-              <div className="bg-muted/30 dark:bg-teal-800/50 rounded-lg p-6 text-center space-y-4">
+              </form> : <div className="bg-muted/30 dark:bg-teal-800/50 rounded-lg p-6 text-center space-y-4">
                 <div className="mx-auto w-12 h-12 bg-teal-100 dark:bg-teal-700 rounded-full flex items-center justify-center">
                   <CheckCircle className="h-6 w-6 text-teal-600 dark:text-teal-200" />
                 </div>
@@ -67,8 +50,7 @@ const Newsletter = () => {
                 <p className="text-muted-foreground dark:text-gray-200">
                   Check your inbox soon for the latest strategic narrative insights.
                 </p>
-              </div>
-            )}
+              </div>}
             
             <p className="text-sm text-center text-muted-foreground dark:text-gray-300 mb-12">
               Join 10,000+ founders and marketers. Unsubscribe anytime.
@@ -146,25 +128,16 @@ const Newsletter = () => {
                   the best founders are using language to shape markets."
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="dark:border-teal-700 dark:text-white dark:hover:bg-teal-700/50"
-                    onClick={() => window.open('https://x.com/sandeepkondury', '_blank')}
-                  >
+                  <Button variant="outline" size="sm" className="dark:border-teal-700 dark:text-white dark:hover:bg-teal-700/50" onClick={() => window.open('https://x.com/sandeepkondury', '_blank')}>
                     @sandeep on X
                   </Button>
-                  <Button variant="outline" size="sm" className="dark:border-teal-700 dark:text-white dark:hover:bg-teal-700/50">
-                    Previous newsletters
-                  </Button>
+                  
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default Newsletter;
