@@ -39,7 +39,7 @@ const App = () => (
               <Route path="/search" element={<Navigate to="/case-studies" replace />} />
               <Route path="/submit" element={<Submit />} />
               <Route path="/newsletter" element={<Newsletter />} />
-              <Route path="/pricing" element={<Navigate to="/join" replace />} />
+              <Route path="/pricing" element={<Pricing />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/mobile-sidebar" element={<MobileSidebar />} />
