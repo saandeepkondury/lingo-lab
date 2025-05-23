@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import FiltersPanel from '@/components/FiltersPanel';
@@ -8,6 +9,8 @@ import { filterGroups } from '@/data/companiesData';
 import { useCaseStudiesFilter } from '@/hooks/useCaseStudiesFilter';
 import SearchArea from '@/components/CaseStudies/SearchArea';
 import CaseStudiesList from '@/components/CaseStudies/CaseStudiesList';
+import { Bookmark } from 'lucide-react';
+
 const CaseStudies = () => {
   const {
     searchQuery,
@@ -39,11 +42,21 @@ const CaseStudies = () => {
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Explore how the world's most successful startups used strategic narrative to drive growth
             </p>
-            {!isLoggedIn && <div className="mt-4">
-                <Button className="bg-teal-500 hover:bg-teal-600 text-white mr-3" asChild>
-                  <Link to="/join">Join to Unlock All Case Studies</Link>
+            <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
+              {!isLoggedIn && (
+                <Button className="bg-teal-500 hover:bg-teal-600 text-white" asChild>
+                  <Link to="/join">Join to Unlock All Case Studies</Link>
                 </Button>
-              </div>}
+              )}
+              {isLoggedIn && (
+                <Button variant="outline" className="flex items-center gap-2" asChild>
+                  <Link to="/saved">
+                    <Bookmark className="h-4 w-4" />
+                    Saved Case Studies
+                  </Link>
+                </Button>
+              )}
+            </div>
           </div>
           
           <div className="relative flex flex-col md:flex-row gap-8">
