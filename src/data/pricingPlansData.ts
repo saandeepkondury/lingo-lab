@@ -39,10 +39,8 @@ export const pricingPlansData: PricingPlan[] = [
     features: [
       { included: true, text: "Unlimited case studies" },
       { included: true, text: "Advanced search & filters" },
-      { included: true, text: "Download pitch decks & assets" },
-      { included: true, text: "Exclusive founder interviews" },
       { included: true, text: "Save to personal library" },
-      { included: true, text: "Private Slack community" },
+      { included: true, text: "Exclusive founder interviews" },
       { included: true, text: "Monthly trend reports" },
       { included: false, text: "Private mentorship sessions" },
     ],
