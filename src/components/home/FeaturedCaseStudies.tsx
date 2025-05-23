@@ -31,17 +31,16 @@ const featuredCaseStudies = [{
   narrativeType: "Competitive Positioning",
   industry: "Design"
 }];
-
 const FeaturedCaseStudies = () => {
   const [email, setEmail] = useState('');
-  const { handleSubmit, isSubmitting } = useEmailSubmit();
-
+  const {
+    handleSubmit,
+    isSubmitting
+  } = useEmailSubmit();
   const handleFeaturedSubmit = (e: React.FormEvent) => {
     handleSubmit(e, email, setEmail);
   };
-
-  return (
-    <section className="py-20">
+  return <section className="py-20">
       <div className="container max-w-6xl mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-semibold mb-4">Featured Case Studies</h2>
@@ -54,28 +53,8 @@ const FeaturedCaseStudies = () => {
           {featuredCaseStudies.map(study => <CaseStudyCard key={study.id} {...study} disableLinks={true} />)}
         </div>
         
-        <div className="flex flex-col items-center">
-          <form onSubmit={handleFeaturedSubmit} className="flex flex-col sm:flex-row gap-3 w-full max-w-lg mb-6">
-            <Input
-              type="email"
-              placeholder="Enter your email for access"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="h-12 px-4 text-base"
-              required
-            />
-            <Button 
-              type="submit" 
-              className="h-12 rounded-md bg-teal-500 hover:bg-teal-600 text-white px-6 text-base"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Submitting..." : "View All Case Studies"} <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </form>
-        </div>
+        
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default FeaturedCaseStudies;
