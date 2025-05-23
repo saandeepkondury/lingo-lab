@@ -1,8 +1,12 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import CaseStudyCard from '@/components/CaseStudyCard';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { useToast } from '@/hooks/use-toast';
+import { Link } from 'react-router-dom';
 
 // Sample data for the homepage
 const featuredCaseStudies = [{
@@ -34,6 +38,41 @@ const featuredCaseStudies = [{
   industry: "Design"
 }];
 const Index = () => {
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Simple email validation
+    if (!email || !email.includes('@')) {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    // Simulate submission processing
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setEmail('');
+      
+      // Navigate to pricing page after successful submission
+      navigate('/pricing');
+      
+      toast({
+        title: "Email submitted",
+        description: "Thank you for your interest! Check out our pricing plans.",
+      });
+    }, 800);
+  };
+
   return <Layout>
       {/* Hero Section - Updated with modern Apple-inspired design */}
       <section className="bg-gradient-to-b from-teal-50 to-white py-24 md:py-32">
@@ -45,10 +84,24 @@ const Index = () => {
             <p className="text-xl md:text-2xl mt-8 text-zinc-700">
               Discover how top founders used strategic narrative to raise millions and shape markets.
             </p>
-            <div className="pt-10">
-              <Button size="lg" className="rounded-full bg-teal-500 hover:bg-teal-600 text-white px-10 py-6 text-lg shadow-md" asChild>
-                <Link to="/join">Join to Read Case Studies</Link>
-              </Button>
+            <div className="pt-10 flex justify-center">
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="h-12 px-4 text-base"
+                  required
+                />
+                <Button 
+                  type="submit" 
+                  className="h-12 rounded-md bg-teal-500 hover:bg-teal-600 text-white px-6 text-base"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Submitting..." : "Join Our Community"}
+                </Button>
+              </form>
             </div>
           </div>
         </div>
