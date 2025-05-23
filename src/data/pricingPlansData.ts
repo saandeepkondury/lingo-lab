@@ -1,4 +1,3 @@
-
 import { PlanFeature } from "@/components/pricing/PricingPlan";
 
 export interface PricingPlan {
@@ -23,7 +22,6 @@ export const pricingPlansData: PricingPlan[] = [
       { included: true, text: "Advanced search functionality" },
       { included: true, text: "Weekly newsletter" },
       { included: true, text: "Full case study library" },
-      { included: true, text: "Downloadable content" },
       { included: false, text: "Private Slack community" },
       { included: false, text: "Founder interviews" },
       { included: false, text: "Private mentorship sessions" },
