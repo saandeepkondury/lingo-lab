@@ -12,17 +12,17 @@ const BillingFrequencySelector = ({
   setBillingFrequency 
 }: BillingFrequencySelectorProps) => {
   return (
-    <div className="flex items-center justify-center gap-4 mt-8">
+    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
       <Button
         variant={billingFrequency === 'quarter' ? 'default' : 'outline'}
-        className={billingFrequency === 'quarter' ? 'bg-teal-500 hover:bg-teal-600' : ''}
+        className={`w-full sm:w-auto ${billingFrequency === 'quarter' ? 'bg-teal-500 hover:bg-teal-600' : ''}`}
         onClick={() => setBillingFrequency('quarter')}
       >
         Quarterly Billing
       </Button>
       <Button
         variant={billingFrequency === 'year' ? 'default' : 'outline'}
-        className={billingFrequency === 'year' ? 'bg-teal-500 hover:bg-teal-600' : ''}
+        className={`w-full sm:w-auto ${billingFrequency === 'year' ? 'bg-teal-500 hover:bg-teal-600' : ''}`}
         onClick={() => setBillingFrequency('year')}
       >
         Annual Billing
