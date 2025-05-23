@@ -19,12 +19,26 @@ const Navbar = () => {
           <Link to="/" className="mr-6 flex items-center space-x-2">
             <span className="text-xl font-serif font-bold bg-gradient-to-r from-teal-500 to-coral-500 bg-clip-text text-transparent">Lingo<span className="text-teal-500">Lab</span></span>
           </Link>
-          {/* Case Studies link removed */}
+          {isLoggedIn && (
+            <nav className="flex items-center space-x-6 text-sm font-medium">
+              <Link 
+                to="/case-studies" 
+                className="transition-colors hover:text-foreground/80 text-foreground/60"
+              >
+                Case Studies
+              </Link>
+              <Link 
+                to="/submit" 
+                className="transition-colors hover:text-foreground/80 text-foreground/60"
+              >
+                Submit Lingo
+              </Link>
+            </nav>
+          )}
         </div>
         
         <div className="flex flex-1 items-center justify-end space-x-2">
           <ThemeToggle />
-          {/* Search button removed */}
           
           <div className="flex space-x-2">
             {isLoggedIn ? (

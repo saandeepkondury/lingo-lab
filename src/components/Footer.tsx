@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <footer className="border-t border-border/40 bg-background">
       <div className="container max-w-screen-2xl py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-2">
             <Link to="/" className="flex items-center space-x-2 mb-4">
               <span className="text-xl font-bold bg-gradient-to-r from-teal-500 to-coral-500 bg-clip-text text-transparent">Lingo<span className="text-teal-500">Lab</span></span>
@@ -21,17 +21,6 @@ const Footer = () => {
                 hello@lingolab.site
               </a>
             </Button>
-          </div>
-          
-          <div>
-            <h3 className="font-medium text-lg mb-4">Pages</h3>
-            <ul className="space-y-2">
-              <li><Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">Home</Link></li>
-              <li><Link to="/case-studies" className="text-muted-foreground hover:text-foreground transition-colors">Case Studies</Link></li>
-              <li><Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">Pricing</Link></li>
-              <li><Link to="/submit" className="text-muted-foreground hover:text-foreground transition-colors">Submit Lingo</Link></li>
-              <li><Link to="/newsletter" className="text-muted-foreground hover:text-foreground transition-colors">Newsletter</Link></li>
-            </ul>
           </div>
           
           <div>
