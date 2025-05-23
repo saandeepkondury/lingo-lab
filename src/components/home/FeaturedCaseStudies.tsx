@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -52,7 +51,7 @@ const FeaturedCaseStudies = () => {
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-          {featuredCaseStudies.map(study => <CaseStudyCard key={study.id} {...study} />)}
+          {featuredCaseStudies.map(study => <CaseStudyCard key={study.id} {...study} disableLinks={true} />)}
         </div>
         
         <div className="flex flex-col items-center">
