@@ -32,12 +32,12 @@ export const useEmailSubmit = () => {
       setIsSubmitting(false);
       setEmail('');
       
-      // Navigate to pricing page after successful submission
-      navigate('/pricing');
+      // Navigate to newsletter page after successful submission
+      navigate('/newsletter');
       
       toast({
-        title: "Email submitted",
-        description: "Thank you for your interest! Check out our pricing plans.",
+        title: "Successfully subscribed!",
+        description: "You've been added to our newsletter. Welcome to the community!",
       });
     }, 800);
   };
