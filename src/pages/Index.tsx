@@ -91,7 +91,7 @@ const Index = () => {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-12 px-4 text-base"
+                  className="h-12 px-4 text-base bg-teal-50 dark:bg-teal-900/30 border-teal-100 dark:border-teal-700/50 placeholder:text-teal-500/50 dark:placeholder:text-teal-300/50"
                   required
                 />
                 <Button 
