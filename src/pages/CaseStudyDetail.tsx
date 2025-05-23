@@ -5,12 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { BookmarkPlus, MessageSquare, TrendingUp, Lock } from 'lucide-react';
+import { BookmarkPlus, BookmarkCheck, MessageSquare, TrendingUp, Lock } from 'lucide-react';
 import CaseStudyCard from '@/components/CaseStudyCard';
 import ShareOptions from '@/components/ShareOptions';
 import SEOHead from '@/components/SEOHead';
 import PricingPopup from '@/components/PricingPopup';
 import { useAuth } from '@/context/AuthContext';
+import { useSavedCaseStudies } from '@/context/SavedCaseStudiesContext';
+import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
@@ -86,6 +88,35 @@ const CaseStudyDetail = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   
   const { isLoggedIn } = useAuth();
+  const { isSaved, saveCaseStudy, removeCaseStudy } = useSavedCaseStudies();
+  const { toast } = useToast();
+  
+  const handleSaveToggle = () => {
+    if (!isLoggedIn) {
+      toast({
+        title: "Login Required",
+        description: "Please log in to save case studies.",
+        action: <Button className="bg-teal-500 hover:bg-teal-600 text-white" size="sm" asChild><Link to="/join">Login</Link></Button>
+      });
+      return;
+    }
+
+    if (!slug) return;
+
+    if (isSaved(slug)) {
+      removeCaseStudy(slug);
+      toast({
+        title: "Case study removed",
+        description: "Removed from your saved case studies."
+      });
+    } else {
+      saveCaseStudy(slug);
+      toast({
+        title: "Case study saved",
+        description: "Added to your saved case studies."
+      });
+    }
+  };
   
   useEffect(() => {
     // Scroll to top when component mounts
@@ -215,9 +246,14 @@ const CaseStudyDetail = () => {
 
             {/* Social buttons */}
             <div className="flex justify-end mt-4 space-x-3">
-              <Button variant="outline" size="sm" className="flex items-center space-x-1 bg-white dark:bg-gray-800">
-                <BookmarkPlus className="h-4 w-4" />
-                <span>Save</span>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex items-center space-x-1 bg-white dark:bg-gray-800"
+                onClick={handleSaveToggle}
+              >
+                {slug && isSaved(slug) ? <BookmarkCheck className="h-4 w-4" /> : <BookmarkPlus className="h-4 w-4" />}
+                <span>{slug && isSaved(slug) ? 'Saved' : 'Save'}</span>
               </Button>
               
               <ShareOptions 

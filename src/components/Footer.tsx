@@ -2,8 +2,11 @@
 import { Link } from 'react-router-dom';
 import { Mail, Twitter, Linkedin } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { useAuth } from '@/context/AuthContext';
 
 const Footer = () => {
+  const { isLoggedIn } = useAuth();
+
   return (
     <footer className="border-t border-border/40 bg-background">
       <div className="container max-w-screen-2xl py-12">
@@ -23,13 +26,14 @@ const Footer = () => {
             </Button>
           </div>
           
-          <div>
-            <h3 className="font-medium text-lg mb-4">Resources</h3>
-            <ul className="space-y-2">
-              <li><Link to="/join" className="text-muted-foreground hover:text-foreground transition-colors">Saved Case Studies</Link></li>
-              <li><Link to="/join" className="text-muted-foreground hover:text-foreground transition-colors">Founder Interviews</Link></li>
-            </ul>
-          </div>
+          {isLoggedIn && (
+            <div>
+              <h3 className="font-medium text-lg mb-4">Resources</h3>
+              <ul className="space-y-2">
+                <li><Link to="/saved" className="text-muted-foreground hover:text-foreground transition-colors">Saved Case Studies</Link></li>
+              </ul>
+            </div>
+          )}
         </div>
         
         <div className="border-t border-border/40 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
