@@ -1,7 +1,7 @@
 
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Search } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from '@/context/AuthContext';
 
@@ -29,15 +29,11 @@ const MobileSidebar = () => {
       {/* Navigation links */}
       <nav className="flex-1 py-8 px-6 flex flex-col space-y-6 text-lg font-medium">
         <Link to="/" className="hover:text-teal-600">Home</Link>
-        <Link to="/case-studies" className="hover:text-teal-600">Case Studies</Link>
+        {/* Case Studies link removed */}
         
         <div className="flex items-center space-x-4 py-4">
           <ThemeToggle />
-          <Button variant="outline" size="icon" className="rounded-full" asChild>
-            <Link to="/case-studies" aria-label="Search">
-              <Search className="h-4 w-4" />
-            </Link>
-          </Button>
+          {/* Search button removed */}
         </div>
         
         <div className="mt-auto pt-8">

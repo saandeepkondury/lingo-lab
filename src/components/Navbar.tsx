@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Search, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from '@/context/AuthContext';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -26,20 +26,12 @@ const Navbar = () => {
           <Link to="/" className="mr-6 flex items-center space-x-2">
             <span className="text-xl font-serif font-bold bg-gradient-to-r from-teal-500 to-coral-500 bg-clip-text text-transparent">Lingo<span className="text-teal-500">Lab</span></span>
           </Link>
-          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-            <Link to="/case-studies" className="transition-colors hover:text-teal-600">Case Studies</Link>
-          </nav>
+          {/* Case Studies link removed */}
         </div>
         
         <div className="flex flex-1 items-center justify-end space-x-2">
           <ThemeToggle />
-          <div className="hidden md:flex ml-2">
-            <Button variant="outline" size="icon" className="rounded-full mr-2" asChild>
-              <Link to="/case-studies" aria-label="Search">
-                <Search className="h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
+          {/* Search button removed */}
           
           <div className="hidden md:flex space-x-2">
             {isLoggedIn ? (
