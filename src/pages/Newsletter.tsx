@@ -146,8 +146,13 @@ const Newsletter = () => {
                   the best founders are using language to shape markets."
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <Button variant="outline" size="sm" className="dark:border-teal-700 dark:text-white dark:hover:bg-teal-700/50">
-                    @sandeep on Twitter
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="dark:border-teal-700 dark:text-white dark:hover:bg-teal-700/50"
+                    onClick={() => window.open('https://x.com/sandeepkondury', '_blank')}
+                  >
+                    @sandeep on X
                   </Button>
                   <Button variant="outline" size="sm" className="dark:border-teal-700 dark:text-white dark:hover:bg-teal-700/50">
                     Previous newsletters
