@@ -9,7 +9,7 @@ import { Shield, LogIn, UserPlus } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const Join = () => {
-  const { isLoggedIn, login, logout } = useAuth();
+  const { isLoggedIn, login, logout, checkSubscription } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [email, setEmail] = useState('');
@@ -17,15 +17,19 @@ const Join = () => {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     // Mock login - simulate checking if user has paid subscription
-    setTimeout(() => {
-      // For demo purposes, simulate that users without a subscription can't login
-      // In a real app, this would check the subscription status
-      const hasSubscription = Math.random() > 0.7; // 30% chance of having subscription for demo
+    setTimeout(async () => {
+      login();
+      
+      // Check subscription status after login
+      await checkSubscription();
+      
+      // For demo purposes, simulate that some users might not have subscriptions
+      const hasSubscription = Math.random() > 0.3; // 70% chance of having subscription for demo
       
       if (!hasSubscription) {
         toast({
@@ -38,7 +42,6 @@ const Join = () => {
         return;
       }
 
-      login();
       toast({
         title: "Welcome back to LingoLab",
         description: "You've successfully logged in."
@@ -58,7 +61,7 @@ const Join = () => {
         title: "Account Created",
         description: "Please choose a plan to complete your account setup."
       });
-      navigate('/pricing');
+      navigate('/pricing', { state: { fromSignup: true } });
       setIsLoading(false);
     }, 1500);
   };
