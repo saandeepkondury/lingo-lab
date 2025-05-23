@@ -32,8 +32,8 @@ export const useEmailSubmit = () => {
       setIsSubmitting(false);
       setEmail('');
       
-      // Navigate to newsletter page after successful submission
-      navigate('/newsletter');
+      // Navigate to pricing page after successful submission
+      navigate('/pricing');
       
       toast({
         title: "Successfully subscribed!",
