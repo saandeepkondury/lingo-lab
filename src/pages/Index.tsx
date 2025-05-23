@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -73,6 +74,14 @@ const Index = () => {
     }, 800);
   };
 
+  const handleViewCaseStudiesClick = () => {
+    navigate('/pricing');
+    toast({
+      title: "Join our community",
+      description: "Sign up to view all case studies."
+    });
+  };
+
   return <Layout>
       {/* Hero Section - Updated with modern Apple-inspired design */}
       <section className="bg-gradient-to-b from-teal-50 to-white py-24 md:py-32">
@@ -122,10 +131,11 @@ const Index = () => {
           </div>
           
           <div className="flex justify-center">
-            <Button variant="outline" size="lg" className="rounded-full" asChild>
-              <Link to="/case-studies">
-                View All Case Studies <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
+            <Button 
+              className="h-12 rounded-md bg-teal-500 hover:bg-teal-600 text-white px-6 text-base"
+              onClick={handleViewCaseStudiesClick}
+            >
+              Join Our Community <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -185,8 +195,12 @@ const Index = () => {
             <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
               Join thousands of founders using Lingo Lab to craft compelling company narratives.
             </p>
-            <Button size="lg" className="rounded-full bg-white text-teal-600 hover:bg-teal-50 px-8" asChild>
-              <Link to="/join">Get Started Today</Link>
+            <Button 
+              size="lg" 
+              className="rounded-md bg-white text-teal-600 hover:bg-teal-50 px-8 h-12 text-base" 
+              onClick={() => navigate('/pricing')}
+            >
+              Join Our Community
             </Button>
           </div>
         </div>
@@ -194,3 +208,4 @@ const Index = () => {
     </Layout>;
 };
 export default Index;
+
