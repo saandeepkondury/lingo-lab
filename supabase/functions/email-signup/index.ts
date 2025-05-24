@@ -94,9 +94,9 @@ const handler = async (req: Request): Promise<Response> => {
       React.createElement(WelcomeEmail, { email, source })
     );
 
-    // Send welcome email - UPDATE THIS FROM ADDRESS TO YOUR VERIFIED DOMAIN
+    // Send welcome email - Use your verified domain
     const emailResponse = await resend.emails.send({
-      from: "LingoLab <hello@yourdomain.com>", // Replace with your verified domain
+      from: "LingoLab <hello@lingolab.site>", // Replace with your verified domain
       to: [email],
       subject: "Welcome to LingoLab! 🎉 Master Strategic Narrative",
       html: emailHtml,
