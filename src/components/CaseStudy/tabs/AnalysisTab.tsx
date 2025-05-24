@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Lock } from 'lucide-react';
+import { useSubscription } from '@/hooks/useSubscription';
 
 interface AnalysisTabProps {
   caseStudy: any;
@@ -12,6 +13,9 @@ interface AnalysisTabProps {
 }
 
 const AnalysisTab = ({ caseStudy, isLoggedIn, showLockOverlay, contentRef }: AnalysisTabProps) => {
+  const { subscribed } = useSubscription();
+  const hasPaidAccess = isLoggedIn && subscribed;
+
   return (
     <section className="prose prose-indigo dark:prose-invert max-w-none">
       <h2 className="text-2xl font-semibold">The Lingo That Changed Everything</h2>
@@ -23,7 +27,7 @@ const AnalysisTab = ({ caseStudy, isLoggedIn, showLockOverlay, contentRef }: Ana
       {/* Reference point for locking content */}
       <div ref={contentRef} className="relative">
         {/* Lock overlay for non-subscribers */}
-        {showLockOverlay && !isLoggedIn && (
+        {showLockOverlay && !hasPaidAccess && (
           <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg">
             <div className="text-center p-6 max-w-md">
               <Lock className="h-12 w-12 mx-auto mb-4 text-teal-500" />
@@ -42,7 +46,7 @@ const AnalysisTab = ({ caseStudy, isLoggedIn, showLockOverlay, contentRef }: Ana
         )}
         
         {/* Locked content - visible for subscribers only without blur */}
-        <div className={!isLoggedIn ? "filter blur-sm select-none pointer-events-none" : ""}>
+        <div className={!hasPaidAccess ? "filter blur-sm select-none pointer-events-none" : ""}>
           <h2 className="text-2xl font-semibold mt-10">Channel Breakdown</h2>
           <p className="mb-6">{caseStudy.content.channelBreakdown}</p>
           

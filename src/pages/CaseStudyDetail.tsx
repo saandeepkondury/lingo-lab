@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import SEOHead from '@/components/SEOHead';
 import PricingPopup from '@/components/PricingPopup';
 import { useAuth } from '@/context/AuthContext';
+import { useSubscription } from '@/hooks/useSubscription';
 import { useSavedCaseStudies } from '@/context/SavedCaseStudiesContext';
 import { useToast } from '@/hooks/use-toast';
 import CaseStudyHeader from '@/components/CaseStudy/CaseStudyHeader';
@@ -86,8 +87,11 @@ const CaseStudyDetail = () => {
   const contentRef = useRef<HTMLDivElement>(null);
   
   const { isLoggedIn } = useAuth();
+  const { subscribed } = useSubscription();
   const { isSaved, saveCaseStudy, removeCaseStudy } = useSavedCaseStudies();
   const { toast } = useToast();
+  
+  const hasPaidAccess = isLoggedIn && subscribed;
   
   const handleSaveToggle = () => {
     if (!isLoggedIn) {
@@ -122,7 +126,7 @@ const CaseStudyDetail = () => {
     
     // Add scroll event listener to detect when user scrolls to locked content
     const handleScroll = () => {
-      if (!isLoggedIn && contentRef.current) {
+      if (!hasPaidAccess && contentRef.current) {
         const rect = contentRef.current.getBoundingClientRect();
         // If the locked content section is in view
         if (rect.top < window.innerHeight && rect.bottom > 0) {
@@ -134,7 +138,7 @@ const CaseStudyDetail = () => {
     
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [slug, isLoggedIn]);
+  }, [slug, hasPaidAccess]);
   
   if (!caseStudy) {
     return (
@@ -193,7 +197,7 @@ const CaseStudyDetail = () => {
       </article>
       
       {/* Show pricing popup when the user scrolls to locked content or if showPricingPopup is true */}
-      {showPricingPopup && !isLoggedIn && <PricingPopup forceShow={true} />}
+      {showPricingPopup && !hasPaidAccess && <PricingPopup forceShow={true} />}
     </Layout>
   );
 };

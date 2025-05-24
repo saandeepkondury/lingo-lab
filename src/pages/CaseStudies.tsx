@@ -5,6 +5,7 @@ import FiltersPanel from '@/components/FiltersPanel';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/AuthContext';
+import { useSubscription } from '@/hooks/useSubscription';
 import { filterGroups } from '@/data/companiesData';
 import { useCaseStudiesFilter } from '@/hooks/useCaseStudiesFilter';
 import SearchArea from '@/components/CaseStudies/SearchArea';
@@ -23,8 +24,11 @@ const CaseStudies = () => {
     lockedCaseStudies
   } = useCaseStudiesFilter();
   const { isLoggedIn } = useAuth();
+  const { subscribed } = useSubscription();
   const { toast } = useToast();
   const location = useLocation();
+
+  const hasPaidAccess = isLoggedIn && subscribed;
 
   // Check if user just signed in/up and show appropriate message
   useEffect(() => {
@@ -41,16 +45,10 @@ const CaseStudies = () => {
     } else if (location.state?.justSignedIn) {
       toast({
         title: "Welcome back!",
-        description: "Enjoy full access to our case study library.",
+        description: hasPaidAccess ? "Enjoy full access to our case study library." : "Subscribe to unlock our full case study library.",
       });
     }
-  }, [location.state, toast]);
-
-  // For non-paid users (demo), show locked case studies
-  // In a real app, this would check actual subscription status
-  const isPaidUser = isLoggedIn && Math.random() > 0.5; // 50% chance for demo
-  const displayVisibleCaseStudies = isPaidUser ? visibleCaseStudies : visibleCaseStudies.slice(0, 2);
-  const displayLockedCaseStudies = isPaidUser ? [] : [...visibleCaseStudies.slice(2), ...lockedCaseStudies];
+  }, [location.state, toast, hasPaidAccess]);
 
   const handleLockedCaseStudyClick = () => {
     toast({
@@ -74,7 +72,7 @@ const CaseStudies = () => {
               Explore how the world's most successful startups used strategic narrative to drive growth
             </p>
             <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
-              {!isPaidUser && (
+              {!hasPaidAccess && (
                 <Button className="bg-teal-500 hover:bg-teal-600 text-white" asChild>
                   <Link to="/pricing">Upgrade to Unlock All Case Studies</Link>
                 </Button>
@@ -111,15 +109,15 @@ const CaseStudies = () => {
               {/* Results count */}
               <div className="mb-6">
                 <p className="text-sm text-muted-foreground">
-                  Showing {displayVisibleCaseStudies.length + displayLockedCaseStudies.length} case studies
-                  {displayLockedCaseStudies.length > 0 && ` (${displayLockedCaseStudies.length} locked)`}
+                  Showing {visibleCaseStudies.length + lockedCaseStudies.length} case studies
+                  {lockedCaseStudies.length > 0 && ` (${lockedCaseStudies.length} locked)`}
                 </p>
               </div>
               
               {/* Results grid */}
               <CaseStudiesList 
-                visibleCaseStudies={displayVisibleCaseStudies} 
-                lockedCaseStudies={displayLockedCaseStudies} 
+                visibleCaseStudies={visibleCaseStudies} 
+                lockedCaseStudies={lockedCaseStudies} 
                 handleLockedCaseStudyClick={handleLockedCaseStudyClick} 
                 clearFilters={clearFilters} 
               />

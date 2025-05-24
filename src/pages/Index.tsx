@@ -8,6 +8,7 @@ import FiltersPanel from '@/components/FiltersPanel';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/AuthContext';
+import { useSubscription } from '@/hooks/useSubscription';
 import { filterGroups } from '@/data/companiesData';
 import { useCaseStudiesFilter } from '@/hooks/useCaseStudiesFilter';
 import SearchArea from '@/components/CaseStudies/SearchArea';
@@ -16,6 +17,9 @@ import { Link } from 'react-router-dom';
 
 const Index = () => {
   const { isLoggedIn } = useAuth();
+  const { subscribed } = useSubscription();
+  
+  const hasPaidAccess = isLoggedIn && subscribed;
   
   // If user is logged in, show case studies page
   if (isLoggedIn) {
@@ -48,6 +52,13 @@ const Index = () => {
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Explore how the world's most successful startups used strategic narrative to drive growth
               </p>
+              {!hasPaidAccess && (
+                <div className="mt-4">
+                  <Button className="bg-teal-500 hover:bg-teal-600 text-white" asChild>
+                    <Link to="/pricing">Upgrade to Unlock All Case Studies</Link>
+                  </Button>
+                </div>
+              )}
             </div>
             
             <div className="relative flex flex-col md:flex-row gap-8">
