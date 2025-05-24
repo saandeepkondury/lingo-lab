@@ -11,7 +11,7 @@ interface SubscriptionData {
 }
 
 export const useSubscription = () => {
-  const { user, session, isLoggedIn } = useAuth();
+  const { user, isLoggedIn } = useAuth();
   const { toast } = useToast();
   const [subscriptionData, setSubscriptionData] = useState<SubscriptionData>({
     subscribed: false,
@@ -21,64 +21,40 @@ export const useSubscription = () => {
   const [loading, setLoading] = useState(false);
 
   const checkSubscription = async () => {
-    if (!isLoggedIn || !user || !session) {
-      console.log('No valid session for subscription check');
+    if (!isLoggedIn || !user) {
       setSubscriptionData({ subscribed: false, subscription_tier: null, subscription_end: null });
       return;
     }
 
     setLoading(true);
     try {
-      console.log('Checking subscription for user:', user.email);
-      
-      // Get fresh session token before making the request
-      const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError || !currentSession) {
-        console.error('Session error during subscription check:', sessionError);
-        setSubscriptionData({ subscribed: false, subscription_tier: null, subscription_end: null });
-        return;
-      }
-
-      const { data, error } = await supabase.functions.invoke('check-subscription', {
-        headers: {
-          Authorization: `Bearer ${currentSession.access_token}`,
-        },
-      });
+      const { data, error } = await supabase.functions.invoke('check-subscription');
       
       if (error) {
         console.error('Subscription check error:', error);
-        // Don't show error toast for session-related issues
-        if (!error.message?.includes('Session') && !error.message?.includes('Authentication')) {
-          toast({
-            title: "Error checking subscription",
-            description: "Please try again later",
-            variant: "destructive"
-          });
-        }
-        return;
-      }
-
-      console.log('Subscription check response:', data);
-      setSubscriptionData(data);
-    } catch (error) {
-      console.error('Subscription check failed:', error);
-      // Only show user-facing error for non-auth issues
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      if (!errorMessage.includes('Session') && !errorMessage.includes('Authentication')) {
         toast({
           title: "Error checking subscription",
           description: "Please try again later",
           variant: "destructive"
         });
+        return;
       }
+
+      setSubscriptionData(data);
+    } catch (error) {
+      console.error('Subscription check failed:', error);
+      toast({
+        title: "Error checking subscription",
+        description: "Please try again later",
+        variant: "destructive"
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const createCheckout = async (planType: 'basic' | 'pro' | 'investor') => {
-    if (!isLoggedIn || !session) {
+    if (!isLoggedIn) {
       toast({
         title: "Authentication required",
         description: "Please sign in to continue",
@@ -89,24 +65,8 @@ export const useSubscription = () => {
 
     setLoading(true);
     try {
-      // Get fresh session token
-      const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError || !currentSession) {
-        console.error('Session error during checkout:', sessionError);
-        toast({
-          title: "Authentication error",
-          description: "Please sign in again",
-          variant: "destructive"
-        });
-        return;
-      }
-
       const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { planType },
-        headers: {
-          Authorization: `Bearer ${currentSession.access_token}`,
-        },
+        body: { planType }
       });
 
       if (error) {
@@ -135,7 +95,7 @@ export const useSubscription = () => {
   };
 
   const openCustomerPortal = async () => {
-    if (!isLoggedIn || !session) {
+    if (!isLoggedIn) {
       toast({
         title: "Authentication required",
         description: "Please sign in to continue",
@@ -146,24 +106,7 @@ export const useSubscription = () => {
 
     setLoading(true);
     try {
-      // Get fresh session token
-      const { data: { session: currentSession }, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError || !currentSession) {
-        console.error('Session error during portal access:', sessionError);
-        toast({
-          title: "Authentication error",
-          description: "Please sign in again",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      const { data, error } = await supabase.functions.invoke('customer-portal', {
-        headers: {
-          Authorization: `Bearer ${currentSession.access_token}`,
-        },
-      });
+      const { data, error } = await supabase.functions.invoke('customer-portal');
 
       if (error) {
         console.error('Customer portal error:', error);
@@ -191,16 +134,10 @@ export const useSubscription = () => {
   };
 
   useEffect(() => {
-    // Only check subscription if we have a valid session
-    if (isLoggedIn && session && user) {
-      // Small delay to ensure session is fully established
-      const timeoutId = setTimeout(() => {
-        checkSubscription();
-      }, 100);
-
-      return () => clearTimeout(timeoutId);
+    if (isLoggedIn) {
+      checkSubscription();
     }
-  }, [isLoggedIn, session?.access_token, user?.id]);
+  }, [isLoggedIn, user]);
 
   return {
     ...subscriptionData,

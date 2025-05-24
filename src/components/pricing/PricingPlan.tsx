@@ -5,7 +5,6 @@ import { Badge } from '@/components/ui/badge';
 import { Check, X } from 'lucide-react';
 import { useSubscription } from '@/hooks/useSubscription';
 import { useAuth } from '@/context/AuthContext';
-import { useToast } from '@/components/ui/use-toast';
 
 export interface PlanFeature {
   included: boolean;
@@ -38,7 +37,6 @@ const PricingPlan = ({
   const location = useLocation();
   const { isLoggedIn } = useAuth();
   const { subscribed, subscription_tier, loading, createCheckout, openCustomerPortal } = useSubscription();
-  const { toast } = useToast();
   const isFromSignup = location.state?.fromSignup || document.referrer.includes('/join');
   
   const planType = name.toLowerCase() as 'basic' | 'pro' | 'investor';
@@ -46,13 +44,8 @@ const PricingPlan = ({
   const isSubscribed = subscribed && (planType === 'basic' || planType === 'pro');
 
   const handleButtonClick = () => {
-    // Ensure user is logged in before any payment action
     if (!isLoggedIn) {
-      toast({
-        title: "Authentication required",
-        description: "Please sign in to continue with your subscription",
-        variant: "destructive"
-      });
+      window.location.href = '/join';
       return;
     }
 
@@ -64,7 +57,7 @@ const PricingPlan = ({
   };
 
   const getButtonText = () => {
-    if (!isLoggedIn) return 'Sign In Required';
+    if (!isLoggedIn) return cta;
     if (isCurrentPlan) return 'Manage Subscription';
     if (isFromSignup) return `Activate ${name} Plan`;
     return cta;
@@ -159,16 +152,10 @@ const PricingPlan = ({
           }`} 
           variant={isCurrentPlan ? 'default' : popular ? 'default' : 'outline'}
           onClick={handleButtonClick}
-          disabled={loading || !isLoggedIn}
+          disabled={loading}
         >
           {loading ? 'Loading...' : getButtonText()}
         </Button>
-
-        {!isLoggedIn && (
-          <p className="text-xs text-muted-foreground mt-2 text-center">
-            Please sign in to subscribe
-          </p>
-        )}
       </div>
     </div>
   );

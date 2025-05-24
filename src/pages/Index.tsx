@@ -18,31 +18,31 @@ import { Link } from 'react-router-dom';
 const Index = () => {
   const { isLoggedIn } = useAuth();
   const { subscribed } = useSubscription();
-  const { toast } = useToast();
-  
-  // Always call hooks at the top level - move this outside the conditional
-  const {
-    searchQuery,
-    setSearchQuery,
-    activeFilters,
-    handleFilterChange,
-    clearFilters,
-    visibleCaseStudies,
-    lockedCaseStudies
-  } = useCaseStudiesFilter();
   
   const hasPaidAccess = isLoggedIn && subscribed;
   
-  const handleLockedCaseStudyClick = () => {
-    toast({
-      title: "Premium Case Study",
-      description: "Subscribe to access our full library of case studies.",
-      action: <Button className="bg-teal-500 hover:bg-teal-600 text-white" size="sm" asChild><Link to="/pricing">View Plans</Link></Button>
-    });
-  };
-
   // If user is logged in, show case studies page
   if (isLoggedIn) {
+    const {
+      searchQuery,
+      setSearchQuery,
+      activeFilters,
+      handleFilterChange,
+      clearFilters,
+      visibleCaseStudies,
+      lockedCaseStudies
+    } = useCaseStudiesFilter();
+    
+    const { toast } = useToast();
+    
+    const handleLockedCaseStudyClick = () => {
+      toast({
+        title: "Premium Case Study",
+        description: "Subscribe to access our full library of case studies.",
+        action: <Button className="bg-teal-500 hover:bg-teal-600 text-white" size="sm" asChild><Link to="/pricing">View Plans</Link></Button>
+      });
+    };
+
     return (
       <Layout>
         <section className="py-12">

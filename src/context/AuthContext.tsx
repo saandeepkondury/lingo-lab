@@ -8,7 +8,7 @@ interface AuthContextType {
   session: Session | null;
   isLoggedIn: boolean;
   login: () => void;
-  logout: () => Promise<void>;
+  logout: () => void;
   signUp: (email: string, password: string, fullName: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   isLoading: boolean;
@@ -25,22 +25,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('Auth state changed:', event, session?.user?.email);
+        console.log('Auth state changed:', event, session);
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(false);
 
-        // Only check subscription for authenticated users with a valid session
-        if (event === 'SIGNED_IN' && session?.access_token) {
+        // Check subscription status when user logs in
+        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
           try {
-            // Small delay to ensure session is fully established
-            setTimeout(async () => {
-              await supabase.functions.invoke('check-subscription', {
-                headers: {
-                  Authorization: `Bearer ${session.access_token}`,
-                },
-              });
-            }, 200);
+            await supabase.functions.invoke('check-subscription');
           } catch (error) {
             console.error('Failed to check subscription on auth change:', error);
           }
@@ -50,7 +43,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('Initial session check:', session?.user?.email);
       setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
@@ -83,22 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = async () => {
-    console.log('Starting logout process...');
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.error('Logout error:', error);
-        throw error;
-      }
-      console.log('Logout successful');
-      
-      // Clear local state immediately
-      setSession(null);
-      setUser(null);
-    } catch (error) {
-      console.error('Error during logout:', error);
-      throw error;
-    }
+    await supabase.auth.signOut();
   };
 
   // Legacy functions for backward compatibility
@@ -107,7 +84,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     console.log('Use signIn instead of login');
   };
 
-  const isLoggedIn = !!user && !!session;
+  const isLoggedIn = !!user;
 
   return (
     <AuthContext.Provider value={{ 
