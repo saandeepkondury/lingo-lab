@@ -11,10 +11,13 @@ export type Database = {
     Tables: {
       subscribers: {
         Row: {
+          billing_frequency: string | null
           created_at: string
           email: string
           id: string
+          plan_type: string | null
           stripe_customer_id: string | null
+          stripe_subscription_id: string | null
           subscribed: boolean
           subscription_end: string | null
           subscription_tier: string | null
@@ -22,10 +25,13 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          billing_frequency?: string | null
           created_at?: string
           email: string
           id?: string
+          plan_type?: string | null
           stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
           subscribed?: boolean
           subscription_end?: string | null
           subscription_tier?: string | null
@@ -33,10 +39,13 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          billing_frequency?: string | null
           created_at?: string
           email?: string
           id?: string
+          plan_type?: string | null
           stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
           subscribed?: boolean
           subscription_end?: string | null
           subscription_tier?: string | null

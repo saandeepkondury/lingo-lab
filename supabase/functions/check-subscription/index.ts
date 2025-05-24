@@ -48,7 +48,12 @@ serve(async (req) => {
     
     logStep("User authenticated", { userId: user.id, email: user.email });
 
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
+    const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
+    if (!stripeKey) {
+      throw new Error("Stripe configuration error");
+    }
+
+    const stripe = new Stripe(stripeKey, {
       apiVersion: "2023-10-16",
     });
 
@@ -71,6 +76,8 @@ serve(async (req) => {
         subscribed: false,
         subscription_tier: null,
         subscription_end: null,
+        plan_type: null,
+        billing_frequency: null,
         updated_at: new Date().toISOString(),
       }, { onConflict: 'email' });
       
@@ -97,6 +104,8 @@ serve(async (req) => {
     let hasActiveSub = false;
     let subscriptionTier = null;
     let subscriptionEnd = null;
+    let planType = null;
+    let billingFrequency = null;
 
     // Check for one-time payments (for Investor plan)
     const payments = await stripe.paymentIntents.list({
@@ -113,6 +122,7 @@ serve(async (req) => {
     if (successfulInvestorPayment) {
       hasActiveSub = true;
       subscriptionTier = "Investor";
+      planType = "investor";
       // Investor plan is lifetime, so we set end date far in the future
       subscriptionEnd = new Date(Date.now() + (10 * 365 * 24 * 60 * 60 * 1000)).toISOString(); // 10 years from now
       logStep("Found successful Investor payment", { paymentId: successfulInvestorPayment.id });
@@ -130,16 +140,28 @@ serve(async (req) => {
         const priceId = subscription.items.data[0].price.id;
         const price = await stripe.prices.retrieve(priceId);
         const amount = price.unit_amount || 0;
+        const interval = price.recurring?.interval_count || 1;
         
-        // Check for annual vs quarterly billing and determine tier
-        if (amount <= 15876) { // $158.76 quarterly for basic or $529.20 annually for basic
+        // Determine billing frequency and tier
+        if (interval >= 12) {
+          billingFrequency = "year";
+        } else {
+          billingFrequency = "quarter";
+        }
+        
+        // Determine tier based on monthly equivalent
+        const monthlyAmount = billingFrequency === "year" ? amount / 12 : amount / 3;
+        if (monthlyAmount <= 5000) { // Around $50/month
           subscriptionTier = "Basic";
-        } else if (amount <= 35640) { // $356.40 quarterly for pro or $1069.20 annually for pro
+          planType = "basic";
+        } else if (monthlyAmount <= 10000) { // Around $100/month
           subscriptionTier = "Pro";
+          planType = "pro";
         } else {
           subscriptionTier = "Enterprise";
+          planType = "enterprise";
         }
-        logStep("Determined subscription tier", { priceId, amount, subscriptionTier });
+        logStep("Determined subscription tier", { priceId, amount, subscriptionTier, billingFrequency });
       } else {
         logStep("Subscription found but expired", { 
           subscriptionId: subscription.id, 
@@ -165,6 +187,8 @@ serve(async (req) => {
       subscribed: hasActiveSub,
       subscription_tier: subscriptionTier,
       subscription_end: subscriptionEnd,
+      plan_type: planType,
+      billing_frequency: billingFrequency,
       updated_at: new Date().toISOString(),
     }, { onConflict: 'email' });
 

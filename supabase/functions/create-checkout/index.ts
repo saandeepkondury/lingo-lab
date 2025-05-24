@@ -52,7 +52,13 @@ serve(async (req) => {
     const { planType, billingFrequency = 'quarter' } = await req.json();
     logStep("Plan type and billing frequency received", { planType, billingFrequency });
 
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
+    const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
+    if (!stripeKey) {
+      logStep("Stripe secret key not found");
+      throw new Error("Stripe configuration error");
+    }
+
+    const stripe = new Stripe(stripeKey, {
       apiVersion: "2023-10-16",
     });
 
