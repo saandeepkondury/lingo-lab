@@ -1,6 +1,12 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0'
+import { Resend } from "npm:resend@2.0.0";
+import { renderAsync } from 'npm:@react-email/components@0.0.22'
+import React from 'npm:react@18.3.1'
+import { WelcomeEmail } from './_templates/welcome-email.tsx'
+
+const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -83,10 +89,26 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('[EMAIL-SIGNUP] Email signup added to database:', signup);
 
+    // Render the welcome email template
+    const emailHtml = await renderAsync(
+      React.createElement(WelcomeEmail, { email, source })
+    );
+
+    // Send welcome email
+    const emailResponse = await resend.emails.send({
+      from: "LingoLab <onboarding@resend.dev>",
+      to: [email],
+      subject: "Welcome to LingoLab! 🎉 Master Strategic Narrative",
+      html: emailHtml,
+    });
+
+    console.log("[EMAIL-SIGNUP] Welcome email sent successfully:", emailResponse);
+
     return new Response(JSON.stringify({ 
       success: true, 
-      message: "Successfully signed up! We'll be in touch soon.",
-      signupId: signup.id
+      message: "Successfully signed up! Check your email for next steps.",
+      signupId: signup.id,
+      emailId: emailResponse.data?.id
     }), {
       status: 200,
       headers: {
