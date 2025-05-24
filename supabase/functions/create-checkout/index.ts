@@ -18,21 +18,23 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const supabaseClient = createClient(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_ANON_KEY") ?? ""
-  );
-
   try {
     logStep("Function started");
 
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
+      logStep("No authorization header provided");
       throw new Error("No authorization header provided");
     }
 
     const token = authHeader.replace("Bearer ", "");
     logStep("Authenticating user");
+    
+    // Use anon key for user authentication
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+    );
     
     const { data, error: authError } = await supabaseClient.auth.getUser(token);
     if (authError) {
