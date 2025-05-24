@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Navigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import PricingHeader from '@/components/pricing/PricingHeader';
 import PricingPlan from '@/components/pricing/PricingPlan';
@@ -9,12 +9,33 @@ import ContactSection from '@/components/pricing/ContactSection';
 import { pricingPlansData } from '@/data/pricingPlansData';
 import { useToast } from '@/components/ui/use-toast';
 import { useSubscription } from '@/hooks/useSubscription';
+import { useAuth } from '@/context/AuthContext';
 
 const Pricing = () => {
   const [billingFrequency, setBillingFrequency] = useState<'quarter' | 'year'>('quarter');
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const { checkSubscription } = useSubscription();
+  const { isLoggedIn, isLoading } = useAuth();
+  
+  // Redirect to login if not authenticated
+  if (!isLoading && !isLoggedIn) {
+    return <Navigate to="/join" state={{ redirectTo: '/pricing' }} replace />;
+  }
+
+  // Show loading while checking auth status
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500 mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading...</p>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
   
   useEffect(() => {
     const success = searchParams.get('success');
