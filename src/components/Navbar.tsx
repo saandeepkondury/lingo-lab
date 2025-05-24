@@ -11,7 +11,16 @@ const Navbar = () => {
   const location = useLocation();
   
   const handleLogout = async () => {
-    await logout();
+    try {
+      console.log('Navbar: Logout button clicked');
+      await logout();
+      console.log('Navbar: Logout completed, redirecting to home');
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Navbar: Logout failed:', error);
+      // Force redirect even if logout failed
+      window.location.href = '/';
+    }
   };
 
   const showCaseStudiesLink = isLoggedIn || location.pathname === '/pricing';

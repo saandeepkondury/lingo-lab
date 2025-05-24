@@ -26,11 +26,25 @@ serve(async (req) => {
   try {
     logStep("Function started");
 
-    const authHeader = req.headers.get("Authorization")!;
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      throw new Error("No authorization header provided");
+    }
+
     const token = authHeader.replace("Bearer ", "");
-    const { data } = await supabaseClient.auth.getUser(token);
+    logStep("Authenticating user");
+    
+    const { data, error: authError } = await supabaseClient.auth.getUser(token);
+    if (authError) {
+      logStep("Authentication failed", { error: authError.message });
+      throw new Error(`Authentication failed: ${authError.message}`);
+    }
+    
     const user = data.user;
-    if (!user?.email) throw new Error("User not authenticated or email not available");
+    if (!user?.email) {
+      throw new Error("User not authenticated or email not available");
+    }
+    
     logStep("User authenticated", { userId: user.id, email: user.email });
 
     const { planType } = await req.json();
@@ -50,7 +64,7 @@ serve(async (req) => {
       logStep("No existing customer found");
     }
 
-    const origin = req.headers.get("origin") || "http://localhost:3000";
+    const origin = req.headers.get("origin") || "https://1b47a6d6-0bdb-47c2-88d9-152af9583ef3.lovableproject.com";
 
     let session;
     if (planType === "investor") {

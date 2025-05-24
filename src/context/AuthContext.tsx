@@ -25,28 +25,39 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('Auth state changed:', event, session);
+        console.log('Auth state changed:', event, session?.user?.id);
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(false);
 
-        // Check subscription status when user logs in
+        // For specific events, check subscription status
         if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-          try {
-            await supabase.functions.invoke('check-subscription');
-          } catch (error) {
-            console.error('Failed to check subscription on auth change:', error);
-          }
+          // Small delay to ensure session is properly established
+          setTimeout(async () => {
+            try {
+              await supabase.functions.invoke('check-subscription');
+            } catch (error) {
+              console.log('Subscription check failed during auth change:', error);
+            }
+          }, 1000);
         }
       }
     );
 
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setIsLoading(false);
-    });
+    const initializeAuth = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setSession(session);
+        setUser(session?.user ?? null);
+      } catch (error) {
+        console.error('Failed to get initial session:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeAuth();
 
     return () => subscription.unsubscribe();
   }, []);
@@ -75,16 +86,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = async () => {
-    await supabase.auth.signOut();
+    try {
+      console.log('Logging out user...');
+      // Clear local state immediately
+      setUser(null);
+      setSession(null);
+      
+      // Attempt to sign out from Supabase
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.warn('Logout error (but continuing):', error);
+      }
+      console.log('Logout completed');
+    } catch (error) {
+      console.warn('Logout failed, but clearing local state:', error);
+      // Still clear local state even if Supabase call fails
+      setUser(null);
+      setSession(null);
+    }
   };
 
   // Legacy functions for backward compatibility
   const login = () => {
-    // This is kept for backward compatibility but won't actually log in
     console.log('Use signIn instead of login');
   };
 
-  const isLoggedIn = !!user;
+  const isLoggedIn = !!user && !!session;
 
   return (
     <AuthContext.Provider value={{ 

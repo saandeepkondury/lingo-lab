@@ -11,7 +11,7 @@ interface SubscriptionData {
 }
 
 export const useSubscription = () => {
-  const { user, isLoggedIn } = useAuth();
+  const { user, isLoggedIn, session } = useAuth();
   const { toast } = useToast();
   const [subscriptionData, setSubscriptionData] = useState<SubscriptionData>({
     subscribed: false,
@@ -21,40 +21,43 @@ export const useSubscription = () => {
   const [loading, setLoading] = useState(false);
 
   const checkSubscription = async () => {
-    if (!isLoggedIn || !user) {
+    if (!isLoggedIn || !user || !session) {
       setSubscriptionData({ subscribed: false, subscription_tier: null, subscription_end: null });
       return;
     }
 
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('check-subscription');
+      // Get a fresh session token
+      const { data: { session: freshSession } } = await supabase.auth.getSession();
+      
+      if (!freshSession) {
+        console.warn('No fresh session available for subscription check');
+        setSubscriptionData({ subscribed: false, subscription_tier: null, subscription_end: null });
+        return;
+      }
+
+      const { data, error } = await supabase.functions.invoke('check-subscription', {
+        headers: {
+          Authorization: `Bearer ${freshSession.access_token}`,
+        },
+      });
       
       if (error) {
         console.error('Subscription check error:', error);
-        toast({
-          title: "Error checking subscription",
-          description: "Please try again later",
-          variant: "destructive"
-        });
         return;
       }
 
       setSubscriptionData(data);
     } catch (error) {
       console.error('Subscription check failed:', error);
-      toast({
-        title: "Error checking subscription",
-        description: "Please try again later",
-        variant: "destructive"
-      });
     } finally {
       setLoading(false);
     }
   };
 
   const createCheckout = async (planType: 'basic' | 'pro' | 'investor') => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn || !session) {
       toast({
         title: "Authentication required",
         description: "Please sign in to continue",
@@ -65,15 +68,25 @@ export const useSubscription = () => {
 
     setLoading(true);
     try {
+      // Get a fresh session token
+      const { data: { session: freshSession } } = await supabase.auth.getSession();
+      
+      if (!freshSession) {
+        throw new Error('No valid session found');
+      }
+
       const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { planType }
+        body: { planType },
+        headers: {
+          Authorization: `Bearer ${freshSession.access_token}`,
+        },
       });
 
       if (error) {
         console.error('Checkout error:', error);
         toast({
           title: "Payment error",
-          description: "Failed to create checkout session",
+          description: error.message || "Failed to create checkout session",
           variant: "destructive"
         });
         return;
@@ -86,7 +99,7 @@ export const useSubscription = () => {
       console.error('Checkout failed:', error);
       toast({
         title: "Payment error",
-        description: "Failed to create checkout session",
+        description: error instanceof Error ? error.message : "Failed to create checkout session",
         variant: "destructive"
       });
     } finally {
@@ -95,7 +108,7 @@ export const useSubscription = () => {
   };
 
   const openCustomerPortal = async () => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn || !session) {
       toast({
         title: "Authentication required",
         description: "Please sign in to continue",
@@ -106,7 +119,18 @@ export const useSubscription = () => {
 
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('customer-portal');
+      // Get a fresh session token
+      const { data: { session: freshSession } } = await supabase.auth.getSession();
+      
+      if (!freshSession) {
+        throw new Error('No valid session found');
+      }
+
+      const { data, error } = await supabase.functions.invoke('customer-portal', {
+        headers: {
+          Authorization: `Bearer ${freshSession.access_token}`,
+        },
+      });
 
       if (error) {
         console.error('Customer portal error:', error);
@@ -134,10 +158,10 @@ export const useSubscription = () => {
   };
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isLoggedIn && session) {
       checkSubscription();
     }
-  }, [isLoggedIn, user]);
+  }, [isLoggedIn, session]);
 
   return {
     ...subscriptionData,
