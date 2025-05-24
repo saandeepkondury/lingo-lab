@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import PricingHeader from '@/components/pricing/PricingHeader';
 import PricingPlan from '@/components/pricing/PricingPlan';
+import Testimonials from '@/components/pricing/Testimonials';
 import FAQ from '@/components/pricing/FAQ';
 import ContactSection from '@/components/pricing/ContactSection';
 import { pricingPlansData } from '@/data/pricingPlansData';
@@ -56,6 +57,7 @@ const Pricing = () => {
             ))}
           </div>
           
+          <Testimonials />
           <FAQ />
           <ContactSection />
         </div>
