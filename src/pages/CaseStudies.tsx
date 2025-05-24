@@ -11,6 +11,10 @@ import SearchArea from '@/components/CaseStudies/SearchArea';
 import CaseStudiesList from '@/components/CaseStudies/CaseStudiesList';
 import { Bookmark } from 'lucide-react';
 import { useEffect } from 'react';
+import HeroSection from '@/components/home/HeroSection';
+import FeaturedCaseStudies from '@/components/home/FeaturedCaseStudies';
+import ValueProposition from '@/components/home/ValueProposition';
+import CTASection from '@/components/home/CTASection';
 
 const CaseStudies = () => {
   const {
@@ -46,6 +50,19 @@ const CaseStudies = () => {
     }
   }, [location.state, toast]);
 
+  // If user is not logged in, show marketing homepage
+  if (!isLoggedIn) {
+    return (
+      <Layout>
+        <HeroSection />
+        <FeaturedCaseStudies />
+        <ValueProposition />
+        <CTASection />
+      </Layout>
+    );
+  }
+
+  // For logged-in users, show case studies page
   // For non-paid users (demo), show locked case studies
   // In a real app, this would check actual subscription status
   const isPaidUser = isLoggedIn && Math.random() > 0.5; // 50% chance for demo
