@@ -23,8 +23,13 @@ interface FiltersPanelProps {
 }
 
 const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: FiltersPanelProps) => {
-  // Set all groups to collapsed by default
-  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
+  // Set specific groups to be expanded by default
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
+    "Company": true,
+    "Revenue": true,
+    "Business Type": true,
+    "Country": true
+  });
   const isMobile = useIsMobile();
   const [searchQueries, setSearchQueries] = useState<Record<string, string>>({});
 
