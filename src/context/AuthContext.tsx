@@ -24,11 +24,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         console.log('Auth state changed:', event, session);
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(false);
+
+        // Check subscription status when user logs in
+        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+          try {
+            await supabase.functions.invoke('check-subscription');
+          } catch (error) {
+            console.error('Failed to check subscription on auth change:', error);
+          }
+        }
       }
     );
 

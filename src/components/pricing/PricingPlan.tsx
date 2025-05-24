@@ -1,8 +1,10 @@
 
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Check, X } from 'lucide-react';
+import { useSubscription } from '@/hooks/useSubscription';
+import { useAuth } from '@/context/AuthContext';
 
 export interface PlanFeature {
   included: boolean;
@@ -33,20 +35,64 @@ const PricingPlan = ({
   billingFrequency 
 }: PricingPlanProps) => {
   const location = useLocation();
+  const { isLoggedIn } = useAuth();
+  const { subscribed, subscription_tier, loading, createCheckout, openCustomerPortal } = useSubscription();
   const isFromSignup = location.state?.fromSignup || document.referrer.includes('/join');
+  
+  const planType = name.toLowerCase() as 'basic' | 'pro' | 'investor';
+  const isCurrentPlan = subscribed && subscription_tier?.toLowerCase() === planType;
+  const isSubscribed = subscribed && (planType === 'basic' || planType === 'pro');
+
+  const handleButtonClick = () => {
+    if (!isLoggedIn) {
+      window.location.href = '/join';
+      return;
+    }
+
+    if (isCurrentPlan) {
+      openCustomerPortal();
+    } else {
+      createCheckout(planType);
+    }
+  };
+
+  const getButtonText = () => {
+    if (!isLoggedIn) return cta;
+    if (isCurrentPlan) return 'Manage Subscription';
+    if (isFromSignup) return `Activate ${name} Plan`;
+    return cta;
+  };
+
+  const getDisplayPrice = () => {
+    if (oneTime) return price;
+    if (billingFrequency === 'year') {
+      return Math.round(price * 12 * 0.9); // 10% discount for annual
+    }
+    return price * 3; // Quarterly
+  };
 
   return (
     <div 
       className={`relative rounded-xl border ${
-        popular 
+        isCurrentPlan
+          ? 'border-teal-500 shadow-lg shadow-teal-100 bg-teal-50' 
+          : popular 
           ? 'border-teal-200 shadow-lg shadow-teal-100' 
           : 'border-border'
       }`}
     >
-      {popular && (
+      {(popular && !isCurrentPlan) && (
         <div className="absolute -top-4 inset-x-0 flex justify-center">
           <Badge className="bg-teal-500 hover:bg-teal-600">
             {isFromSignup ? 'Recommended' : 'Most Popular'}
+          </Badge>
+        </div>
+      )}
+
+      {isCurrentPlan && (
+        <div className="absolute -top-4 inset-x-0 flex justify-center">
+          <Badge className="bg-green-500 hover:bg-green-600">
+            Your Plan
           </Badge>
         </div>
       )}
@@ -71,12 +117,12 @@ const PricingPlan = ({
           </div>
           {!oneTime && price > 0 && billingFrequency === 'quarter' && (
             <p className="text-sm text-muted-foreground mt-1">
-              Billed quarterly (${price * 3})
+              Billed quarterly (${getDisplayPrice()})
             </p>
           )}
           {!oneTime && price > 0 && billingFrequency === 'year' && (
             <p className="text-sm text-muted-foreground mt-1">
-              Billed annually with 10% discount (${Math.round(price * 12 * 0.9)})
+              Billed annually with 10% discount (${getDisplayPrice()})
             </p>
           )}
         </div>
@@ -98,16 +144,17 @@ const PricingPlan = ({
         
         <Button 
           className={`w-full ${
-            popular 
+            isCurrentPlan
+              ? 'bg-green-500 hover:bg-green-600'
+              : popular 
               ? 'bg-teal-500 hover:bg-teal-600'
               : ''
           }`} 
-          variant={popular ? 'default' : 'outline'}
-          asChild
+          variant={isCurrentPlan ? 'default' : popular ? 'default' : 'outline'}
+          onClick={handleButtonClick}
+          disabled={loading}
         >
-          <Link to="/join">
-            {isFromSignup ? `Activate ${name} Plan` : cta}
-          </Link>
+          {loading ? 'Loading...' : getButtonText()}
         </Button>
       </div>
     </div>
