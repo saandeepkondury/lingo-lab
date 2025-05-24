@@ -25,15 +25,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('Auth state changed:', event, session);
+        console.log('Auth state changed:', event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(false);
 
-        // Check subscription status when user logs in
-        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        // Only check subscription for authenticated users with a valid session
+        if (event === 'SIGNED_IN' && session?.access_token) {
           try {
-            await supabase.functions.invoke('check-subscription');
+            // Small delay to ensure session is fully established
+            setTimeout(async () => {
+              await supabase.functions.invoke('check-subscription', {
+                headers: {
+                  Authorization: `Bearer ${session.access_token}`,
+                },
+              });
+            }, 200);
           } catch (error) {
             console.error('Failed to check subscription on auth change:', error);
           }
@@ -43,6 +50,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Initial session check:', session?.user?.email);
       setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
@@ -99,7 +107,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     console.log('Use signIn instead of login');
   };
 
-  const isLoggedIn = !!user;
+  const isLoggedIn = !!user && !!session;
 
   return (
     <AuthContext.Provider value={{ 
