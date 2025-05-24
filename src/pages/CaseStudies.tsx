@@ -10,6 +10,7 @@ import { useCaseStudiesFilter } from '@/hooks/useCaseStudiesFilter';
 import SearchArea from '@/components/CaseStudies/SearchArea';
 import CaseStudiesList from '@/components/CaseStudies/CaseStudiesList';
 import { Bookmark } from 'lucide-react';
+import { useEffect } from 'react';
 
 const CaseStudies = () => {
   const {
@@ -25,10 +26,31 @@ const CaseStudies = () => {
   const { toast } = useToast();
   const location = useLocation();
 
-  // If user is not logged in and came from pricing page, show only locked case studies
-  const isFromPricing = location.state?.fromPricing || document.referrer.includes('/pricing');
-  const displayVisibleCaseStudies = (!isLoggedIn && isFromPricing) ? [] : visibleCaseStudies;
-  const displayLockedCaseStudies = (!isLoggedIn && isFromPricing) ? lockedCaseStudies : (isLoggedIn ? [] : lockedCaseStudies);
+  // Check if user just signed in/up and show appropriate message
+  useEffect(() => {
+    if (location.state?.justSignedUp) {
+      toast({
+        title: "Welcome to LingoLab!",
+        description: "You can see a preview of our case studies. Subscribe to unlock them all!",
+        action: (
+          <Button className="bg-teal-500 hover:bg-teal-600 text-white" size="sm" asChild>
+            <Link to="/pricing">View Plans</Link>
+          </Button>
+        )
+      });
+    } else if (location.state?.justSignedIn) {
+      toast({
+        title: "Welcome back!",
+        description: "Enjoy full access to our case study library.",
+      });
+    }
+  }, [location.state, toast]);
+
+  // For non-paid users (demo), show locked case studies
+  // In a real app, this would check actual subscription status
+  const isPaidUser = isLoggedIn && Math.random() > 0.5; // 50% chance for demo
+  const displayVisibleCaseStudies = isPaidUser ? visibleCaseStudies : visibleCaseStudies.slice(0, 2);
+  const displayLockedCaseStudies = isPaidUser ? [] : [...visibleCaseStudies.slice(2), ...lockedCaseStudies];
 
   const handleLockedCaseStudyClick = () => {
     toast({
@@ -52,9 +74,9 @@ const CaseStudies = () => {
               Explore how the world's most successful startups used strategic narrative to drive growth
             </p>
             <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
-              {!isLoggedIn && (
+              {!isPaidUser && (
                 <Button className="bg-teal-500 hover:bg-teal-600 text-white" asChild>
-                  <Link to="/join">Join to Unlock All Case Studies</Link>
+                  <Link to="/pricing">Upgrade to Unlock All Case Studies</Link>
                 </Button>
               )}
               {isLoggedIn && (
@@ -90,7 +112,7 @@ const CaseStudies = () => {
               <div className="mb-6">
                 <p className="text-sm text-muted-foreground">
                   Showing {displayVisibleCaseStudies.length + displayLockedCaseStudies.length} case studies
-                  {!isLoggedIn && displayLockedCaseStudies.length > 0 && ` (${displayLockedCaseStudies.length} locked)`}
+                  {displayLockedCaseStudies.length > 0 && ` (${displayLockedCaseStudies.length} locked)`}
                 </p>
               </div>
               

@@ -1,3 +1,4 @@
+
 import Layout from '@/components/Layout';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -43,7 +44,8 @@ const Join = () => {
         title: "Welcome back to LingoLab",
         description: "You've successfully logged in."
       });
-      navigate('/case-studies');
+      // Redirect to case studies with state indicating they just signed in
+      navigate('/case-studies', { state: { justSignedIn: true } });
       setIsLoading(false);
     }, 1500);
   };
@@ -52,13 +54,15 @@ const Join = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Mock signup - redirect to pricing to complete account setup
+    // Mock signup - redirect to case studies to show locked content, then to pricing
     setTimeout(() => {
+      login(); // Log them in for demo
       toast({
         title: "Account Created",
-        description: "Please choose a plan to complete your account setup."
+        description: "Please choose a plan to unlock all case studies."
       });
-      navigate('/pricing');
+      // Redirect to case studies with state indicating they just signed up
+      navigate('/case-studies', { state: { justSignedUp: true } });
       setIsLoading(false);
     }, 1500);
   };
@@ -157,12 +161,12 @@ const Join = () => {
                 className="w-full bg-teal-500 hover:bg-teal-600 text-white"
                 disabled={isLoading}
               >
-                {isLoading ? "Creating account..." : "Create Account & Choose Plan"}
+                {isLoading ? "Creating account..." : "Create Account"}
               </Button>
             </form>
             <div className="mt-4 text-center">
               <p className="text-sm text-muted-foreground">
-                After signup, you'll choose a plan to complete your account
+                After signup, you'll see our case studies and can choose a plan
               </p>
             </div>
           </TabsContent>
