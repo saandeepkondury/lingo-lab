@@ -70,6 +70,23 @@ const PricingPlan = ({
     return price * 3; // Quarterly
   };
 
+  const getMonthlyPrice = () => {
+    if (oneTime) return price;
+    if (billingFrequency === 'year') {
+      return Math.round(price * 0.9); // 10% discount applied to monthly price
+    }
+    return price;
+  };
+
+  const getSavingsText = () => {
+    if (oneTime || price === 0) return null;
+    if (billingFrequency === 'year') {
+      const yearlySavings = Math.round(price * 12 * 0.1);
+      return `Save $${yearlySavings}/year`;
+    }
+    return null;
+  };
+
   return (
     <div 
       className={`relative rounded-xl border ${
@@ -103,7 +120,7 @@ const PricingPlan = ({
         <div className="mt-4 mb-6">
           <div className="flex items-baseline">
             <span className="text-4xl font-bold">
-              ${oneTime ? price : price}
+              ${oneTime ? price : getMonthlyPrice()}
             </span>
             {!oneTime && (
               <span className="text-muted-foreground ml-1">
@@ -113,6 +130,11 @@ const PricingPlan = ({
             {oneTime && (
               <span className="text-muted-foreground ml-1">one-time</span>
             )}
+            {billingFrequency === 'year' && !oneTime && price > 0 && (
+              <span className="ml-2 text-sm bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
+                10% OFF
+              </span>
+            )}
           </div>
           {!oneTime && price > 0 && billingFrequency === 'quarter' && (
             <p className="text-sm text-muted-foreground mt-1">
@@ -120,9 +142,16 @@ const PricingPlan = ({
             </p>
           )}
           {!oneTime && price > 0 && billingFrequency === 'year' && (
-            <p className="text-sm text-muted-foreground mt-1">
-              Billed annually with 10% discount (${getDisplayPrice()})
-            </p>
+            <div className="mt-1">
+              <p className="text-sm text-muted-foreground">
+                Billed annually (${getDisplayPrice()})
+              </p>
+              {getSavingsText() && (
+                <p className="text-sm text-green-600 font-medium">
+                  {getSavingsText()}
+                </p>
+              )}
+            </div>
           )}
         </div>
         

@@ -22,11 +22,11 @@ const BillingFrequencySelector = ({
       </Button>
       <Button
         variant={billingFrequency === 'year' ? 'default' : 'outline'}
-        className={`w-full sm:w-auto ${billingFrequency === 'year' ? 'bg-teal-500 hover:bg-teal-600' : ''}`}
+        className={`w-full sm:w-auto ${billingFrequency === 'year' ? 'bg-teal-500 hover:bg-teal-600' : ''} relative`}
         onClick={() => setBillingFrequency('year')}
       >
         Annual Billing
-        <Badge variant="outline" className="ml-2 bg-coral-50 text-coral-500 border-coral-200">
+        <Badge variant="outline" className="ml-2 bg-green-50 text-green-600 border-green-200 font-semibold">
           Save 10%
         </Badge>
       </Button>
