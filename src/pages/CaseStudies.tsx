@@ -15,6 +15,7 @@ import HeroSection from '@/components/home/HeroSection';
 import FeaturedCaseStudies from '@/components/home/FeaturedCaseStudies';
 import ValueProposition from '@/components/home/ValueProposition';
 import CTASection from '@/components/home/CTASection';
+import { useSubscription } from '@/hooks/useSubscription';
 
 const CaseStudies = () => {
   const {
@@ -27,6 +28,7 @@ const CaseStudies = () => {
     lockedCaseStudies
   } = useCaseStudiesFilter();
   const { isLoggedIn } = useAuth();
+  const { subscribed, loading } = useSubscription();
   const { toast } = useToast();
   const location = useLocation();
 
@@ -45,10 +47,10 @@ const CaseStudies = () => {
     } else if (location.state?.justSignedIn) {
       toast({
         title: "Welcome back!",
-        description: "Enjoy full access to our case study library.",
+        description: subscribed ? "Enjoy full access to our case study library." : "Subscribe to unlock our full case study library.",
       });
     }
-  }, [location.state, toast]);
+  }, [location.state, toast, subscribed]);
 
   // If user is not logged in, show marketing homepage
   if (!isLoggedIn) {
@@ -63,9 +65,23 @@ const CaseStudies = () => {
   }
 
   // For logged-in users, show case studies page
-  // For non-paid users (demo), show locked case studies
-  // In a real app, this would check actual subscription status
-  const isPaidUser = isLoggedIn && Math.random() > 0.5; // 50% chance for demo
+  // Show loading state while checking subscription
+  if (loading) {
+    return (
+      <Layout>
+        <section className="py-12">
+          <div className="container max-w-6xl mx-auto px-6">
+            <div className="text-center">
+              <p className="text-lg text-muted-foreground">Loading...</p>
+            </div>
+          </div>
+        </section>
+      </Layout>
+    );
+  }
+
+  // Use actual subscription status instead of random demo logic
+  const isPaidUser = subscribed;
   const displayVisibleCaseStudies = isPaidUser ? visibleCaseStudies : visibleCaseStudies.slice(0, 2);
   const displayLockedCaseStudies = isPaidUser ? [] : [...visibleCaseStudies.slice(2), ...lockedCaseStudies];
 

@@ -41,7 +41,6 @@ const PricingPlan = ({
   
   const planType = name.toLowerCase() as 'basic' | 'pro' | 'investor';
   const isCurrentPlan = subscribed && subscription_tier?.toLowerCase() === planType;
-  const isSubscribed = subscribed && (planType === 'basic' || planType === 'pro');
 
   const handleButtonClick = () => {
     if (!isLoggedIn) {
