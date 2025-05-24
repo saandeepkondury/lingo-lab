@@ -7,43 +7,34 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/AuthContext';
 
 const LoginForm = () => {
-  const { login } = useAuth();
+  const { signIn } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Mock login - simulate checking if user has paid subscription
-    setTimeout(() => {
-      // For demo purposes, simulate that users without a subscription can't login
-      // In a real app, this would check the subscription status
-      const hasSubscription = Math.random() > 0.7; // 30% chance of having subscription for demo
-      
-      if (!hasSubscription) {
-        toast({
-          title: "Subscription Required",
-          description: "Please complete your subscription to access your account.",
-          variant: "destructive"
-        });
-        navigate('/pricing');
-        setIsLoading(false);
-        return;
-      }
-
-      login();
+    try {
+      await signIn(email, password);
       toast({
         title: "Welcome back to LingoLab",
         description: "You've successfully logged in."
       });
-      // Redirect to case studies with state indicating they just signed in
-      navigate('/case-studies', { state: { justSignedIn: true } });
+      navigate('/case-studies');
+    } catch (error: any) {
+      console.error('Login error:', error);
+      toast({
+        title: "Login Failed",
+        description: error.message || "Invalid email or password.",
+        variant: "destructive"
+      });
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -73,11 +64,6 @@ const LoginForm = () => {
       >
         {isLoading ? "Signing in..." : "Sign In"}
       </Button>
-      <div className="mt-4 text-center">
-        <p className="text-sm text-muted-foreground">
-          Only users with active subscriptions can sign in
-        </p>
-      </div>
     </form>
   );
 };

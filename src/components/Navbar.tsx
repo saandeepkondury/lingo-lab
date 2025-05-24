@@ -10,8 +10,8 @@ const Navbar = () => {
   const isMobile = useIsMobile();
   const location = useLocation();
   
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
   };
 
   const showCaseStudiesLink = isLoggedIn || location.pathname === '/pricing';

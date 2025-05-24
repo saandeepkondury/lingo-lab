@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/AuthContext';
 
 const SignupForm = () => {
-  const { login } = useAuth();
+  const { signUp } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [email, setEmail] = useState('');
@@ -15,21 +15,27 @@ const SignupForm = () => {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Mock signup - redirect to case studies to show locked content, then to pricing
-    setTimeout(() => {
-      login(); // Log them in for demo
+    try {
+      await signUp(email, password, name);
       toast({
         title: "Account Created",
-        description: "Please choose a plan to unlock all case studies."
+        description: "Welcome to LingoLab! You can now access all case studies."
       });
-      // Redirect to case studies with state indicating they just signed up
-      navigate('/case-studies', { state: { justSignedUp: true } });
+      navigate('/case-studies');
+    } catch (error: any) {
+      console.error('Signup error:', error);
+      toast({
+        title: "Signup Failed",
+        description: error.message || "An error occurred during signup.",
+        variant: "destructive"
+      });
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -59,6 +65,7 @@ const SignupForm = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          minLength={6}
         />
       </div>
       <Button 
@@ -68,11 +75,6 @@ const SignupForm = () => {
       >
         {isLoading ? "Creating account..." : "Create Account"}
       </Button>
-      <div className="mt-4 text-center">
-        <p className="text-sm text-muted-foreground">
-          After signup, you'll see our case studies and can choose a plan
-        </p>
-      </div>
     </form>
   );
 };
