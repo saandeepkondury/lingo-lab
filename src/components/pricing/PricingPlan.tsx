@@ -51,7 +51,7 @@ const PricingPlan = ({
     if (isCurrentPlan) {
       openCustomerPortal();
     } else {
-      createCheckout(planType);
+      createCheckout(planType, billingFrequency);
     }
   };
 

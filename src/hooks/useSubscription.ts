@@ -56,7 +56,7 @@ export const useSubscription = () => {
     }
   };
 
-  const createCheckout = async (planType: 'basic' | 'pro' | 'investor') => {
+  const createCheckout = async (planType: 'basic' | 'pro' | 'investor', billingFrequency: 'quarter' | 'year' = 'quarter') => {
     if (!isLoggedIn || !session) {
       toast({
         title: "Authentication required",
@@ -76,7 +76,7 @@ export const useSubscription = () => {
       }
 
       const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { planType },
+        body: { planType, billingFrequency },
         headers: {
           Authorization: `Bearer ${freshSession.access_token}`,
         },

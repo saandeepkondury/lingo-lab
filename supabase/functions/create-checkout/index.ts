@@ -49,8 +49,8 @@ serve(async (req) => {
     
     logStep("User authenticated", { userId: user.id, email: user.email });
 
-    const { planType } = await req.json();
-    logStep("Plan type received", { planType });
+    const { planType, billingFrequency = 'quarter' } = await req.json();
+    logStep("Plan type and billing frequency received", { planType, billingFrequency });
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2023-10-16",
@@ -87,19 +87,29 @@ serve(async (req) => {
         mode: "payment",
         success_url: `${origin}/pricing?success=true&plan=investor`,
         cancel_url: `${origin}/pricing?canceled=true`,
+        metadata: {
+          user_id: user.id,
+          plan_type: planType,
+          billing_frequency: billingFrequency,
+        },
       });
       logStep("One-time payment session created", { sessionId: session.id });
     } else {
       // Recurring subscription for Basic/Pro plans
       const planPrices = {
-        basic: 4900, // $49 monthly, but billed quarterly
-        pro: 9900,   // $99 monthly, but billed quarterly
+        basic: billingFrequency === 'year' ? 4410 : 4900, // $44.10/month annually or $49/month quarterly
+        pro: billingFrequency === 'year' ? 8910 : 9900,   // $89.10/month annually or $99/month quarterly
       };
 
       const planNames = {
         basic: "Basic Plan - LingoLab",
         pro: "Pro Plan - LingoLab",
       };
+
+      const intervalCount = billingFrequency === 'year' ? 12 : 3;
+      const unitAmount = billingFrequency === 'year' 
+        ? planPrices[planType as keyof typeof planPrices] * 12
+        : planPrices[planType as keyof typeof planPrices] * 3;
 
       session = await stripe.checkout.sessions.create({
         customer: customerId,
@@ -109,8 +119,8 @@ serve(async (req) => {
             price_data: {
               currency: "usd",
               product_data: { name: planNames[planType as keyof typeof planNames] },
-              unit_amount: planPrices[planType as keyof typeof planPrices] * 3, // Quarterly billing
-              recurring: { interval: "month", interval_count: 3 },
+              unit_amount: unitAmount,
+              recurring: { interval: "month", interval_count: intervalCount },
             },
             quantity: 1,
           },
@@ -118,8 +128,13 @@ serve(async (req) => {
         mode: "subscription",
         success_url: `${origin}/pricing?success=true&plan=${planType}`,
         cancel_url: `${origin}/pricing?canceled=true`,
+        metadata: {
+          user_id: user.id,
+          plan_type: planType,
+          billing_frequency: billingFrequency,
+        },
       });
-      logStep("Subscription session created", { sessionId: session.id, planType });
+      logStep("Subscription session created", { sessionId: session.id, planType, billingFrequency });
     }
 
     return new Response(JSON.stringify({ url: session.url }), {

@@ -29,7 +29,7 @@ serve(async (req) => {
     const token = authHeader.replace("Bearer ", "");
     logStep("Authenticating user with token");
     
-    // Use anon key for authentication, service role for database operations
+    // Use anon key for authentication
     const authClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_ANON_KEY") ?? ""
@@ -87,34 +87,66 @@ serve(async (req) => {
     const customerId = customers.data[0].id;
     logStep("Found Stripe customer", { customerId });
 
+    // Check for active subscriptions
     const subscriptions = await stripe.subscriptions.list({
       customer: customerId,
       status: "active",
-      limit: 1,
+      limit: 10,
     });
     
-    const hasActiveSub = subscriptions.data.length > 0;
+    let hasActiveSub = false;
     let subscriptionTier = null;
     let subscriptionEnd = null;
 
-    if (hasActiveSub) {
+    // Check for one-time payments (for Investor plan)
+    const payments = await stripe.paymentIntents.list({
+      customer: customerId,
+      limit: 10,
+    });
+
+    const successfulInvestorPayment = payments.data.find(payment => 
+      payment.status === 'succeeded' && 
+      payment.amount === 499900 && 
+      payment.created > (Date.now() / 1000) - (365 * 24 * 60 * 60) // Within last year
+    );
+
+    if (successfulInvestorPayment) {
+      hasActiveSub = true;
+      subscriptionTier = "Investor";
+      // Investor plan is lifetime, so we set end date far in the future
+      subscriptionEnd = new Date(Date.now() + (10 * 365 * 24 * 60 * 60 * 1000)).toISOString(); // 10 years from now
+      logStep("Found successful Investor payment", { paymentId: successfulInvestorPayment.id });
+    } else if (subscriptions.data.length > 0) {
       const subscription = subscriptions.data[0];
-      subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
-      logStep("Active subscription found", { subscriptionId: subscription.id, endDate: subscriptionEnd });
+      const now = Math.floor(Date.now() / 1000);
       
-      // Determine subscription tier from price
-      const priceId = subscription.items.data[0].price.id;
-      const price = await stripe.prices.retrieve(priceId);
-      const amount = price.unit_amount || 0;
-      
-      if (amount <= 14700) { // $147 quarterly = $49/month
-        subscriptionTier = "Basic";
-      } else if (amount <= 29700) { // $297 quarterly = $99/month
-        subscriptionTier = "Pro";
+      // Check if subscription is actually active and not expired
+      if (subscription.current_period_end > now) {
+        hasActiveSub = true;
+        subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
+        logStep("Active subscription found", { subscriptionId: subscription.id, endDate: subscriptionEnd });
+        
+        // Determine subscription tier from price
+        const priceId = subscription.items.data[0].price.id;
+        const price = await stripe.prices.retrieve(priceId);
+        const amount = price.unit_amount || 0;
+        
+        // Check for annual vs quarterly billing and determine tier
+        if (amount <= 15876) { // $158.76 quarterly for basic or $529.20 annually for basic
+          subscriptionTier = "Basic";
+        } else if (amount <= 35640) { // $356.40 quarterly for pro or $1069.20 annually for pro
+          subscriptionTier = "Pro";
+        } else {
+          subscriptionTier = "Enterprise";
+        }
+        logStep("Determined subscription tier", { priceId, amount, subscriptionTier });
       } else {
-        subscriptionTier = "Enterprise";
+        logStep("Subscription found but expired", { 
+          subscriptionId: subscription.id, 
+          endDate: subscription.current_period_end,
+          now: now 
+        });
       }
-      logStep("Determined subscription tier", { priceId, amount, subscriptionTier });
     } else {
       logStep("No active subscription found");
     }
