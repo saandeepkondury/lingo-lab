@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 export const useEmailSubmit = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,11 +29,30 @@ export const useEmailSubmit = () => {
     setIsSubmitting(true);
 
     try {
-      // Since we don't have a database table anymore, just show success message
-      toast({
-        title: "Successfully subscribed!",
-        description: "You've been added to our newsletter. Welcome to the community!",
+      console.log('Submitting email to newsletter signup:', email);
+      
+      const { data, error } = await supabase.functions.invoke('newsletter-signup', {
+        body: { email }
       });
+
+      if (error) {
+        console.error('Newsletter signup error:', error);
+        throw error;
+      }
+
+      console.log('Newsletter signup response:', data);
+
+      if (data.alreadySubscribed) {
+        toast({
+          title: "Already subscribed!",
+          description: data.message,
+        });
+      } else {
+        toast({
+          title: "Successfully subscribed!",
+          description: data.message,
+        });
+      }
 
       setEmail('');
       navigate('/join');
