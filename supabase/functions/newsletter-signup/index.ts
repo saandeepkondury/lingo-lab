@@ -88,7 +88,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send confirmation email
     const emailResponse = await resend.emails.send({
-      from: "LingoLab <onboarding@resend.dev>",
+      from: "LingoLab <hello@lingolab.site>",
       to: [email],
       subject: "Welcome to LingoLab's Newsletter! 🎉",
       html: emailHtml,
