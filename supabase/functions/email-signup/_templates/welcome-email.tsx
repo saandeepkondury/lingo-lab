@@ -1,4 +1,3 @@
-
 import {
   Body,
   Container,
@@ -21,7 +20,7 @@ interface WelcomeEmailProps {
 export const WelcomeEmail = ({ email, source }: WelcomeEmailProps) => (
   <Html>
     <Head />
-    <Preview>Welcome to LingoLab - Master Strategic Narrative</Preview>
+    <Preview>Welcome to LingoLab - Where words become weapons of mass persuasion! 🚀</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={headerSection}>
@@ -29,68 +28,78 @@ export const WelcomeEmail = ({ email, source }: WelcomeEmailProps) => (
             Welcome to <span style={brandGradient}>LingoLab</span>! 🎉
           </Heading>
           <Text style={subtitle}>
-            Master strategic narrative to secure venture capital 3x faster
+            Where words become weapons of mass persuasion 💥
           </Text>
         </Section>
         
         <Section style={contentSection}>
           <Text style={text}>
-            Hi there,
+            Hey there, future lingo legend! 👋
           </Text>
           <Text style={text}>
-            Thank you for joining LingoLab! You've taken the first step toward mastering the art of strategic narrative that drives successful fundraising.
+            Welcome to the most exclusive club for word wizards and narrative ninjas! You've just joined the ranks of founders who know that the right words can move mountains (and investor wallets).
           </Text>
           
           <Text style={text}>
             {source === 'homepage' 
-              ? "We noticed you're interested in learning how top founders use strategic narrative to raise millions and shape markets."
-              : "Thanks for subscribing to The Lingo Drop! You'll receive weekly insights on strategic narrative breakthroughs."
+              ? "We saw you lurking around our homepage – smart move! You clearly recognize game-changing potential when you see it. 🕵️‍♂️"
+              : "Thanks for subscribing to The Lingo Drop! You're about to become fluent in the language of legendary fundraising. 📚"
             }
           </Text>
 
           <Section style={benefitsSection}>
-            <Heading style={h2}>What's next?</Heading>
+            <Heading style={h2}>What's cooking in your inbox? 🍳</Heading>
             <Text style={benefitItem}>
-              ✨ <strong>Explore Case Studies:</strong> Discover how companies like Notion, Figma, and ChatGPT used strategic language to define new categories
+              🔥 <strong>Weekly Lingo Drops:</strong> Fresh insights on how companies like Notion, Figma, and ChatGPT used strategic narrative to bend reality (and secure millions)
             </Text>
             <Text style={benefitItem}>
-              📚 <strong>Weekly Insights:</strong> Get "The Lingo Drop" newsletter with analysis of powerful strategic narratives
+              🎯 <strong>Founder War Stories:</strong> Exclusive tea-spilling sessions with VCs and founders who've mastered the art of persuasive storytelling
             </Text>
             <Text style={benefitItem}>
-              🎯 <strong>Founder Interviews:</strong> Exclusive conversations with VCs and founders on narrative strategy
+              🧠 <strong>Category Creation Secrets:</strong> Learn how to make your competition irrelevant by creating entirely new markets
             </Text>
             <Text style={benefitItem}>
-              🔧 <strong>Frameworks & Tools:</strong> Early access to our positioning frameworks and narrative tools
+              ⚡ <strong>Narrative Frameworks:</strong> Battle-tested templates that turn "meh" pitches into "take my money" moments
             </Text>
           </Section>
 
           <Section style={ctaSection}>
-            <Button href="https://pnwakyibtpncjosghlbh.supabase.co/join" style={button}>
-              Get Started →
+            <Text style={ctaIntro}>
+              Ready to level up from word-curious to word-dangerous? 🎮
+            </Text>
+            <Button href="https://lingolab.site/join" style={button}>
+              Create Your Account →
             </Button>
             <Text style={ctaText}>
-              Create your account to unlock our full library of case studies and strategic insights.
+              Join our community and unlock our full arsenal of case studies, frameworks, and insider secrets. It's like having a narrative consultant in your pocket! 📱
             </Text>
           </Section>
+
+          <Text style={newsletterNote}>
+            <strong>P.S.</strong> Every Thursday, we drop "The Lingo" – a weekly dose of the hottest trends, emerging narratives, and linguistic gold that's reshaping entire industries. Think of it as your weekly shot of strategic storytelling espresso ☕
+          </Text>
         </Section>
 
         <Section style={footerSection}>
           <Text style={footer}>
-            Best regards,<br />
+            Keep crafting those killer narratives! 🚀<br />
             The LingoLab Team
           </Text>
           <Text style={footerLinks}>
-            <Link href="https://pnwakyibtpncjosghlbh.supabase.co" style={link}>
+            <Link href="https://lingolab.site" style={link}>
               LingoLab
             </Link>
             {" • "}
-            <Link href="https://pnwakyibtpncjosghlbh.supabase.co/case-studies" style={link}>
+            <Link href="https://lingolab.site/case-studies" style={link}>
               Case Studies
             </Link>
             {" • "}
-            <Link href="https://pnwakyibtpncjosghlbh.supabase.co/newsletter" style={link}>
+            <Link href="https://lingolab.site/newsletter" style={link}>
               Newsletter
             </Link>
+          </Text>
+          <Text style={unsubscribeText}>
+            Not feeling the lingo love? <Link href="https://lingolab.site" style={link}>Manage preferences</Link>
           </Text>
         </Section>
       </Container>
@@ -200,6 +209,34 @@ const ctaText = {
   fontSize: '14px',
   lineHeight: '1.5',
   margin: '0',
+}
+
+const ctaIntro = {
+  color: '#374151',
+  fontSize: '16px',
+  fontWeight: '600',
+  lineHeight: '1.6',
+  margin: '0 0 16px 0',
+  textAlign: 'center' as const,
+}
+
+const newsletterNote = {
+  color: '#0f766e',
+  fontSize: '15px',
+  lineHeight: '1.6',
+  margin: '24px 0 0 0',
+  backgroundColor: '#f0fdfa',
+  padding: '16px',
+  borderRadius: '8px',
+  borderLeft: '4px solid #0f766e',
+}
+
+const unsubscribeText = {
+  color: '#9ca3af',
+  fontSize: '11px',
+  lineHeight: '1.5',
+  margin: '8px 0 0 0',
+  textAlign: 'center' as const,
 }
 
 const footerSection = {
