@@ -29,9 +29,9 @@ export const useEmailSubmit = () => {
     setIsSubmitting(true);
 
     try {
-      // Insert email into newsletter_subscriptions table (updated table name)
+      // Insert email into community_subscriptions table
       const { error } = await supabase
-        .from('newsletter_subscriptions')
+        .from('community_subscriptions')
         .insert([
           { 
             email, 
