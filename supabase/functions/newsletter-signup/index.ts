@@ -35,30 +35,47 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const supabase = createClient(supabaseUrl, supabaseKey)
 
-    // Insert subscriber into database
+    // Check if subscriber already exists
+    const { data: existingSubscriber, error: checkError } = await supabase
+      .from('subscribers')
+      .select('id, email')
+      .eq('email', email)
+      .maybeSingle();
+
+    if (checkError) {
+      console.error('[NEWSLETTER-SIGNUP] Database check error:', checkError);
+      throw new Error(`Database error: ${checkError.message}`);
+    }
+
+    if (existingSubscriber) {
+      console.log(`[NEWSLETTER-SIGNUP] Email already subscribed: ${email}`);
+      return new Response(JSON.stringify({ 
+        success: true, 
+        message: "You're already subscribed to our newsletter!",
+        alreadySubscribed: true 
+      }), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          ...corsHeaders,
+        },
+      });
+    }
+
+    // Insert new subscriber into database
     const { data: subscriber, error: dbError } = await supabase
       .from('subscribers')
-      .insert([{ email }])
+      .insert([{ 
+        email: email,
+        subscribed: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }])
       .select()
       .single();
 
     if (dbError) {
-      if (dbError.code === '23505') { // Unique constraint violation
-        console.log(`[NEWSLETTER-SIGNUP] Email already subscribed: ${email}`);
-        return new Response(JSON.stringify({ 
-          success: true, 
-          message: "You're already subscribed to our newsletter!",
-          alreadySubscribed: true 
-        }), {
-          status: 200,
-          headers: {
-            "Content-Type": "application/json",
-            ...corsHeaders,
-          },
-        });
-      }
-      
-      console.error('[NEWSLETTER-SIGNUP] Database error:', dbError);
+      console.error('[NEWSLETTER-SIGNUP] Database insert error:', dbError);
       throw new Error(`Database error: ${dbError.message}`);
     }
 

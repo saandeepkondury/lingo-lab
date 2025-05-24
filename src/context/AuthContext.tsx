@@ -30,14 +30,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(session?.user ?? null);
         setIsLoading(false);
 
-        // For specific events, check subscription status
-        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-          // Small delay to ensure session is properly established
+        // When a user signs up, update their subscriber record if it exists
+        if (event === 'SIGNED_IN' && session?.user?.email) {
           setTimeout(async () => {
             try {
+              // Update subscriber record to connect it with the user account
+              const { error } = await supabase
+                .from('subscribers')
+                .update({ user_id: session.user.id })
+                .eq('email', session.user.email)
+                .is('user_id', null);
+
+              if (error) {
+                console.log('Failed to connect subscriber record:', error);
+              } else {
+                console.log('Successfully connected subscriber record to user');
+              }
+
               await supabase.functions.invoke('check-subscription');
             } catch (error) {
-              console.log('Subscription check failed during auth change:', error);
+              console.log('Error during post-signin operations:', error);
             }
           }, 1000);
         }
