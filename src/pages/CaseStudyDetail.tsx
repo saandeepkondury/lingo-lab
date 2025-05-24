@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { BookmarkPlus, BookmarkCheck, MessageSquare, TrendingUp, Lock } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { BookmarkPlus, BookmarkCheck, MessageSquare, TrendingUp, Lock, Play, Users, DollarSign, Target } from 'lucide-react';
 import CaseStudyCard from '@/components/CaseStudyCard';
 import ShareOptions from '@/components/ShareOptions';
 import SEOHead from '@/components/SEOHead';
@@ -266,83 +267,422 @@ const CaseStudyDetail = () => {
             </div>
           </div>
           
-          {/* Main Content - First sections (always visible) */}
-          <section className="prose prose-indigo dark:prose-invert max-w-none">
-            <h2 className="text-2xl font-semibold">The Lingo That Changed Everything</h2>
-            <p className="text-lg leading-relaxed mb-6">{caseStudy.content.lingoExplanation}</p>
+          {/* Tab Navigation */}
+          <Tabs defaultValue="analysis" className="w-full">
+            <TabsList className="grid w-full grid-cols-6 mb-8">
+              <TabsTrigger value="analysis" className="flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" />
+                Analysis
+              </TabsTrigger>
+              <TabsTrigger value="interview" className="flex items-center gap-2">
+                <MessageSquare className="h-4 w-4" />
+                Interview
+              </TabsTrigger>
+              <TabsTrigger value="video" className="flex items-center gap-2">
+                <Play className="h-4 w-4" />
+                Video
+              </TabsTrigger>
+              <TabsTrigger value="tech-stack" className="flex items-center gap-2">
+                <Users className="h-4 w-4" />
+                Tech Stack
+              </TabsTrigger>
+              <TabsTrigger value="funding" className="flex items-center gap-2">
+                <DollarSign className="h-4 w-4" />
+                Funding
+              </TabsTrigger>
+              <TabsTrigger value="positioning" className="flex items-center gap-2">
+                <Target className="h-4 w-4" />
+                Positioning
+              </TabsTrigger>
+            </TabsList>
             
-            <h2 className="text-2xl font-semibold mt-10">Origin Story of the Phrase</h2>
-            <p className="mb-6">{caseStudy.content.originStory}</p>
-            
-            {/* Reference point for locking content */}
-            <div ref={contentRef} className="relative">
-              {/* Lock overlay for non-subscribers */}
-              {showLockOverlay && !isLoggedIn && (
-                <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg">
-                  <div className="text-center p-6 max-w-md">
-                    <Lock className="h-12 w-12 mx-auto mb-4 text-teal-500" />
-                    <h3 className="text-xl font-bold mb-3">Premium Content</h3>
-                    <p className="text-muted-foreground mb-6">
-                      Subscribe to unlock the full case study and get access to all premium content.
-                    </p>
-                    <Button 
-                      className="bg-teal-500 hover:bg-teal-600 text-white px-6"
-                      onClick={() => window.location.href = '/pricing'}
-                    >
-                      View Pricing Plans
-                    </Button>
-                  </div>
-                </div>
-              )}
-              
-              {/* Locked content - visible for subscribers only without blur */}
-              <div className={!isLoggedIn ? "filter blur-sm select-none pointer-events-none" : ""}>
-                <h2 className="text-2xl font-semibold mt-10">Channel Breakdown</h2>
-                <p className="mb-6">{caseStudy.content.channelBreakdown}</p>
+            {/* Analysis Tab - Current Content */}
+            <TabsContent value="analysis">
+              {/* Main Content - First sections (always visible) */}
+              <section className="prose prose-indigo dark:prose-invert max-w-none">
+                <h2 className="text-2xl font-semibold">The Lingo That Changed Everything</h2>
+                <p className="text-lg leading-relaxed mb-6">{caseStudy.content.lingoExplanation}</p>
                 
-                <h2 className="text-2xl font-semibold mt-10">Tipping Point</h2>
-                <p className="mb-6">{caseStudy.content.tippingPoint}</p>
+                <h2 className="text-2xl font-semibold mt-10">Origin Story of the Phrase</h2>
+                <p className="mb-6">{caseStudy.content.originStory}</p>
                 
-                {/* Founder Quote */}
-                <div className="my-10 bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border-l-4 border-indigo-500">
-                  <blockquote className="text-lg italic dark:text-gray-200">
-                    {caseStudy.content.founderQuote.split(' - ')[0]}
-                  </blockquote>
-                  <footer className="mt-2 text-right font-medium dark:text-gray-300">
-                    - {caseStudy.content.founderQuote.split(' - ')[1]}
-                  </footer>
-                </div>
-                
-                <h2 className="text-2xl font-semibold mt-10">Narrative Architecture</h2>
-                <Card className="my-6 border-none shadow-sm dark:bg-gray-800/50">
-                  <CardContent className="p-0">
-                    <div className="grid grid-cols-1 divide-y dark:divide-gray-700">
-                      <div className="p-4">
-                        <h4 className="font-semibold text-lg text-indigo-700 dark:text-indigo-300">The Problem</h4>
-                        <p className="dark:text-gray-300">{caseStudy.content.narrativeArchitecture.problem}</p>
-                      </div>
-                      
-                      <div className="p-4">
-                        <h4 className="font-semibold text-lg text-indigo-700 dark:text-indigo-300">The Promise</h4>
-                        <p className="dark:text-gray-300">{caseStudy.content.narrativeArchitecture.promise}</p>
-                      </div>
-                      
-                      <div className="p-4">
-                        <h4 className="font-semibold text-lg text-indigo-700 dark:text-indigo-300">The Proof</h4>
-                        <p className="dark:text-gray-300">{caseStudy.content.narrativeArchitecture.proof}</p>
+                {/* Reference point for locking content */}
+                <div ref={contentRef} className="relative">
+                  {/* Lock overlay for non-subscribers */}
+                  {showLockOverlay && !isLoggedIn && (
+                    <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg">
+                      <div className="text-center p-6 max-w-md">
+                        <Lock className="h-12 w-12 mx-auto mb-4 text-teal-500" />
+                        <h3 className="text-xl font-bold mb-3">Premium Content</h3>
+                        <p className="text-muted-foreground mb-6">
+                          Subscribe to unlock the full case study and get access to all premium content.
+                        </p>
+                        <Button 
+                          className="bg-teal-500 hover:bg-teal-600 text-white px-6"
+                          onClick={() => window.location.href = '/pricing'}
+                        >
+                          View Pricing Plans
+                        </Button>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  )}
+                  
+                  {/* Locked content - visible for subscribers only without blur */}
+                  <div className={!isLoggedIn ? "filter blur-sm select-none pointer-events-none" : ""}>
+                    <h2 className="text-2xl font-semibold mt-10">Channel Breakdown</h2>
+                    <p className="mb-6">{caseStudy.content.channelBreakdown}</p>
+                    
+                    <h2 className="text-2xl font-semibold mt-10">Tipping Point</h2>
+                    <p className="mb-6">{caseStudy.content.tippingPoint}</p>
+                    
+                    {/* Founder Quote */}
+                    <div className="my-10 bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border-l-4 border-indigo-500">
+                      <blockquote className="text-lg italic dark:text-gray-200">
+                        {caseStudy.content.founderQuote.split(' - ')[0]}
+                      </blockquote>
+                      <footer className="mt-2 text-right font-medium dark:text-gray-300">
+                        - {caseStudy.content.founderQuote.split(' - ')[1]}
+                      </footer>
+                    </div>
+                    
+                    <h2 className="text-2xl font-semibold mt-10">Narrative Architecture</h2>
+                    <Card className="my-6 border-none shadow-sm dark:bg-gray-800/50">
+                      <CardContent className="p-0">
+                        <div className="grid grid-cols-1 divide-y dark:divide-gray-700">
+                          <div className="p-4">
+                            <h4 className="font-semibold text-lg text-indigo-700 dark:text-indigo-300">The Problem</h4>
+                            <p className="dark:text-gray-300">{caseStudy.content.narrativeArchitecture.problem}</p>
+                          </div>
+                          
+                          <div className="p-4">
+                            <h4 className="font-semibold text-lg text-indigo-700 dark:text-indigo-300">The Promise</h4>
+                            <p className="dark:text-gray-300">{caseStudy.content.narrativeArchitecture.promise}</p>
+                          </div>
+                          
+                          <div className="p-4">
+                            <h4 className="font-semibold text-lg text-indigo-700 dark:text-indigo-300">The Proof</h4>
+                            <p className="dark:text-gray-300">{caseStudy.content.narrativeArchitecture.proof}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    
+                    <h2 className="text-2xl font-semibold mt-10">Ripple Effects</h2>
+                    <p className="mb-6">{caseStudy.content.rippleEffects}</p>
+                    
+                    <h2 className="text-2xl font-semibold mt-10">Expert Summary</h2>
+                    <p className="mb-6">{caseStudy.content.expertSummary}</p>
+                  </div>
+                </div>
+              </section>
+            </TabsContent>
+            
+            {/* Interview Tab */}
+            <TabsContent value="interview">
+              <div className="prose prose-indigo dark:prose-invert max-w-none">
+                <h2 className="text-2xl font-semibold mb-6">Founder Interview</h2>
                 
-                <h2 className="text-2xl font-semibold mt-10">Ripple Effects</h2>
-                <p className="mb-6">{caseStudy.content.rippleEffects}</p>
+                <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl mb-8">
+                  <div className="flex items-center space-x-4 mb-4">
+                    <div className="w-12 h-12 rounded-full bg-indigo-200 dark:bg-indigo-800 overflow-hidden">
+                      <img 
+                        src={caseStudy.author?.image || "/placeholder.svg"} 
+                        alt="Founder" 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold">Patrick Collison</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-300">CEO & Co-founder, Stripe</p>
+                    </div>
+                  </div>
+                </div>
                 
-                <h2 className="text-2xl font-semibold mt-10">Expert Summary</h2>
-                <p className="mb-6">{caseStudy.content.expertSummary}</p>
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-xl font-semibold mb-3">How did you come up with the term "Financial Infrastructure"?</h3>
+                    <p className="mb-4">
+                      "We realized early on that calling ourselves a 'payments company' was limiting. When you say payments, 
+                      people think of credit card processing - a commodity service with thin margins. But what we were building 
+                      was much more fundamental. We were creating the economic plumbing for the internet."
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-xl font-semibold mb-3">What was the turning point for this narrative?</h3>
+                    <p className="mb-4">
+                      "It was around 2018 when we started consistently using 'infrastructure' in our messaging. 
+                      The analogy to AWS was intentional - just as they made computing resources programmable, 
+                      we wanted to make financial services programmable. That framing opened up entirely new product categories."
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-xl font-semibold mb-3">How did this impact your product roadmap?</h3>
+                    <p className="mb-4">
+                      "Once we positioned as infrastructure, products like Stripe Atlas, Treasury, and Issuing became 
+                      logical extensions rather than random diversifications. Infrastructure companies build platforms, 
+                      not just point solutions."
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </section>
+            </TabsContent>
+            
+            {/* Video Tab */}
+            <TabsContent value="video">
+              <div className="prose prose-indigo dark:prose-invert max-w-none">
+                <h2 className="text-2xl font-semibold mb-6">Video Analysis</h2>
+                
+                <div className="aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-6">
+                  <div className="text-center">
+                    <Play className="h-16 w-16 mx-auto mb-4 text-gray-400" />
+                    <p className="text-gray-500">Video content coming soon</p>
+                    <p className="text-sm text-gray-400 mt-2">Deep dive into Stripe's narrative evolution</p>
+                  </div>
+                </div>
+                
+                <h3 className="text-xl font-semibold mb-4">Key Video Moments</h3>
+                <ul className="space-y-3">
+                  <li className="flex items-start space-x-3">
+                    <span className="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 px-2 py-1 rounded text-sm font-mono">2:34</span>
+                    <span>Patrick Collison explains the infrastructure metaphor</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <span className="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 px-2 py-1 rounded text-sm font-mono">5:12</span>
+                    <span>AWS comparison and platform strategy</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <span className="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 px-2 py-1 rounded text-sm font-mono">8:45</span>
+                    <span>Impact on product development roadmap</span>
+                  </li>
+                </ul>
+              </div>
+            </TabsContent>
+            
+            {/* Tech Stack Tab */}
+            <TabsContent value="tech-stack">
+              <div className="prose prose-indigo dark:prose-invert max-w-none">
+                <h2 className="text-2xl font-semibold mb-6">Technology Stack</h2>
+                
+                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                  <Card>
+                    <CardContent className="p-6">
+                      <h3 className="text-lg font-semibold mb-4">Backend Infrastructure</h3>
+                      <ul className="space-y-2">
+                        <li className="flex items-center space-x-2">
+                          <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                          <span>Ruby on Rails (Primary API)</span>
+                        </li>
+                        <li className="flex items-center space-x-2">
+                          <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                          <span>Scala (High-performance services)</span>
+                        </li>
+                        <li className="flex items-center space-x-2">
+                          <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                          <span>Go (Infrastructure tooling)</span>
+                        </li>
+                        <li className="flex items-center space-x-2">
+                          <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
+                          <span>MongoDB & MySQL</span>
+                        </li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardContent className="p-6">
+                      <h3 className="text-lg font-semibold mb-4">Frontend & APIs</h3>
+                      <ul className="space-y-2">
+                        <li className="flex items-center space-x-2">
+                          <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
+                          <span>React (Dashboard)</span>
+                        </li>
+                        <li className="flex items-center space-x-2">
+                          <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                          <span>RESTful APIs</span>
+                        </li>
+                        <li className="flex items-center space-x-2">
+                          <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
+                          <span>GraphQL (Select services)</span>
+                        </li>
+                        <li className="flex items-center space-x-2">
+                          <span className="w-2 h-2 bg-gray-500 rounded-full"></span>
+                          <span>Extensive SDK library</span>
+                        </li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </div>
+                
+                <h3 className="text-xl font-semibold mb-4">Architecture Philosophy</h3>
+                <p className="mb-4">
+                  Stripe's technology stack reflects their "infrastructure" narrative. Rather than building a monolithic 
+                  payments processor, they've created a distributed system of microservices that can be composed 
+                  to solve different financial problems.
+                </p>
+                
+                <p className="mb-4">
+                  This architectural approach reinforces their positioning as infrastructure rather than a simple 
+                  payment gateway - it's designed to be the foundation other companies build on top of.
+                </p>
+              </div>
+            </TabsContent>
+            
+            {/* Funding Tab */}
+            <TabsContent value="funding">
+              <div className="prose prose-indigo dark:prose-invert max-w-none">
+                <h2 className="text-2xl font-semibold mb-6">Funding Journey</h2>
+                
+                <div className="space-y-6">
+                  <Card>
+                    <CardContent className="p-6">
+                      <div className="flex justify-between items-start mb-4">
+                        <div>
+                          <h3 className="text-xl font-semibold">Series H</h3>
+                          <p className="text-gray-600 dark:text-gray-300">March 2021</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-2xl font-bold text-green-600">$600M</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">$95B valuation</p>
+                        </div>
+                      </div>
+                      <p className="text-sm mb-3">
+                        <strong>Lead Investors:</strong> Allianz X, Axa, Baillie Gifford, Fidelity Management
+                      </p>
+                      <p className="text-sm">
+                        This round solidified Stripe's position as financial infrastructure for the internet, 
+                        with funds allocated to global expansion and product development.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardContent className="p-6">
+                      <div className="flex justify-between items-start mb-4">
+                        <div>
+                          <h3 className="text-xl font-semibold">Series G</h3>
+                          <p className="text-gray-600 dark:text-gray-300">April 2020</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-2xl font-bold text-green-600">$600M</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">$36B valuation</p>
+                        </div>
+                      </div>
+                      <p className="text-sm mb-3">
+                        <strong>Lead Investors:</strong> Andreessen Horowitz, General Catalyst, Sequoia Capital
+                      </p>
+                      <p className="text-sm">
+                        Raised during the pandemic to capitalize on the shift to digital commerce and 
+                        expand Stripe's infrastructure offerings globally.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardContent className="p-6">
+                      <div className="flex justify-between items-start mb-4">
+                        <div>
+                          <h3 className="text-xl font-semibold">Earlier Rounds</h3>
+                          <p className="text-gray-600 dark:text-gray-300">2011-2019</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-2xl font-bold text-blue-600">$1.6B+</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300">Total raised</p>
+                        </div>
+                      </div>
+                      <p className="text-sm">
+                        Series A through F with notable investors including Sequoia Capital, Andreessen Horowitz, 
+                        Thrive Capital, and General Catalyst, building from payments to full financial infrastructure.
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+                
+                <h3 className="text-xl font-semibold mb-4 mt-8">Funding Strategy Impact</h3>
+                <p className="mb-4">
+                  Stripe's "financial infrastructure" narrative was crucial in achieving premium valuations typically 
+                  reserved for software companies rather than traditional financial services. This positioning 
+                  allowed them to command SaaS-like multiples rather than fintech multiples.
+                </p>
+              </div>
+            </TabsContent>
+            
+            {/* Positioning Tab */}
+            <TabsContent value="positioning">
+              <div className="prose prose-indigo dark:prose-invert max-w-none">
+                <h2 className="text-2xl font-semibold mb-6">Strategic Positioning</h2>
+                
+                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                  <Card>
+                    <CardContent className="p-6">
+                      <h3 className="text-lg font-semibold mb-4 text-red-600">Before: "Payments Company"</h3>
+                      <ul className="space-y-2 text-sm">
+                        <li>• Commoditized service perception</li>
+                        <li>• Limited to transaction processing</li>
+                        <li>• Competing on pricing and features</li>
+                        <li>• Traditional fintech multiples</li>
+                        <li>• Single product category</li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardContent className="p-6">
+                      <h3 className="text-lg font-semibold mb-4 text-green-600">After: "Financial Infrastructure"</h3>
+                      <ul className="space-y-2 text-sm">
+                        <li>• Essential platform positioning</li>
+                        <li>• Expanded total addressable market</li>
+                        <li>• Platform strategy opportunities</li>
+                        <li>• SaaS-like valuation multiples</li>
+                        <li>• Multiple product categories</li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </div>
+                
+                <h3 className="text-xl font-semibold mb-4">Competitive Differentiation</h3>
+                <div className="space-y-4">
+                  <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <h4 className="font-semibold mb-2">vs. PayPal</h4>
+                    <p className="text-sm">
+                      While PayPal focused on consumer wallets and marketplace payments, Stripe positioned 
+                      as developer-first infrastructure for building custom financial experiences.
+                    </p>
+                  </div>
+                  
+                  <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <h4 className="font-semibold mb-2">vs. Square</h4>
+                    <p className="text-sm">
+                      Square targeted physical retail with hardware-software bundles, while Stripe became 
+                      the invisible infrastructure powering online businesses globally.
+                    </p>
+                  </div>
+                  
+                  <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <h4 className="font-semibold mb-2">vs. Traditional Processors</h4>
+                    <p className="text-sm">
+                      Legacy processors offered basic transaction services, while Stripe provided 
+                      programmable financial infrastructure with modern APIs and developer experience.
+                    </p>
+                  </div>
+                </div>
+                
+                <h3 className="text-xl font-semibold mb-4 mt-8">Market Creation Impact</h3>
+                <p className="mb-4">
+                  By positioning as "financial infrastructure," Stripe didn't just compete in the existing 
+                  payments market - they created an entirely new category. This allowed them to:
+                </p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Set category definitions and standards</li>
+                  <li>Attract talent wanting to build "infrastructure"</li>
+                  <li>Justify premium pricing for platform capabilities</li>
+                  <li>Expand into adjacent financial services naturally</li>
+                  <li>Partner with other infrastructure companies (AWS, etc.)</li>
+                </ul>
+              </div>
+            </TabsContent>
+          </Tabs>
           
           <Separator className="my-12" />
           
