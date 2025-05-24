@@ -94,13 +94,30 @@ const handler = async (req: Request): Promise<Response> => {
       React.createElement(WelcomeEmail, { email, source })
     );
 
-    // Send welcome email
+    // Send welcome email - UPDATE THIS FROM ADDRESS TO YOUR VERIFIED DOMAIN
     const emailResponse = await resend.emails.send({
-      from: "LingoLab <onboarding@resend.dev>",
+      from: "LingoLab <hello@yourdomain.com>", // Replace with your verified domain
       to: [email],
       subject: "Welcome to LingoLab! 🎉 Master Strategic Narrative",
       html: emailHtml,
     });
+
+    if (emailResponse.error) {
+      console.error("[EMAIL-SIGNUP] Email send error:", emailResponse.error);
+      // Still return success for database signup even if email fails
+      return new Response(JSON.stringify({ 
+        success: true, 
+        message: "Successfully signed up! (Email delivery pending)",
+        signupId: signup.id,
+        emailError: emailResponse.error.message
+      }), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          ...corsHeaders,
+        },
+      });
+    }
 
     console.log("[EMAIL-SIGNUP] Welcome email sent successfully:", emailResponse);
 
