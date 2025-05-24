@@ -64,16 +64,16 @@ const thirdColumn = testimonials.slice(6, 9);
 
 const Testimonials = () => {
   return (
-    <section className="bg-gradient-to-b from-teal-50/50 to-white py-20 relative">
+    <section className="bg-gradient-to-b from-teal-50/50 to-background dark:from-teal-900/20 dark:to-background py-20 relative">
       <div className="container z-10 mx-auto max-w-6xl px-6">
         <div className="flex flex-col items-center justify-center max-w-[540px] mx-auto">
           <div className="flex justify-center">
-            <div className="border border-teal-200 bg-teal-50 text-teal-700 py-1 px-4 rounded-lg text-sm font-medium">
+            <div className="border border-teal-200 dark:border-teal-700 bg-teal-50 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300 py-1 px-4 rounded-lg text-sm font-medium">
               Testimonials
             </div>
           </div>
 
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold tracking-tight mt-5 text-center">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold tracking-tight mt-5 text-center text-foreground">
             What our users say
           </h2>
           <p className="text-center mt-5 text-muted-foreground max-w-md">

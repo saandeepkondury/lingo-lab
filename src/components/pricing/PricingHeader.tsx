@@ -14,13 +14,13 @@ const PricingHeader = ({ billingFrequency, setBillingFrequency }: PricingHeaderP
   return (
     <div className="text-center mb-12">
       {isFromSignup && (
-        <div className="mb-6 p-4 bg-teal-50 border border-teal-200 rounded-lg">
-          <p className="text-teal-800 font-medium">
+        <div className="mb-6 p-4 bg-teal-50 dark:bg-teal-900/30 border border-teal-200 dark:border-teal-700 rounded-lg">
+          <p className="text-teal-800 dark:text-teal-200 font-medium">
             🎉 Account created successfully! Choose a plan to complete your setup and start exploring case studies.
           </p>
         </div>
       )}
-      <h1 className="text-4xl md:text-5xl font-semibold mb-6">
+      <h1 className="text-4xl md:text-5xl font-semibold mb-6 text-foreground">
         {isFromSignup ? 'Complete Your Account Setup' : 'Pricing Plans'}
       </h1>
       <p className="text-xl text-muted-foreground max-w-2xl mx-auto">

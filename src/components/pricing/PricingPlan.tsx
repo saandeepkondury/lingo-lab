@@ -91,15 +91,15 @@ const PricingPlan = ({
     <div 
       className={`relative rounded-xl border ${
         isCurrentPlan
-          ? 'border-teal-500 shadow-lg shadow-teal-100 bg-teal-50' 
+          ? 'border-teal-500 dark:border-teal-400 shadow-lg shadow-teal-100 dark:shadow-teal-900/50 bg-teal-50 dark:bg-teal-900/20' 
           : popular 
-          ? 'border-teal-200 shadow-lg shadow-teal-100' 
-          : 'border-border'
+          ? 'border-teal-200 dark:border-teal-700 shadow-lg shadow-teal-100 dark:shadow-teal-900/30 bg-card dark:bg-card' 
+          : 'border-border dark:border-border bg-card dark:bg-card'
       }`}
     >
       {(popular && !isCurrentPlan) && (
         <div className="absolute -top-4 inset-x-0 flex justify-center">
-          <Badge className="bg-teal-500 hover:bg-teal-600">
+          <Badge className="bg-teal-500 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 text-white">
             {isFromSignup ? 'Recommended' : 'Most Popular'}
           </Badge>
         </div>
@@ -107,19 +107,19 @@ const PricingPlan = ({
 
       {isCurrentPlan && (
         <div className="absolute -top-4 inset-x-0 flex justify-center">
-          <Badge className="bg-green-500 hover:bg-green-600">
+          <Badge className="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white">
             Your Plan
           </Badge>
         </div>
       )}
       
       <div className="p-6">
-        <h3 className="text-2xl font-semibold">{name}</h3>
+        <h3 className="text-2xl font-semibold text-foreground">{name}</h3>
         <p className="text-muted-foreground">{description}</p>
         
         <div className="mt-4 mb-6">
           <div className="flex items-baseline">
-            <span className="text-4xl font-bold">
+            <span className="text-4xl font-bold text-foreground">
               ${oneTime ? price : getMonthlyPrice()}
             </span>
             {!oneTime && (
@@ -131,7 +131,7 @@ const PricingPlan = ({
               <span className="text-muted-foreground ml-1">one-time</span>
             )}
             {billingFrequency === 'year' && !oneTime && price > 0 && (
-              <span className="ml-2 text-sm bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
+              <span className="ml-2 text-sm bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 px-2 py-1 rounded-full font-medium">
                 10% OFF
               </span>
             )}
@@ -147,7 +147,7 @@ const PricingPlan = ({
                 Billed annually (${getDisplayPrice()})
               </p>
               {getSavingsText() && (
-                <p className="text-sm text-green-600 font-medium">
+                <p className="text-sm text-green-600 dark:text-green-400 font-medium">
                   {getSavingsText()}
                 </p>
               )}
@@ -159,11 +159,11 @@ const PricingPlan = ({
           {features.map((feature, fIndex) => (
             <li key={fIndex} className="flex items-start gap-2">
               {feature.included ? (
-                <Check className="h-5 w-5 text-teal-500 flex-shrink-0 mt-0.5" />
+                <Check className="h-5 w-5 text-teal-500 dark:text-teal-400 flex-shrink-0 mt-0.5" />
               ) : (
                 <X className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
               )}
-              <span className={!feature.included ? 'text-muted-foreground' : ''}>
+              <span className={!feature.included ? 'text-muted-foreground' : 'text-foreground'}>
                 {feature.text}
               </span>
             </li>
@@ -173,9 +173,9 @@ const PricingPlan = ({
         <Button 
           className={`w-full ${
             isCurrentPlan
-              ? 'bg-green-500 hover:bg-green-600'
+              ? 'bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700'
               : popular 
-              ? 'bg-teal-500 hover:bg-teal-600'
+              ? 'bg-teal-500 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700'
               : ''
           }`} 
           variant={isCurrentPlan ? 'default' : popular ? 'default' : 'outline'}

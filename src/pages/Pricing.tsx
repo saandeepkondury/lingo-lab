@@ -40,7 +40,7 @@ const Pricing = () => {
   
   return (
     <Layout>
-      <section className="py-16 md:py-24">
+      <section className="py-16 md:py-24 bg-background dark:bg-background">
         <div className="container max-w-6xl mx-auto px-6">
           <PricingHeader 
             billingFrequency={billingFrequency}

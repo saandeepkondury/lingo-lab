@@ -35,16 +35,16 @@ export const TestimonialsColumn = ({ testimonials, className, duration = 15 }: T
             {testimonials.map((testimonial, testimonialIndex) => (
               <div
                 key={testimonialIndex}
-                className="bg-card p-6 rounded-xl border border-border/50 shadow-sm max-w-xs"
+                className="bg-card dark:bg-card border border-border/50 dark:border-teal-800/30 shadow-sm hover:shadow-md dark:hover:shadow-teal-900/20 transition-shadow p-6 rounded-xl max-w-xs"
               >
                 <div className="flex items-center gap-3 mb-4">
                   <img
                     src={testimonial.image}
                     alt={testimonial.name}
-                    className="w-10 h-10 rounded-full object-cover"
+                    className="w-10 h-10 rounded-full object-cover ring-2 ring-teal-200 dark:ring-teal-700"
                   />
                   <div>
-                    <h4 className="font-medium text-sm">{testimonial.name}</h4>
+                    <h4 className="font-medium text-sm text-foreground">{testimonial.name}</h4>
                     <p className="text-xs text-muted-foreground">{testimonial.role}</p>
                   </div>
                 </div>
