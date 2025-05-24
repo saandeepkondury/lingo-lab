@@ -23,12 +23,8 @@ interface FiltersPanelProps {
 }
 
 const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: FiltersPanelProps) => {
-  // Initialize with some groups expanded for better UX
-  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({
-    'Company': true,
-    'Industry': true,
-    'Revenue': true
-  });
+  // Set all groups to collapsed by default
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
   const isMobile = useIsMobile();
   const [searchQueries, setSearchQueries] = useState<Record<string, string>>({});
 
@@ -54,7 +50,7 @@ const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: 
   };
   
   const FiltersPanelContent = () => (
-    <div className="w-full md:w-64 space-y-4">
+    <div className="w-full md:w-64 space-y-6">
       <div className="text-sm font-medium text-sidebar-foreground">Filter By</div>
       
       {filters.map((group) => (
@@ -77,7 +73,7 @@ const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: 
               {/* Special handling for searchable filters */}
               {(group.name === "Company" || group.name === "Industry") ? (
                 <div className="px-2 mb-2">
-                  <div className="relative mb-2">
+                  <div className="relative">
                     <div className="absolute inset-y-0 left-2 flex items-center pointer-events-none">
                       <Search className="h-3.5 w-3.5 text-sidebar-foreground/70" />
                     </div>
@@ -121,7 +117,7 @@ const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: 
               ) : group.name === "Niche" ? (
                 // Special searchable text input for Niche
                 <div className="px-2 mb-2">
-                  <div className="relative mb-2">
+                  <div className="relative">
                     <Input 
                       type="text"
                       placeholder="Enter niche keywords..."
