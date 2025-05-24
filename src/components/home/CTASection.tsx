@@ -7,7 +7,7 @@ import { useEmailSubmit } from '@/hooks/useEmailSubmit';
 
 const CTASection = () => {
   const [email, setEmail] = useState('');
-  const { handleSubmit, isSubmitting } = useEmailSubmit();
+  const { handleSubmit, isSubmitting } = useEmailSubmit('homepage');
 
   const handleCtaSubmit = (e: React.FormEvent) => {
     handleSubmit(e, email, setEmail);

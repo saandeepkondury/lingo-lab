@@ -30,21 +30,53 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(session?.user ?? null);
         setIsLoading(false);
 
-        // When a user signs up, update their subscriber record if it exists
+        // When a user signs up, update their subscriber record and email signups if they exist
         if (event === 'SIGNED_IN' && session?.user?.email) {
           setTimeout(async () => {
             try {
               // Update subscriber record to connect it with the user account
-              const { error } = await supabase
+              const { error: subscriberError } = await supabase
                 .from('subscribers')
                 .update({ user_id: session.user.id })
                 .eq('email', session.user.email)
                 .is('user_id', null);
 
-              if (error) {
-                console.log('Failed to connect subscriber record:', error);
+              if (subscriberError) {
+                console.log('Failed to connect subscriber record:', subscriberError);
               } else {
                 console.log('Successfully connected subscriber record to user');
+              }
+
+              // Also create a subscriber record if they signed up via email signup
+              const { data: emailSignups } = await supabase
+                .from('email_signups')
+                .select('*')
+                .eq('email', session.user.email);
+
+              if (emailSignups && emailSignups.length > 0) {
+                // Check if subscriber already exists
+                const { data: existingSubscriber } = await supabase
+                  .from('subscribers')
+                  .select('id')
+                  .eq('email', session.user.email)
+                  .maybeSingle();
+
+                if (!existingSubscriber) {
+                  // Create subscriber record
+                  const { error: insertError } = await supabase
+                    .from('subscribers')
+                    .insert({
+                      email: session.user.email,
+                      user_id: session.user.id,
+                      subscribed: true
+                    });
+
+                  if (insertError) {
+                    console.log('Failed to create subscriber from email signup:', insertError);
+                  } else {
+                    console.log('Successfully created subscriber from email signup');
+                  }
+                }
               }
 
               await supabase.functions.invoke('check-subscription');

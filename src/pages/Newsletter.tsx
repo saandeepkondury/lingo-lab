@@ -2,38 +2,17 @@ import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
-import { useNavigate } from 'react-router-dom';
 import { CheckCircle } from 'lucide-react';
+import { useEmailSubmit } from '@/hooks/useEmailSubmit';
 
 const Newsletter = () => {
-  const {
-    toast
-  } = useToast();
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const { handleSubmit, isSubmitting } = useEmailSubmit('newsletter');
   
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    // Simulate subscription process
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubscribed(true);
-      setEmail('');
-      toast({
-        title: "Successfully subscribed",
-        description: "You've been added to our weekly newsletter."
-      });
-      
-      // Redirect to join page after successful subscription
-      setTimeout(() => {
-        navigate('/join');
-      }, 2000);
-    }, 1500);
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    await handleSubmit(e, email, setEmail);
+    setIsSubscribed(true);
   };
   
   return (
@@ -49,7 +28,7 @@ const Newsletter = () => {
           
           <div className="max-w-xl mx-auto">
             {!isSubscribed ? (
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 mb-4">
+              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 mb-4">
                 <Input 
                   type="email" 
                   placeholder="Your email address" 

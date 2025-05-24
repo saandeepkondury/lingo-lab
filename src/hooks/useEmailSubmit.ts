@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
-export const useEmailSubmit = () => {
+export const useEmailSubmit = (source: 'homepage' | 'newsletter' = 'homepage') => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -29,27 +29,27 @@ export const useEmailSubmit = () => {
     setIsSubmitting(true);
 
     try {
-      console.log('Submitting email to newsletter signup:', email);
+      console.log('Submitting email signup:', email, 'from', source);
       
-      const { data, error } = await supabase.functions.invoke('newsletter-signup', {
-        body: { email }
+      const { data, error } = await supabase.functions.invoke('email-signup', {
+        body: { email, source }
       });
 
       if (error) {
-        console.error('Newsletter signup error:', error);
+        console.error('Email signup error:', error);
         throw error;
       }
 
-      console.log('Newsletter signup response:', data);
+      console.log('Email signup response:', data);
 
-      if (data.alreadySubscribed) {
+      if (data.alreadySignedUp) {
         toast({
-          title: "Already subscribed!",
+          title: "Already signed up!",
           description: data.message,
         });
       } else {
         toast({
-          title: "Successfully subscribed!",
+          title: "Successfully signed up!",
           description: data.message,
         });
       }
