@@ -1,7 +1,10 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useEmailSubmit } from '@/hooks/useEmailSubmit';
+import TrustIndicator from '@/components/TrustIndicator';
+
 const HeroSection = () => {
   const [email, setEmail] = useState('');
   const {
@@ -18,13 +21,14 @@ const HeroSection = () => {
           <p className="text-xl md:text-2xl mt-8 text-zinc-700">
             Discover how top founders used strategic narrative to raise millions and shape markets.
           </p>
-          <div className="pt-10 flex justify-center">
+          <div className="pt-10 flex flex-col items-center gap-4">
             <form onSubmit={handleHeroSubmit} className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
               <Input type="email" placeholder="Enter your email" value={email} onChange={e => setEmail(e.target.value)} className="h-12 px-4 text-base" required />
               <Button type="submit" className="h-12 rounded-md bg-teal-500 hover:bg-teal-600 text-white px-6 text-base" disabled={isSubmitting}>
                 {isSubmitting ? "Submitting..." : "Join Our Community"}
               </Button>
             </form>
+            <TrustIndicator />
           </div>
         </div>
       </div>
