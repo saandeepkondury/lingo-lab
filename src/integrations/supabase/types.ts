@@ -9,7 +9,7 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      community_subscriptions: {
+      newsletter_subscriptions: {
         Row: {
           email: string
           id: string
