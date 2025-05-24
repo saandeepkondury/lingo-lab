@@ -5,7 +5,7 @@ import FiltersPanel from '@/components/FiltersPanel';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/AuthContext';
-import { filterGroups } from '@/data/companiesData';
+import { filterGroups } from '@/data/caseStudiesData';
 import { useCaseStudiesFilter } from '@/hooks/useCaseStudiesFilter';
 import SearchArea from '@/components/CaseStudies/SearchArea';
 import CaseStudiesList from '@/components/CaseStudies/CaseStudiesList';
