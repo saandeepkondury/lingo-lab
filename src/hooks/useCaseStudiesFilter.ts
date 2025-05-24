@@ -1,7 +1,6 @@
 
 import { useState, useMemo } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { useSubscription } from '@/hooks/useSubscription';
 import { allCaseStudies } from '@/data/caseStudiesData';
 
 export const useCaseStudiesFilter = (companyId?: string) => {
@@ -10,7 +9,6 @@ export const useCaseStudiesFilter = (companyId?: string) => {
     companyId ? { 'Company': [companyId] } : {}
   );
   const { isLoggedIn } = useAuth();
-  const { subscribed } = useSubscription();
   
   const handleFilterChange = (group: string, value: string) => {
     setActiveFilters(prev => {
@@ -123,27 +121,14 @@ export const useCaseStudiesFilter = (companyId?: string) => {
     });
   }, [initialCaseStudies, searchQuery, activeFilters]);
 
-  // Check if user has paid access - logged in AND subscribed
-  const hasPaidAccess = isLoggedIn && subscribed;
-
-  // Memoize the visible and locked case studies based on subscription status
+  // Memoize the visible and locked case studies to prevent unnecessary calculations
   const visibleCaseStudies = useMemo(() => {
-    // If user has paid access, show all filtered case studies
-    if (hasPaidAccess) {
-      return filteredCaseStudies;
-    }
-    // If not paid, show only first 2 case studies
-    return filteredCaseStudies.slice(0, 2);
-  }, [hasPaidAccess, filteredCaseStudies]);
+    return isLoggedIn ? filteredCaseStudies : filteredCaseStudies.slice(0, 4);
+  }, [isLoggedIn, filteredCaseStudies]);
 
   const lockedCaseStudies = useMemo(() => {
-    // If user has paid access, no locked case studies
-    if (hasPaidAccess) {
-      return [];
-    }
-    // If not paid, show remaining case studies as locked
-    return filteredCaseStudies.slice(2);
-  }, [hasPaidAccess, filteredCaseStudies]);
+    return !isLoggedIn ? filteredCaseStudies.slice(4) : [];
+  }, [isLoggedIn, filteredCaseStudies]);
     
   return {
     searchQuery,
