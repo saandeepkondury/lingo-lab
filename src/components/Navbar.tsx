@@ -1,5 +1,5 @@
 
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from '@/context/AuthContext';
@@ -9,17 +9,18 @@ const Navbar = () => {
   const { isLoggedIn, logout } = useAuth();
   const isMobile = useIsMobile();
   const location = useLocation();
+  const navigate = useNavigate();
   
   const handleLogout = async () => {
     try {
       console.log('Navbar: Logout button clicked');
       await logout();
       console.log('Navbar: Logout completed, redirecting to home');
-      window.location.href = '/';
+      navigate('/');
     } catch (error) {
       console.error('Navbar: Logout failed:', error);
       // Force redirect even if logout failed
-      window.location.href = '/';
+      navigate('/');
     }
   };
 
