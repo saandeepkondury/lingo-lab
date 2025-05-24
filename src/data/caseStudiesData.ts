@@ -1,3 +1,4 @@
+
 // Sample case studies data
 export const allCaseStudies = [
   {
@@ -12,7 +13,21 @@ export const allCaseStudies = [
     stage: "Series H",
     lingoStyle: "Metaphor",
     year: 2021,
-    targetAudience: "Developers"
+    targetAudience: "Developers",
+    revenue: "$10M+",
+    businessType: "FinTech",
+    niche: "payment processing infrastructure",
+    country: "USA",
+    startedAt: "2010",
+    growthMethod: "Partnerships",
+    businessModel: "Transaction Fee",
+    founders: "2",
+    employees: "200+",
+    funding: "Series B+",
+    customer: "B2B",
+    involvement: "Full-time",
+    narrativeFocus: "Tech Innovator",
+    fundingStrategy: "VC-led"
   },
   {
     id: "notion-all-in-one-workspace",
@@ -26,7 +41,21 @@ export const allCaseStudies = [
     stage: "Series C",
     lingoStyle: "Movement",
     year: 2020,
-    targetAudience: "Teams"
+    targetAudience: "Teams",
+    revenue: "$1M-$10M",
+    businessType: "SaaS",
+    niche: "productivity workspace collaboration",
+    country: "USA",
+    startedAt: "2016",
+    growthMethod: "Community",
+    businessModel: "Freemium",
+    founders: "2",
+    employees: "51-200",
+    funding: "Series A",
+    customer: "B2B",
+    involvement: "Full-time",
+    narrativeFocus: "Category Creator",
+    fundingStrategy: "VC-led"
   },
   {
     id: "figma-multiplayer-design",
@@ -40,7 +69,21 @@ export const allCaseStudies = [
     stage: "Acquisition",
     lingoStyle: "Metaphor",
     year: 2022,
-    targetAudience: "Designers"
+    targetAudience: "Designers",
+    revenue: "$10M+",
+    businessType: "SaaS",
+    niche: "collaborative design tools",
+    country: "USA",
+    startedAt: "2012",
+    growthMethod: "Viral",
+    businessModel: "Subscription",
+    founders: "2",
+    employees: "200+",
+    funding: "Series B+",
+    customer: "B2B",
+    involvement: "Full-time",
+    narrativeFocus: "Disruptor",
+    fundingStrategy: "VC-led"
   },
   {
     id: "open-ai-chatgpt",
@@ -54,7 +97,21 @@ export const allCaseStudies = [
     stage: "Late Growth",
     lingoStyle: "Meme",
     year: 2022,
-    targetAudience: "General Public"
+    targetAudience: "General Public",
+    revenue: "$10M+",
+    businessType: "AI & ML",
+    niche: "conversational AI artificial intelligence",
+    country: "USA",
+    startedAt: "2015",
+    growthMethod: "Viral",
+    businessModel: "Subscription",
+    founders: "3+",
+    employees: "200+",
+    funding: "Series B+",
+    customer: "B2C",
+    involvement: "Full-time",
+    narrativeFocus: "Category Creator",
+    fundingStrategy: "VC-led"
   },
   {
     id: "airbnb-belong-anywhere",
@@ -68,7 +125,21 @@ export const allCaseStudies = [
     stage: "Pre-IPO",
     lingoStyle: "Movement",
     year: 2014,
-    targetAudience: "Travelers"
+    targetAudience: "Travelers",
+    revenue: "$10M+",
+    businessType: "Marketplace",
+    niche: "travel accommodation sharing",
+    country: "USA",
+    startedAt: "2008",
+    growthMethod: "Community",
+    businessModel: "Transaction Fee",
+    founders: "3+",
+    employees: "200+",
+    funding: "Series B+",
+    customer: "B2C",
+    involvement: "Full-time",
+    narrativeFocus: "Market Leader",
+    fundingStrategy: "VC-led"
   },
   {
     id: "slack-where-work-happens",
@@ -82,12 +153,162 @@ export const allCaseStudies = [
     stage: "Series H",
     lingoStyle: "Anti-villain",
     year: 2019,
-    targetAudience: "Businesses"
+    targetAudience: "Businesses",
+    revenue: "$10M+",
+    businessType: "SaaS",
+    niche: "team communication workplace chat",
+    country: "USA",
+    startedAt: "2013",
+    growthMethod: "Viral",
+    businessModel: "Freemium",
+    founders: "2",
+    employees: "200+",
+    funding: "Series B+",
+    customer: "B2B",
+    involvement: "Full-time",
+    narrativeFocus: "Category Creator",
+    fundingStrategy: "VC-led"
   }
 ];
 
-// Normalized filter groups with unique values for better performance
+// Updated filter groups with new filters and Company filter
 export const filterGroups = [
+  {
+    name: "Company",
+    options: [
+      { value: "stripe", label: "Stripe" },
+      { value: "notion", label: "Notion" },
+      { value: "figma", label: "Figma" },
+      { value: "openai", label: "OpenAI" },
+      { value: "airbnb", label: "Airbnb" },
+      { value: "slack", label: "Slack" }
+    ]
+  },
+  {
+    name: "Revenue",
+    options: [
+      { value: "<$1M", label: "<$1M" },
+      { value: "$1M-$10M", label: "$1M-$10M" },
+      { value: "$10M+", label: "$10M+" }
+    ]
+  },
+  {
+    name: "Business Type",
+    options: [
+      { value: "SaaS", label: "SaaS" },
+      { value: "Marketplace", label: "Marketplace" },
+      { value: "FinTech", label: "FinTech" },
+      { value: "Consumer Goods", label: "Consumer Goods" },
+      { value: "HealthTech", label: "HealthTech" },
+      { value: "AI & ML", label: "AI & ML" }
+    ]
+  },
+  {
+    name: "Niche",
+    options: [] // This will be searchable
+  },
+  {
+    name: "Country",
+    options: [
+      { value: "USA", label: "USA" },
+      { value: "India", label: "India" },
+      { value: "Germany", label: "Germany" },
+      { value: "Canada", label: "Canada" },
+      { value: "UK", label: "UK" }
+    ]
+  },
+  {
+    name: "Started At",
+    options: [
+      { value: "2008", label: "2008" },
+      { value: "2010", label: "2010" },
+      { value: "2012", label: "2012" },
+      { value: "2013", label: "2013" },
+      { value: "2015", label: "2015" },
+      { value: "2016", label: "2016" }
+    ]
+  },
+  {
+    name: "Growth Method",
+    options: [
+      { value: "Paid Ads", label: "Paid Ads" },
+      { value: "Organic SEO", label: "Organic SEO" },
+      { value: "Community", label: "Community" },
+      { value: "Viral", label: "Viral" },
+      { value: "Partnerships", label: "Partnerships" }
+    ]
+  },
+  {
+    name: "Business Model",
+    options: [
+      { value: "Subscription", label: "Subscription" },
+      { value: "Transaction Fee", label: "Transaction Fee" },
+      { value: "Freemium", label: "Freemium" },
+      { value: "Licensing", label: "Licensing" }
+    ]
+  },
+  {
+    name: "Founders",
+    options: [
+      { value: "1", label: "1" },
+      { value: "2", label: "2" },
+      { value: "3+", label: "3+" },
+      { value: "Serial Entrepreneur", label: "Serial Entrepreneur" },
+      { value: "First-time Founder", label: "First-time Founder" }
+    ]
+  },
+  {
+    name: "Employees",
+    options: [
+      { value: "1-10", label: "1-10" },
+      { value: "11-50", label: "11-50" },
+      { value: "51-200", label: "51-200" },
+      { value: "200+", label: "200+" }
+    ]
+  },
+  {
+    name: "Funding",
+    options: [
+      { value: "Bootstrapped", label: "Bootstrapped" },
+      { value: "Seed", label: "Seed" },
+      { value: "Series A", label: "Series A" },
+      { value: "Series B+", label: "Series B+" }
+    ]
+  },
+  {
+    name: "Customer",
+    options: [
+      { value: "B2B", label: "B2B" },
+      { value: "B2C", label: "B2C" },
+      { value: "B2B2C", label: "B2B2C" }
+    ]
+  },
+  {
+    name: "Involvement",
+    options: [
+      { value: "Full-time", label: "Full-time" },
+      { value: "Part-time", label: "Part-time" },
+      { value: "Advisory", label: "Advisory" }
+    ]
+  },
+  {
+    name: "Narrative Focus",
+    options: [
+      { value: "Market Leader", label: "Market Leader" },
+      { value: "Category Creator", label: "Category Creator" },
+      { value: "Tech Innovator", label: "Tech Innovator" },
+      { value: "Disruptor", label: "Disruptor" }
+    ]
+  },
+  {
+    name: "Funding Strategy",
+    options: [
+      { value: "VC-led", label: "VC-led" },
+      { value: "Bootstrapped", label: "Bootstrapped" },
+      { value: "Crowdfunding", label: "Crowdfunding" },
+      { value: "Angel-led", label: "Angel-led" }
+    ]
+  },
   {
     name: "Narrative Type",
     options: [

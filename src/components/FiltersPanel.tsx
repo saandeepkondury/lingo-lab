@@ -23,18 +23,30 @@ interface FiltersPanelProps {
 }
 
 const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: FiltersPanelProps) => {
-  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>(
-    Object.fromEntries(filters.map(filter => [filter.name, true]))
-  );
+  // Set all groups to collapsed by default
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
   const isMobile = useIsMobile();
-  const [companySearchQuery, setCompanySearchQuery] = useState('');
-  const [industrySearchQuery, setIndustrySearchQuery] = useState('');
+  const [searchQueries, setSearchQueries] = useState<Record<string, string>>({});
 
   const toggleGroup = (groupName: string) => {
     setExpandedGroups(prev => ({
       ...prev,
       [groupName]: !prev[groupName]
     }));
+  };
+
+  const updateSearchQuery = (groupName: string, query: string) => {
+    setSearchQueries(prev => ({
+      ...prev,
+      [groupName]: query
+    }));
+  };
+
+  const handleNicheSearch = (query: string) => {
+    if (query.trim()) {
+      onFilterChange('Niche', query.trim());
+    }
+    updateSearchQuery('Niche', '');
   };
   
   const FiltersPanelContent = () => (
@@ -58,8 +70,8 @@ const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: 
           
           {expandedGroups[group.name] && (
             <div className="ml-2 space-y-1">
-              {/* Special handling for Company filter - show search input */}
-              {group.name === "Company" ? (
+              {/* Special handling for searchable filters */}
+              {(group.name === "Company" || group.name === "Industry") ? (
                 <div className="px-2 mb-2">
                   <div className="relative">
                     <div className="absolute inset-y-0 left-2 flex items-center pointer-events-none">
@@ -67,14 +79,14 @@ const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: 
                     </div>
                     <Input 
                       type="text"
-                      placeholder="Search companies..." 
+                      placeholder={`Search ${group.name.toLowerCase()}...`}
                       className="pl-8 py-1 h-8 text-sm bg-sidebar-accent/50 border-sidebar-border"
-                      value={companySearchQuery}
-                      onChange={(e) => setCompanySearchQuery(e.target.value)} 
+                      value={searchQueries[group.name] || ''}
+                      onChange={(e) => updateSearchQuery(group.name, e.target.value)} 
                     />
                   </div>
                   {group.options
-                    .filter(option => option.label.toLowerCase().includes(companySearchQuery.toLowerCase()))
+                    .filter(option => option.label.toLowerCase().includes((searchQueries[group.name] || '').toLowerCase()))
                     .map((option) => {
                       const isActive = activeFilters[group.name]?.includes(option.value);
                       
@@ -102,49 +114,48 @@ const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: 
                     })
                   }
                 </div>
-              ) : group.name === "Industry" ? (
-                // Searchable Industry filter
+              ) : group.name === "Niche" ? (
+                // Special searchable text input for Niche
                 <div className="px-2 mb-2">
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-2 flex items-center pointer-events-none">
-                      <Search className="h-3.5 w-3.5 text-sidebar-foreground/70" />
-                    </div>
                     <Input 
                       type="text"
-                      placeholder="Search industries..." 
-                      className="pl-8 py-1 h-8 text-sm bg-sidebar-accent/50 border-sidebar-border"
-                      value={industrySearchQuery}
-                      onChange={(e) => setIndustrySearchQuery(e.target.value)} 
+                      placeholder="Enter niche keywords..."
+                      className="py-1 h-8 text-sm bg-sidebar-accent/50 border-sidebar-border"
+                      value={searchQueries['Niche'] || ''}
+                      onChange={(e) => updateSearchQuery('Niche', e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          handleNicheSearch(searchQueries['Niche'] || '');
+                        }
+                      }}
                     />
                   </div>
-                  {group.options
-                    .filter(option => option.label.toLowerCase().includes(industrySearchQuery.toLowerCase()))
-                    .map((option) => {
-                      const isActive = activeFilters[group.name]?.includes(option.value);
-                      
-                      return (
-                        <Button
-                          key={option.value}
-                          variant="ghost"
-                          className={`w-full justify-start px-2 py-1.5 h-auto text-sm ${
-                            isActive ? 'font-medium text-sidebar-primary' : 'font-normal text-sidebar-foreground/80 hover:text-sidebar-foreground'
-                          }`}
-                          onClick={() => onFilterChange(group.name, option.value)}
-                        >
-                          <div className="flex items-center">
-                            <div className={`flex h-4 w-4 items-center justify-center rounded-sm border ${
-                              isActive 
-                                ? 'border-sidebar-primary bg-sidebar-primary text-sidebar-primary-foreground' 
-                                : 'border-sidebar-foreground/60'
-                            } mr-2`}>
-                              {isActive && <Check className="h-3 w-3" />}
-                            </div>
-                            {option.label}
-                          </div>
-                        </Button>
-                      );
-                    })
-                  }
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full mt-1 text-xs"
+                    onClick={() => handleNicheSearch(searchQueries['Niche'] || '')}
+                    disabled={!searchQueries['Niche']?.trim()}
+                  >
+                    Add Niche Filter
+                  </Button>
+                  {/* Show active niche filters */}
+                  {activeFilters['Niche']?.map((niche) => (
+                    <Button
+                      key={niche}
+                      variant="ghost"
+                      className="w-full justify-start px-2 py-1.5 h-auto text-sm font-medium text-sidebar-primary"
+                      onClick={() => onFilterChange('Niche', niche)}
+                    >
+                      <div className="flex items-center">
+                        <div className="flex h-4 w-4 items-center justify-center rounded-sm border border-sidebar-primary bg-sidebar-primary text-sidebar-primary-foreground mr-2">
+                          <Check className="h-3 w-3" />
+                        </div>
+                        {niche}
+                      </div>
+                    </Button>
+                  ))}
                 </div>
               ) : (
                 // Regular checkbox filters for other filter categories

@@ -1,3 +1,4 @@
+
 import { useState, useMemo } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { allCaseStudies } from '@/data/caseStudiesData';
@@ -44,10 +45,18 @@ export const useCaseStudiesFilter = (companyId?: string) => {
   // Apply filters and search - memoized to prevent unnecessary recalculations
   const filteredCaseStudies = useMemo(() => {
     return initialCaseStudies.filter(study => {
-      // Search filter
-      if (searchQuery && !study.companyName.toLowerCase().includes(searchQuery.toLowerCase()) && 
-          !study.lingo.toLowerCase().includes(searchQuery.toLowerCase())) {
-        return false;
+      // Search filter - check company name, lingo, and niche
+      if (searchQuery) {
+        const searchLower = searchQuery.toLowerCase();
+        const searchableFields = [
+          study.companyName,
+          study.lingo,
+          study.niche || ''
+        ].join(' ').toLowerCase();
+        
+        if (!searchableFields.includes(searchLower)) {
+          return false;
+        }
       }
       
       // Check if all active filters match
@@ -61,9 +70,32 @@ export const useCaseStudiesFilter = (companyId?: string) => {
           }
           continue;
         }
+
+        // Special handling for Niche filter (searchable text field)
+        if (group === "Niche") {
+          const studyNiche = (study.niche || '').toLowerCase();
+          const hasMatch = values.some(value => 
+            studyNiche.includes(value.toLowerCase()) || value.toLowerCase().includes(studyNiche)
+          );
+          if (!hasMatch) return false;
+          continue;
+        }
         
         // Map the filter group names to the case study object properties
         const fieldMap: Record<string, keyof typeof study> = {
+          "Revenue": "revenue",
+          "Business Type": "businessType",
+          "Country": "country",
+          "Started At": "startedAt",
+          "Growth Method": "growthMethod",
+          "Business Model": "businessModel",
+          "Founders": "founders",
+          "Employees": "employees",
+          "Funding": "funding",
+          "Customer": "customer",
+          "Involvement": "involvement",
+          "Narrative Focus": "narrativeFocus",
+          "Funding Strategy": "fundingStrategy",
           "Narrative Type": "narrativeType",
           "Industry": "industry",
           "Stage": "stage",
