@@ -1,4 +1,3 @@
-
 import Layout from '@/components/Layout';
 import { useAuth } from '@/context/AuthContext';
 import { LogIn, UserPlus } from 'lucide-react';
@@ -7,22 +6,18 @@ import JoinHeader from '@/components/Join/JoinHeader';
 import LoginForm from '@/components/Join/LoginForm';
 import SignupForm from '@/components/Join/SignupForm';
 import LoggedInView from '@/components/Join/LoggedInView';
-
 const Join = () => {
-  const { isLoggedIn } = useAuth();
-
+  const {
+    isLoggedIn
+  } = useAuth();
   if (isLoggedIn) {
-    return (
-      <Layout>
+    return <Layout>
         <div className="container max-w-md mx-auto px-6 py-24">
           <LoggedInView />
         </div>
-      </Layout>
-    );
+      </Layout>;
   }
-
-  return (
-    <Layout>
+  return <Layout>
       <div className="container max-w-md mx-auto px-6 py-24">
         <JoinHeader />
 
@@ -48,13 +43,9 @@ const Join = () => {
         </Tabs>
 
         <div className="mt-6 text-center">
-          <p className="text-sm text-muted-foreground">
-            For demo purposes, you can enter any information
-          </p>
+          
         </div>
       </div>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default Join;
