@@ -4,9 +4,9 @@ import { Webhook } from 'https://esm.sh/standardwebhooks@1.0.0';
 import { Resend } from 'npm:resend@4.0.0';
 import { renderAsync } from 'npm:@react-email/components@0.0.22';
 import React from 'npm:react@18.3.1';
-import { SignupConfirmationEmail } from '../send-welcome-email/_templates/signup-confirmation.tsx';
-import { EmailChangeEmail } from '../send-welcome-email/_templates/email-change.tsx';
-import { PasswordResetEmail } from '../send-welcome-email/_templates/password-reset.tsx';
+import { SignupConfirmationEmail } from './_templates/signup-confirmation.tsx';
+import { EmailChangeEmail } from './_templates/email-change.tsx';
+import { PasswordResetEmail } from './_templates/password-reset.tsx';
 
 const resend = new Resend(Deno.env.get('RESEND_API_KEY') as string);
 const hookSecret = Deno.env.get('AUTH_HOOK_SECRET') as string;
