@@ -11,7 +11,13 @@ const Navbar = () => {
   const location = useLocation();
   
   const handleLogout = async () => {
-    await logout();
+    try {
+      console.log('Logout button clicked');
+      await logout();
+      console.log('Logout completed');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   const showCaseStudiesLink = isLoggedIn || location.pathname === '/pricing';

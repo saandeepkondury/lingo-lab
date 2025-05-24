@@ -8,7 +8,7 @@ interface AuthContextType {
   session: Session | null;
   isLoggedIn: boolean;
   login: () => void;
-  logout: () => void;
+  logout: () => Promise<void>;
   signUp: (email: string, password: string, fullName: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   isLoading: boolean;
@@ -75,7 +75,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = async () => {
-    await supabase.auth.signOut();
+    console.log('Starting logout process...');
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Logout error:', error);
+        throw error;
+      }
+      console.log('Logout successful');
+      
+      // Clear local state immediately
+      setSession(null);
+      setUser(null);
+    } catch (error) {
+      console.error('Error during logout:', error);
+      throw error;
+    }
   };
 
   // Legacy functions for backward compatibility
