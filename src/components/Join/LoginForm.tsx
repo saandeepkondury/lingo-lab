@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 const LoginForm = () => {
   const { signIn } = useAuth();
@@ -13,6 +14,7 @@ const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isResetLoading, setIsResetLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +36,41 @@ const LoginForm = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      toast({
+        title: "Email Required",
+        description: "Please enter your email address first.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsResetLoading(true);
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/join`,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Password Reset Email Sent",
+        description: "Check your email for password reset instructions."
+      });
+    } catch (error: any) {
+      console.error('Password reset error:', error);
+      toast({
+        title: "Reset Failed",
+        description: error.message || "Failed to send password reset email.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsResetLoading(false);
     }
   };
 
@@ -64,6 +101,17 @@ const LoginForm = () => {
       >
         {isLoading ? "Signing in..." : "Sign In"}
       </Button>
+      
+      <div className="text-center">
+        <button
+          type="button"
+          onClick={handleForgotPassword}
+          disabled={isResetLoading}
+          className="text-sm text-teal-600 hover:text-teal-700 underline disabled:opacity-50"
+        >
+          {isResetLoading ? "Sending..." : "Forgot your password?"}
+        </button>
+      </div>
     </form>
   );
 };
