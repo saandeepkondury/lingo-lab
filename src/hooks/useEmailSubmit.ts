@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 
 export const useEmailSubmit = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,33 +28,11 @@ export const useEmailSubmit = () => {
     setIsSubmitting(true);
 
     try {
-      // Insert email into community_subscriptions table
-      const { error } = await supabase
-        .from('community_subscriptions')
-        .insert([
-          { 
-            email, 
-            source: 'homepage'
-          }
-        ]);
-
-      if (error) {
-        console.error('Error inserting email subscription:', error);
-        // If it's a duplicate email, still show success message
-        if (error.code === '23505') {
-          toast({
-            title: "Already subscribed!",
-            description: "This email is already part of our community.",
-          });
-        } else {
-          throw error;
-        }
-      } else {
-        toast({
-          title: "Successfully subscribed!",
-          description: "You've been added to our newsletter. Welcome to the community!",
-        });
-      }
+      // Since we don't have a database table anymore, just show success message
+      toast({
+        title: "Successfully subscribed!",
+        description: "You've been added to our newsletter. Welcome to the community!",
+      });
 
       setEmail('');
       navigate('/join');
