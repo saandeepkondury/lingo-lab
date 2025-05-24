@@ -1,17 +1,19 @@
 
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import Layout from '@/components/Layout';
+import HeroSection from '@/components/home/HeroSection';
+import FeaturedCaseStudies from '@/components/home/FeaturedCaseStudies';
+import ValueProposition from '@/components/home/ValueProposition';
+import CTASection from '@/components/home/CTASection';
 
 const Index = () => {
-  const navigate = useNavigate();
-  
-  // Always redirect to case studies page, which will handle paid/unpaid logic
-  useEffect(() => {
-    navigate('/case-studies');
-  }, [navigate]);
-
-  // This component will redirect immediately, so we don't need to render anything
-  return null;
+  return (
+    <Layout>
+      <HeroSection />
+      <FeaturedCaseStudies />
+      <ValueProposition />
+      <CTASection />
+    </Layout>
+  );
 };
 
 export default Index;

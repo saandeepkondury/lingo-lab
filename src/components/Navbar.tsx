@@ -24,18 +24,16 @@ const Navbar = () => {
     }
   };
 
-  const showCaseStudiesLink = isLoggedIn || location.pathname === '/pricing';
-
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center">
         <div className="mr-4 flex">
-          <Link to="/case-studies" className="mr-6 flex items-center space-x-2">
+          <Link to={isLoggedIn ? "/case-studies" : "/"} className="mr-6 flex items-center space-x-2">
             <span className="text-xl font-serif font-bold bg-gradient-to-r from-teal-500 to-coral-500 bg-clip-text text-transparent">
               Lingo<span className="text-teal-500">Lab</span>
             </span>
           </Link>
-          {showCaseStudiesLink && (
+          {isLoggedIn && (
             <nav className="flex items-center space-x-6 text-sm font-medium">
               <Link 
                 to="/case-studies" 

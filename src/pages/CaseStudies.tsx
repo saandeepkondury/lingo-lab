@@ -1,5 +1,6 @@
 
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import Layout from '@/components/Layout';
 import FiltersPanel from '@/components/FiltersPanel';
 import { Button } from '@/components/ui/button';
@@ -10,11 +11,6 @@ import { useCaseStudiesFilter } from '@/hooks/useCaseStudiesFilter';
 import SearchArea from '@/components/CaseStudies/SearchArea';
 import CaseStudiesList from '@/components/CaseStudies/CaseStudiesList';
 import { Bookmark } from 'lucide-react';
-import { useEffect } from 'react';
-import HeroSection from '@/components/home/HeroSection';
-import FeaturedCaseStudies from '@/components/home/FeaturedCaseStudies';
-import ValueProposition from '@/components/home/ValueProposition';
-import CTASection from '@/components/home/CTASection';
 import { useSubscription } from '@/hooks/useSubscription';
 
 const CaseStudies = () => {
@@ -27,10 +23,18 @@ const CaseStudies = () => {
     visibleCaseStudies,
     lockedCaseStudies
   } = useCaseStudiesFilter();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, isLoading } = useAuth();
   const { subscribed, loading } = useSubscription();
   const { toast } = useToast();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // Redirect to home if not logged in
+  useEffect(() => {
+    if (!isLoading && !isLoggedIn) {
+      navigate('/');
+    }
+  }, [isLoggedIn, isLoading, navigate]);
 
   // Check if user just signed in/up and show appropriate message
   useEffect(() => {
@@ -52,19 +56,26 @@ const CaseStudies = () => {
     }
   }, [location.state, toast, subscribed]);
 
-  // If user is not logged in, show marketing homepage
-  if (!isLoggedIn) {
+  // Show loading state while checking auth
+  if (isLoading) {
     return (
       <Layout>
-        <HeroSection />
-        <FeaturedCaseStudies />
-        <ValueProposition />
-        <CTASection />
+        <section className="py-12">
+          <div className="container max-w-6xl mx-auto px-6">
+            <div className="text-center">
+              <p className="text-lg text-muted-foreground">Loading...</p>
+            </div>
+          </div>
+        </section>
       </Layout>
     );
   }
 
-  // For logged-in users, show case studies page
+  // Don't render anything if not logged in (will redirect)
+  if (!isLoggedIn) {
+    return null;
+  }
+
   // Show loading state while checking subscription
   if (loading) {
     return (
@@ -112,14 +123,12 @@ const CaseStudies = () => {
                   <Link to="/pricing">Upgrade to Unlock All Case Studies</Link>
                 </Button>
               )}
-              {isLoggedIn && (
-                <Button variant="outline" className="flex items-center gap-2" asChild>
-                  <Link to="/saved">
-                    <Bookmark className="h-4 w-4" />
-                    Saved Case Studies
-                  </Link>
-                </Button>
-              )}
+              <Button variant="outline" className="flex items-center gap-2" asChild>
+                <Link to="/saved">
+                  <Bookmark className="h-4 w-4" />
+                  Saved Case Studies
+                </Link>
+              </Button>
             </div>
           </div>
           
