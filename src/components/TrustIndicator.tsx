@@ -33,7 +33,7 @@ function TrustIndicator() {
         />
       </div>
       <p className="px-2 text-xs text-muted-foreground">
-        Trusted by <strong className="font-medium text-foreground">6000</strong> founders.
+        Trusted by <strong className="font-medium text-foreground">thousands</strong> of founders.
       </p>
     </div>
   );
