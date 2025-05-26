@@ -1,14 +1,13 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { TrendingUp, MessageSquare, Play, BarChart3, DollarSign, Target, Quote } from 'lucide-react';
+import { Brain, Building2, Calendar, Rocket, TrendingUp } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
-import AnalysisTab from './tabs/AnalysisTab';
-import InterviewTab from './tabs/InterviewTab';
-import VideoTab from './tabs/VideoTab';
-import MarketInsightTab from './tabs/MarketInsightTab';
-import FundingTab from './tabs/FundingTab';
-import PositioningTab from './tabs/PositioningTab';
-import LingoTab from './tabs/LingoTab';
+
+// Modern components
+import AIInsightsPanel from './modern/AIInsightsPanel';
+import MarketNarrativeSection from './modern/MarketNarrativeSection';
+import NarrativeEvolutionTimeline from './modern/NarrativeEvolutionTimeline';
+import VentureScaleInsights from './modern/VentureScaleInsights';
 
 interface CaseStudyTabsProps {
   caseStudy: any;
@@ -20,76 +19,64 @@ interface CaseStudyTabsProps {
 const CaseStudyTabs = ({ caseStudy, isLoggedIn, showLockOverlay, contentRef }: CaseStudyTabsProps) => {
   return (
     <TooltipProvider>
-      <Tabs defaultValue="analysis" className="w-full">
-        <TabsList className="grid w-full grid-cols-7 mb-8">
-          <TabsTrigger value="analysis" className="flex items-center gap-2">
-            <TrendingUp className="h-4 w-4" />
-            Analysis
+      <Tabs defaultValue="insights" className="w-full">
+        <TabsList className="grid w-full grid-cols-5 mb-8">
+          <TabsTrigger value="insights" className="flex items-center gap-2">
+            <Brain className="h-4 w-4" />
+            AI Insights
           </TabsTrigger>
           <Tooltip>
             <TooltipTrigger asChild>
-              <TabsTrigger value="lingo" className="flex items-center gap-2">
-                <Quote className="h-4 w-4" />
-                Lingo
+              <TabsTrigger value="market" className="flex items-center gap-2">
+                <Building2 className="h-4 w-4" />
+                Market
               </TabsTrigger>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Track the unique language driving this startup's growth and market positioning.</p>
+              <p>Market analysis and competitive landscape insights</p>
             </TooltipContent>
           </Tooltip>
-          <TabsTrigger value="interview" className="flex items-center gap-2">
-            <MessageSquare className="h-4 w-4" />
-            Interview
+          <TabsTrigger value="evolution" className="flex items-center gap-2">
+            <Calendar className="h-4 w-4" />
+            Evolution
           </TabsTrigger>
-          <TabsTrigger value="video" className="flex items-center gap-2">
-            <Play className="h-4 w-4" />
-            Video
+          <TabsTrigger value="venture" className="flex items-center gap-2">
+            <Rocket className="h-4 w-4" />
+            Venture Scale
           </TabsTrigger>
-          <TabsTrigger value="market-insight" className="flex items-center gap-2">
-            <BarChart3 className="h-4 w-4" />
-            Market Insight
-          </TabsTrigger>
-          <TabsTrigger value="funding" className="flex items-center gap-2">
-            <DollarSign className="h-4 w-4" />
-            Funding
-          </TabsTrigger>
-          <TabsTrigger value="positioning" className="flex items-center gap-2">
-            <Target className="h-4 w-4" />
-            Positioning
+          <TabsTrigger value="competitive" className="flex items-center gap-2">
+            <TrendingUp className="h-4 w-4" />
+            Analysis
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="analysis">
-          <AnalysisTab 
-            caseStudy={caseStudy}
-            isLoggedIn={isLoggedIn}
-            showLockOverlay={showLockOverlay}
-            contentRef={contentRef}
+        <TabsContent value="insights">
+          <AIInsightsPanel caseStudy={caseStudy} />
+        </TabsContent>
+        
+        <TabsContent value="market">
+          <MarketNarrativeSection 
+            industry={caseStudy.industry || caseStudy.overview?.industry}
+            currentCompany={caseStudy.company}
           />
         </TabsContent>
         
-        <TabsContent value="lingo">
-          <LingoTab caseStudy={caseStudy} />
+        <TabsContent value="evolution">
+          <NarrativeEvolutionTimeline caseStudy={caseStudy} />
         </TabsContent>
         
-        <TabsContent value="interview">
-          <InterviewTab caseStudy={caseStudy} />
+        <TabsContent value="venture">
+          <VentureScaleInsights caseStudy={caseStudy} />
         </TabsContent>
         
-        <TabsContent value="video">
-          <VideoTab />
-        </TabsContent>
-        
-        <TabsContent value="market-insight">
-          <MarketInsightTab />
-        </TabsContent>
-        
-        <TabsContent value="funding">
-          <FundingTab />
-        </TabsContent>
-        
-        <TabsContent value="positioning">
-          <PositioningTab />
+        <TabsContent value="competitive">
+          <div className="grid lg:grid-cols-2 gap-8">
+            <MarketNarrativeSection 
+              industry={caseStudy.industry || caseStudy.overview?.industry}
+              currentCompany={caseStudy.company}
+            />
+            <AIInsightsPanel caseStudy={caseStudy} />
+          </div>
         </TabsContent>
       </Tabs>
     </TooltipProvider>

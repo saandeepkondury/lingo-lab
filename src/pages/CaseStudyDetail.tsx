@@ -1,5 +1,5 @@
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
@@ -8,13 +8,17 @@ import PricingPopup from '@/components/PricingPopup';
 import { useAuth } from '@/context/AuthContext';
 import { useSavedCaseStudies } from '@/context/SavedCaseStudiesContext';
 import { useToast } from '@/hooks/use-toast';
-import CaseStudyHeader from '@/components/CaseStudy/CaseStudyHeader';
-import CaseStudyAuthorCard from '@/components/CaseStudy/CaseStudyAuthorCard';
-import CaseStudyTabs from '@/components/CaseStudy/CaseStudyTabs';
-import RelatedCaseStudies from '@/components/CaseStudy/RelatedCaseStudies';
-import DiscussionSection from '@/components/CaseStudy/DiscussionSection';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Brain, Building2, TrendingUp, Rocket, Calendar, Bookmark, BookmarkCheck } from 'lucide-react';
 
-// Sample case studies data (this would come from an API in a real app)
+// Modern components
+import CaseStudyHero from '@/components/CaseStudy/modern/CaseStudyHero';
+import MarketNarrativeSection from '@/components/CaseStudy/modern/MarketNarrativeSection';
+import AIInsightsPanel from '@/components/CaseStudy/modern/AIInsightsPanel';
+import NarrativeEvolutionTimeline from '@/components/CaseStudy/modern/NarrativeEvolutionTimeline';
+import VentureScaleInsights from '@/components/CaseStudy/modern/VentureScaleInsights';
+
+// Sample case studies data (this would come from Supabase in a real app)
 const caseStudiesData: Record<string, any> = {
   "stripe-financial-infrastructure": {
     company: "Stripe",
@@ -35,11 +39,8 @@ const caseStudiesData: Record<string, any> = {
       twitter: "@jamiesmith"
     },
     publishDate: "October 15, 2024",
-    metrics: {
-      revenue: "$7.4B",
-      founders: 2,
-      employees: "7,000+"
-    },
+    narrativeType: "Market Creation",
+    industry: "Fintech",
     content: {
       lingoExplanation: "Stripe started as a simple payments API but strategically repositioned itself as 'Financial Infrastructure for the Internet'. This narrative shift away from 'payments' (commoditized, low-margin) to 'infrastructure' (essential, high-value) was pivotal to its massive valuation and market dominance.",
       originStory: "The term was first used in 2018 by Stripe CEO Patrick Collison in a blog post explaining their vision beyond payments. By 2020, it had become the central narrative throughout their fundraising, PR, and product launches.",
@@ -54,8 +55,6 @@ const caseStudiesData: Record<string, any> = {
       rippleEffects: "The 'infrastructure' framing led to entirely new product categories (Stripe Treasury, Stripe Issuing) and forced competitors to reposition themselves. The narrative also attracted engineering talent who wanted to work on 'infrastructure' rather than 'payments'.",
       expertSummary: "Stripe's greatest narrative achievement was making payments seem like just the beginning of their TAM rather than its limitation. By positioning as infrastructure, they justifiably command SaaS multiples rather than financial services multiples."
     },
-    narrativeType: "Market Creation",
-    industry: "Fintech",
     relatedCaseStudies: [
       {
         id: "plaid-financial-connectivity",
@@ -74,16 +73,13 @@ const caseStudiesData: Record<string, any> = {
         industry: "Fintech"
       }
     ]
-  },
-  // More case studies would be defined here
+  }
 };
 
 const CaseStudyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const caseStudy = slug ? caseStudiesData[slug] : null;
-  const [showLockOverlay, setShowLockOverlay] = useState(false);
   const [showPricingPopup, setShowPricingPopup] = useState(false);
-  const contentRef = useRef<HTMLDivElement>(null);
   
   const { isLoggedIn } = useAuth();
   const { isSaved, saveCaseStudy, removeCaseStudy } = useSavedCaseStudies();
@@ -117,18 +113,12 @@ const CaseStudyDetail = () => {
   };
   
   useEffect(() => {
-    // Scroll to top when component mounts
     window.scrollTo(0, 0);
     
-    // Add scroll event listener to detect when user scrolls to locked content
+    // Show pricing popup for non-logged in users after scrolling
     const handleScroll = () => {
-      if (!isLoggedIn && contentRef.current) {
-        const rect = contentRef.current.getBoundingClientRect();
-        // If the locked content section is in view
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
-          setShowPricingPopup(true);
-          setShowLockOverlay(true);
-        }
+      if (!isLoggedIn && window.scrollY > 800) {
+        setShowPricingPopup(true);
       }
     };
     
@@ -154,7 +144,7 @@ const CaseStudyDetail = () => {
   
   // Prepare SEO metadata
   const seoTitle = `${caseStudy.company}: ${caseStudy.lingo} Case Study | LingoLab`;
-  const seoDescription = `Learn how ${caseStudy.company} used "${caseStudy.lingo}" to ${caseStudy.tagline.toLowerCase()}. Strategic narrative case study with detailed analysis.`;
+  const seoDescription = `Learn how ${caseStudy.company} used "${caseStudy.lingo}" to ${caseStudy.tagline.toLowerCase()}. Strategic narrative case study with AI-powered insights.`;
   const seoKeywords = `${caseStudy.company}, ${caseStudy.lingo}, strategic narrative, case study, ${caseStudy.industry}, ${caseStudy.narrativeType}`;
   const canonicalUrl = `${window.location.origin}/case-studies/${slug}`;
   
@@ -168,31 +158,97 @@ const CaseStudyDetail = () => {
         type="article"
       />
       
-      <article className="py-8">
-        <div className="container max-w-4xl mx-auto px-6">
-          <CaseStudyHeader caseStudy={caseStudy} slug={slug} />
-          
-          <CaseStudyAuthorCard 
-            caseStudy={caseStudy}
-            slug={slug}
-            isSaved={slug ? isSaved(slug) : false}
-            onSaveToggle={handleSaveToggle}
-          />
-          
-          <CaseStudyTabs 
-            caseStudy={caseStudy}
-            isLoggedIn={isLoggedIn}
-            showLockOverlay={showLockOverlay}
-            contentRef={contentRef}
-          />
-          
-          <RelatedCaseStudies relatedCaseStudies={caseStudy.relatedCaseStudies} />
-          
-          <DiscussionSection />
+      <article>
+        {/* Hero Section */}
+        <CaseStudyHero caseStudy={caseStudy} />
+        
+        {/* Main Content */}
+        <div className="container max-w-7xl mx-auto px-6 py-12">
+          {/* Breadcrumbs & Save Button */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center text-sm text-muted-foreground">
+              <Link to="/case-studies" className="hover:text-foreground">Case Studies</Link>
+              <span className="mx-2">/</span>
+              <span>{caseStudy.company}</span>
+            </div>
+            
+            <Button 
+              variant="outline" 
+              onClick={handleSaveToggle}
+              className="flex items-center gap-2"
+            >
+              {slug && isSaved(slug) ? (
+                <>
+                  <BookmarkCheck className="h-4 w-4" />
+                  Saved
+                </>
+              ) : (
+                <>
+                  <Bookmark className="h-4 w-4" />
+                  Save
+                </>
+              )}
+            </Button>
+          </div>
+
+          {/* Tabbed Content */}
+          <Tabs defaultValue="insights" className="w-full">
+            <TabsList className="grid w-full grid-cols-5 mb-8">
+              <TabsTrigger value="insights" className="flex items-center gap-2">
+                <Brain className="h-4 w-4" />
+                AI Insights
+              </TabsTrigger>
+              <TabsTrigger value="market" className="flex items-center gap-2">
+                <Building2 className="h-4 w-4" />
+                Market Analysis
+              </TabsTrigger>
+              <TabsTrigger value="evolution" className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                Evolution
+              </TabsTrigger>
+              <TabsTrigger value="venture" className="flex items-center gap-2">
+                <Rocket className="h-4 w-4" />
+                Venture Scale
+              </TabsTrigger>
+              <TabsTrigger value="competitive" className="flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" />
+                Competitive
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="insights" className="mt-8">
+              <AIInsightsPanel caseStudy={caseStudy} />
+            </TabsContent>
+            
+            <TabsContent value="market" className="mt-8">
+              <MarketNarrativeSection 
+                industry={caseStudy.industry}
+                currentCompany={caseStudy.company}
+              />
+            </TabsContent>
+            
+            <TabsContent value="evolution" className="mt-8">
+              <NarrativeEvolutionTimeline caseStudy={caseStudy} />
+            </TabsContent>
+            
+            <TabsContent value="venture" className="mt-8">
+              <VentureScaleInsights caseStudy={caseStudy} />
+            </TabsContent>
+            
+            <TabsContent value="competitive" className="mt-8">
+              <div className="grid lg:grid-cols-2 gap-8">
+                <MarketNarrativeSection 
+                  industry={caseStudy.industry}
+                  currentCompany={caseStudy.company}
+                />
+                <AIInsightsPanel caseStudy={caseStudy} />
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </article>
       
-      {/* Show pricing popup when the user scrolls to locked content or if showPricingPopup is true */}
+      {/* Show pricing popup when user scrolls to locked content */}
       {showPricingPopup && !isLoggedIn && <PricingPopup forceShow={true} />}
     </Layout>
   );
