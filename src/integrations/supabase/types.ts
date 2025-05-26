@@ -9,6 +9,62 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      companies: {
+        Row: {
+          created_at: string
+          description: string | null
+          founded_year: number | null
+          funding_amount: string | null
+          id: string
+          industry: string | null
+          logo_url: string | null
+          name: string
+          primary_narrative_id: string | null
+          slug: string
+          stage: string | null
+          updated_at: string
+          website_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          founded_year?: number | null
+          funding_amount?: string | null
+          id?: string
+          industry?: string | null
+          logo_url?: string | null
+          name: string
+          primary_narrative_id?: string | null
+          slug: string
+          stage?: string | null
+          updated_at?: string
+          website_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          founded_year?: number | null
+          funding_amount?: string | null
+          id?: string
+          industry?: string | null
+          logo_url?: string | null
+          name?: string
+          primary_narrative_id?: string | null
+          slug?: string
+          stage?: string | null
+          updated_at?: string
+          website_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "companies_primary_narrative_id_fkey"
+            columns: ["primary_narrative_id"]
+            isOneToOne: false
+            referencedRelation: "narratives"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_signups: {
         Row: {
           created_at: string | null
@@ -33,6 +89,286 @@ export type Database = {
           ip_address?: unknown | null
           source?: string
           user_agent?: string | null
+        }
+        Relationships: []
+      }
+      founder_submissions: {
+        Row: {
+          analysis_results: Json | null
+          analyzed: boolean | null
+          company_name: string
+          company_website: string | null
+          created_at: string
+          current_positioning: string
+          founder_email: string
+          founder_name: string
+          id: string
+          industry: string | null
+          stage: string | null
+          updated_at: string
+        }
+        Insert: {
+          analysis_results?: Json | null
+          analyzed?: boolean | null
+          company_name: string
+          company_website?: string | null
+          created_at?: string
+          current_positioning: string
+          founder_email: string
+          founder_name: string
+          id?: string
+          industry?: string | null
+          stage?: string | null
+          updated_at?: string
+        }
+        Update: {
+          analysis_results?: Json | null
+          analyzed?: boolean | null
+          company_name?: string
+          company_website?: string | null
+          created_at?: string
+          current_positioning?: string
+          founder_email?: string
+          founder_name?: string
+          id?: string
+          industry?: string | null
+          stage?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      market_signals: {
+        Row: {
+          calculated_at: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          narrative_id: string
+          score: number
+          signal_type: string
+          timeframe: string
+        }
+        Insert: {
+          calculated_at?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          narrative_id: string
+          score: number
+          signal_type: string
+          timeframe: string
+        }
+        Update: {
+          calculated_at?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          narrative_id?: string
+          score?: number
+          signal_type?: string
+          timeframe?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_signals_narrative_id_fkey"
+            columns: ["narrative_id"]
+            isOneToOne: false
+            referencedRelation: "narratives"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      narrative_analytics: {
+        Row: {
+          adoption_velocity: number | null
+          calculated_at: string
+          competitive_density: number | null
+          created_at: string
+          id: string
+          narrative_id: string
+          originality_score: number | null
+          trend_direction: string | null
+          vc_resonance_score: number | null
+        }
+        Insert: {
+          adoption_velocity?: number | null
+          calculated_at?: string
+          competitive_density?: number | null
+          created_at?: string
+          id?: string
+          narrative_id: string
+          originality_score?: number | null
+          trend_direction?: string | null
+          vc_resonance_score?: number | null
+        }
+        Update: {
+          adoption_velocity?: number | null
+          calculated_at?: string
+          competitive_density?: number | null
+          created_at?: string
+          id?: string
+          narrative_id?: string
+          originality_score?: number | null
+          trend_direction?: string | null
+          vc_resonance_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "narrative_analytics_narrative_id_fkey"
+            columns: ["narrative_id"]
+            isOneToOne: false
+            referencedRelation: "narratives"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      narrative_cluster_memberships: {
+        Row: {
+          cluster_id: string
+          created_at: string
+          id: string
+          narrative_id: string
+          similarity_score: number | null
+        }
+        Insert: {
+          cluster_id: string
+          created_at?: string
+          id?: string
+          narrative_id: string
+          similarity_score?: number | null
+        }
+        Update: {
+          cluster_id?: string
+          created_at?: string
+          id?: string
+          narrative_id?: string
+          similarity_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "narrative_cluster_memberships_cluster_id_fkey"
+            columns: ["cluster_id"]
+            isOneToOne: false
+            referencedRelation: "narrative_clusters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "narrative_cluster_memberships_narrative_id_fkey"
+            columns: ["narrative_id"]
+            isOneToOne: false
+            referencedRelation: "narratives"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      narrative_clusters: {
+        Row: {
+          color_code: string | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          color_code?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          color_code?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      narrative_mentions: {
+        Row: {
+          company_id: string | null
+          content_snippet: string | null
+          created_at: string
+          detected_at: string
+          id: string
+          narrative_id: string
+          sentiment_score: number | null
+          source_type: string
+          source_url: string | null
+        }
+        Insert: {
+          company_id?: string | null
+          content_snippet?: string | null
+          created_at?: string
+          detected_at?: string
+          id?: string
+          narrative_id: string
+          sentiment_score?: number | null
+          source_type: string
+          source_url?: string | null
+        }
+        Update: {
+          company_id?: string | null
+          content_snippet?: string | null
+          created_at?: string
+          detected_at?: string
+          id?: string
+          narrative_id?: string
+          sentiment_score?: number | null
+          source_type?: string
+          source_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "narrative_mentions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "narrative_mentions_narrative_id_fkey"
+            columns: ["narrative_id"]
+            isOneToOne: false
+            referencedRelation: "narratives"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      narratives: {
+        Row: {
+          category: string | null
+          created_at: string
+          definition: string | null
+          first_detected_at: string
+          id: string
+          industry: string | null
+          term: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          definition?: string | null
+          first_detected_at?: string
+          id?: string
+          industry?: string | null
+          term: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          definition?: string | null
+          first_detected_at?: string
+          id?: string
+          industry?: string | null
+          term?: string
+          updated_at?: string
         }
         Relationships: []
       }

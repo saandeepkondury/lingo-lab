@@ -1,57 +1,67 @@
 
+import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import { SavedCaseStudiesProvider } from "@/context/SavedCaseStudiesContext";
 import Index from "./pages/Index";
-import Join from "./pages/Join";
-import CaseStudies from "./pages/CaseStudies";
-import CaseStudyDetail from "./pages/CaseStudyDetail";
-import Submit from "./pages/Submit";
-import Newsletter from "./pages/Newsletter";
-import Pricing from "./pages/Pricing";
-import NotFound from "./pages/NotFound";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
-import SavedCaseStudies from "./pages/SavedCaseStudies";
+import { ThemeProvider } from "@/components/ThemeProvider";
+
+// Lazy load pages
+const CaseStudies = lazy(() => import("./pages/CaseStudies"));
+const CaseStudyDetail = lazy(() => import("./pages/CaseStudyDetail"));
+const Companies = lazy(() => import("./pages/Companies"));
+const CompanyDetail = lazy(() => import("./pages/CompanyDetail"));
+const Pricing = lazy(() => import("./pages/Pricing"));
+const Join = lazy(() => import("./pages/Join"));
+const Submit = lazy(() => import("./pages/Submit"));
+const SavedCaseStudies = lazy(() => import("./pages/SavedCaseStudies"));
+const Newsletter = lazy(() => import("./pages/Newsletter"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const NarrativeRadar = lazy(() => import("./pages/NarrativeRadar"));
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="system" storageKey="lingolab-theme">
-      <TooltipProvider>
-        <AuthProvider>
-          <SavedCaseStudiesProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/join" element={<Join />} />
-                <Route path="/case-studies" element={<CaseStudies />} />
-                <Route path="/case-studies/:slug" element={<CaseStudyDetail />} />
-                <Route path="/companies" element={<Navigate to="/case-studies" replace />} />
-                <Route path="/companies/:slug" element={<Navigate to="/case-studies" replace />} />
-                <Route path="/search" element={<Navigate to="/case-studies" replace />} />
-                <Route path="/submit" element={<Submit />} />
-                <Route path="/newsletter" element={<Newsletter />} />
-                <Route path="/pricing" element={<Pricing />} />
-                <Route path="/saved" element={<SavedCaseStudies />} />
-                <Route path="/privacy" element={<Privacy />} />
-                <Route path="/terms" element={<Terms />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
-          </SavedCaseStudiesProvider>
-        </AuthProvider>
-      </TooltipProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
-);
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <ThemeProvider>
+          <AuthProvider>
+            <SavedCaseStudiesProvider>
+              <TooltipProvider>
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/case-studies" element={<CaseStudies />} />
+                    <Route path="/case-studies/:slug" element={<CaseStudyDetail />} />
+                    <Route path="/companies" element={<Companies />} />
+                    <Route path="/companies/:slug" element={<CompanyDetail />} />
+                    <Route path="/narrative-radar" element={<NarrativeRadar />} />
+                    <Route path="/pricing" element={<Pricing />} />
+                    <Route path="/join" element={<Join />} />
+                    <Route path="/submit" element={<Submit />} />
+                    <Route path="/saved" element={<SavedCaseStudies />} />
+                    <Route path="/newsletter" element={<Newsletter />} />
+                    <Route path="/privacy" element={<Privacy />} />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+                <Toaster />
+                <Sonner />
+              </TooltipProvider>
+            </SavedCaseStudiesProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
+  );
+}
 
 export default App;
