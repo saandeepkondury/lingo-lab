@@ -6,17 +6,14 @@ import { Button } from '@/components/ui/button';
 import SEOHead from '@/components/SEOHead';
 import PricingPopup from '@/components/PricingPopup';
 import { useAuth } from '@/context/AuthContext';
-import { useSavedCaseStudies } from '@/context/SavedCaseStudiesContext';
-import { useToast } from '@/hooks/use-toast';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Brain, Building2, TrendingUp, Rocket, Calendar, Bookmark, BookmarkCheck } from 'lucide-react';
 
 // Modern components
 import CaseStudyHero from '@/components/CaseStudy/modern/CaseStudyHero';
-import MarketNarrativeSection from '@/components/CaseStudy/modern/MarketNarrativeSection';
-import AIInsightsPanel from '@/components/CaseStudy/modern/AIInsightsPanel';
-import NarrativeEvolutionTimeline from '@/components/CaseStudy/modern/NarrativeEvolutionTimeline';
-import VentureScaleInsights from '@/components/CaseStudy/modern/VentureScaleInsights';
+import CaseStudyTabs from '@/components/CaseStudy/CaseStudyTabs';
+import CaseStudyBreadcrumbs from '@/components/CaseStudy/CaseStudyBreadcrumbs';
+
+// Hooks
+import { useCaseStudySEO } from '@/hooks/useCaseStudySEO';
 
 // Sample case studies data (this would come from Supabase in a real app)
 const caseStudiesData: Record<string, any> = {
@@ -82,35 +79,7 @@ const CaseStudyDetail = () => {
   const [showPricingPopup, setShowPricingPopup] = useState(false);
   
   const { isLoggedIn } = useAuth();
-  const { isSaved, saveCaseStudy, removeCaseStudy } = useSavedCaseStudies();
-  const { toast } = useToast();
-  
-  const handleSaveToggle = () => {
-    if (!isLoggedIn) {
-      toast({
-        title: "Login Required",
-        description: "Please log in to save case studies.",
-        action: <Button className="bg-teal-500 hover:bg-teal-600 text-white" size="sm" asChild><Link to="/join">Login</Link></Button>
-      });
-      return;
-    }
-
-    if (!slug) return;
-
-    if (isSaved(slug)) {
-      removeCaseStudy(slug);
-      toast({
-        title: "Case study removed",
-        description: "Removed from your saved case studies."
-      });
-    } else {
-      saveCaseStudy(slug);
-      toast({
-        title: "Case study saved",
-        description: "Added to your saved case studies."
-      });
-    }
-  };
+  const seoData = caseStudy && slug ? useCaseStudySEO(caseStudy, slug) : null;
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -126,7 +95,7 @@ const CaseStudyDetail = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [slug, isLoggedIn]);
   
-  if (!caseStudy) {
+  if (!caseStudy || !slug) {
     return (
       <Layout>
         <div className="container max-w-4xl mx-auto px-6 py-20">
@@ -142,21 +111,17 @@ const CaseStudyDetail = () => {
     );
   }
   
-  // Prepare SEO metadata
-  const seoTitle = `${caseStudy.company}: ${caseStudy.lingo} Case Study | LingoLab`;
-  const seoDescription = `Learn how ${caseStudy.company} used "${caseStudy.lingo}" to ${caseStudy.tagline.toLowerCase()}. Strategic narrative case study with AI-powered insights.`;
-  const seoKeywords = `${caseStudy.company}, ${caseStudy.lingo}, strategic narrative, case study, ${caseStudy.industry}, ${caseStudy.narrativeType}`;
-  const canonicalUrl = `${window.location.origin}/case-studies/${slug}`;
-  
   return (
     <Layout>
-      <SEOHead
-        title={seoTitle}
-        description={seoDescription}
-        keywords={seoKeywords}
-        canonicalUrl={canonicalUrl}
-        type="article"
-      />
+      {seoData && (
+        <SEOHead
+          title={seoData.title}
+          description={seoData.description}
+          keywords={seoData.keywords}
+          canonicalUrl={seoData.canonicalUrl}
+          type="article"
+        />
+      )}
       
       <article>
         {/* Hero Section */}
@@ -165,86 +130,15 @@ const CaseStudyDetail = () => {
         {/* Main Content */}
         <div className="container max-w-7xl mx-auto px-6 py-12">
           {/* Breadcrumbs & Save Button */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Link to="/case-studies" className="hover:text-foreground">Case Studies</Link>
-              <span className="mx-2">/</span>
-              <span>{caseStudy.company}</span>
-            </div>
-            
-            <Button 
-              variant="outline" 
-              onClick={handleSaveToggle}
-              className="flex items-center gap-2"
-            >
-              {slug && isSaved(slug) ? (
-                <>
-                  <BookmarkCheck className="h-4 w-4" />
-                  Saved
-                </>
-              ) : (
-                <>
-                  <Bookmark className="h-4 w-4" />
-                  Save
-                </>
-              )}
-            </Button>
-          </div>
+          <CaseStudyBreadcrumbs caseStudy={caseStudy} slug={slug} />
 
           {/* Tabbed Content */}
-          <Tabs defaultValue="insights" className="w-full">
-            <TabsList className="grid w-full grid-cols-5 mb-8">
-              <TabsTrigger value="insights" className="flex items-center gap-2">
-                <Brain className="h-4 w-4" />
-                AI Insights
-              </TabsTrigger>
-              <TabsTrigger value="market" className="flex items-center gap-2">
-                <Building2 className="h-4 w-4" />
-                Market Analysis
-              </TabsTrigger>
-              <TabsTrigger value="evolution" className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                Evolution
-              </TabsTrigger>
-              <TabsTrigger value="venture" className="flex items-center gap-2">
-                <Rocket className="h-4 w-4" />
-                Venture Scale
-              </TabsTrigger>
-              <TabsTrigger value="competitive" className="flex items-center gap-2">
-                <TrendingUp className="h-4 w-4" />
-                Competitive
-              </TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="insights" className="mt-8">
-              <AIInsightsPanel caseStudy={caseStudy} />
-            </TabsContent>
-            
-            <TabsContent value="market" className="mt-8">
-              <MarketNarrativeSection 
-                industry={caseStudy.industry}
-                currentCompany={caseStudy.company}
-              />
-            </TabsContent>
-            
-            <TabsContent value="evolution" className="mt-8">
-              <NarrativeEvolutionTimeline caseStudy={caseStudy} />
-            </TabsContent>
-            
-            <TabsContent value="venture" className="mt-8">
-              <VentureScaleInsights caseStudy={caseStudy} />
-            </TabsContent>
-            
-            <TabsContent value="competitive" className="mt-8">
-              <div className="grid lg:grid-cols-2 gap-8">
-                <MarketNarrativeSection 
-                  industry={caseStudy.industry}
-                  currentCompany={caseStudy.company}
-                />
-                <AIInsightsPanel caseStudy={caseStudy} />
-              </div>
-            </TabsContent>
-          </Tabs>
+          <CaseStudyTabs 
+            caseStudy={caseStudy}
+            isLoggedIn={isLoggedIn}
+            showLockOverlay={showPricingPopup}
+            contentRef={{ current: null }}
+          />
         </div>
       </article>
       
