@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Layout from '@/components/Layout';
-import { Button } from '@/components/ui/button';
 import SEOHead from '@/components/SEOHead';
 import { useAuth } from '@/context/AuthContext';
-import ArticleHeader from '@/components/Article/ArticleHeader';
 import ArticleContent from '@/components/Article/ArticleContent';
-import ShareOptions from '@/components/ShareOptions';
 import LingoDropsSection from '@/components/CaseStudy/LingoDropsSection';
+import CaseStudyDetailHeader from '@/components/CaseStudy/CaseStudyDetailHeader';
+import CaseStudyMetadata from '@/components/CaseStudy/CaseStudyMetadata';
+import CaseStudyNotFound from '@/components/CaseStudy/CaseStudyNotFound';
 
 // Simplified narrative data structure designed for form input
 const narrativeData: Record<string, any> = {
@@ -97,24 +98,7 @@ const CaseStudyDetail = () => {
   }, [slug]);
   
   if (!narrative || !slug) {
-    return (
-      <Layout>
-        <SEOHead
-          title="Narrative Not Found | LingoLab"
-          description="The founder narrative you're looking for doesn't exist or has been removed."
-          canonicalUrl={`${window.location.origin}/case-studies/${slug || 'not-found'}`}
-        />
-        <div className="container max-w-4xl mx-auto px-6 py-20">
-          <div className="text-center">
-            <h1 className="text-2xl font-semibold mb-4">Narrative not found</h1>
-            <p className="mb-8">The founder narrative you're looking for doesn't exist or has been removed.</p>
-            <Button asChild>
-              <Link to="/case-studies">Back to Narratives</Link>
-            </Button>
-          </div>
-        </div>
-      </Layout>
-    );
+    return <CaseStudyNotFound slug={slug} />;
   }
 
   // Generate structured data for the article
@@ -174,23 +158,10 @@ const CaseStudyDetail = () => {
       
       <article className="bg-white dark:bg-gray-900">
         {/* Article Header */}
-        <ArticleHeader narrative={narrative} />
+        <CaseStudyDetailHeader narrative={narrative} slug={slug} />
         
-        {/* Share Button - Prominent position at top */}
-        <div className="container max-w-4xl mx-auto px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex justify-between items-center">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              {narrative.readTime} • Published {new Date(narrative.publishDate).toLocaleDateString()}
-            </div>
-            <ShareOptions 
-              caseStudy={{
-                company: narrative.company,
-                lingo: `${narrative.founderName}'s Market Vision`,
-                id: slug
-              }}
-            />
-          </div>
-        </div>
+        {/* Metadata */}
+        <CaseStudyMetadata narrative={narrative} />
         
         {/* Lingo Drops Section - Featured prominently */}
         <LingoDropsSection narrative={narrative} />
