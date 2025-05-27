@@ -1,13 +1,14 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, Target, Lightbulb, Rocket, BarChart3, Clock, Zap, MapPin } from 'lucide-react';
+
 interface ArticleContentProps {
   narrative: any;
 }
-const ArticleContent = ({
-  narrative
-}: ArticleContentProps) => {
-  return <div className="prose prose-lg dark:prose-invert max-w-none">
+
+const ArticleContent = ({ narrative }: ArticleContentProps) => {
+  return (
+    <div className="prose prose-lg dark:prose-invert max-w-none">
       {/* Introduction */}
       <div className="mb-12">
         <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-300 font-medium">
@@ -212,7 +213,35 @@ const ArticleContent = ({
 
           {/* Speed to Market */}
           <Card>
-            
+            <CardContent className="p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <Clock className="h-5 w-5 text-orange-500" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Speed to Market</h3>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">Category Definition</div>
+                    <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.metrics.speed.categoryDefinition}</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">Market Leadership</div>
+                    <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.metrics.speed.marketLeadership}</div>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">Global Expansion</div>
+                    <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.metrics.speed.globalExpansion}</div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
           </Card>
 
           {/* Narrative Adoption */}
@@ -291,6 +320,8 @@ const ArticleContent = ({
           in their markets; they fundamentally reshape how those markets think about themselves.
         </p>
       </section>
-    </div>;
+    </div>
+  );
 };
+
 export default ArticleContent;

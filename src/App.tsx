@@ -12,6 +12,7 @@ import Join from "./pages/Join";
 import CaseStudies from "./pages/CaseStudies";
 import CaseStudyDetail from "./pages/CaseStudyDetail";
 import Submit from "./pages/Submit";
+import SubmitNarrative from "./pages/SubmitNarrative";
 import Newsletter from "./pages/Newsletter";
 import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
@@ -39,6 +40,7 @@ const App = () => (
                 <Route path="/companies/:slug" element={<Navigate to="/case-studies" replace />} />
                 <Route path="/search" element={<Navigate to="/case-studies" replace />} />
                 <Route path="/submit" element={<Submit />} />
+                <Route path="/submit-narrative" element={<SubmitNarrative />} />
                 <Route path="/newsletter" element={<Newsletter />} />
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/saved" element={<SavedCaseStudies />} />

@@ -1,7 +1,41 @@
-
 import { useState, useMemo } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { allCaseStudies } from '@/data/caseStudiesData';
+import { useFounderNarratives, FounderNarrative } from './useFounderNarratives';
+
+// Transform founder narrative to case study format
+const transformNarrativeToCase = (narrative: FounderNarrative) => ({
+  id: narrative.slug || narrative.id,
+  company: narrative.company.toLowerCase().replace(/\s+/g, '-'),
+  companyName: narrative.company,
+  lingo: narrative.key_phrase,
+  impact: `${narrative.founder_name} shares how "${narrative.key_phrase}" helped transform ${narrative.industry.toLowerCase()}`,
+  rating: 5,
+  narrativeType: narrative.transformation_type || 'Market Creation',
+  industry: narrative.industry,
+  stage: 'Growth',
+  lingoStyle: 'Strategic',
+  year: narrative.founded_year ? parseInt(narrative.founded_year) : new Date().getFullYear(),
+  targetAudience: 'Founders',
+  marketThemes: narrative.market_themes || [],
+  strategicPatterns: narrative.strategic_patterns || [],
+  transformationType: narrative.transformation_type || '',
+  narrativeArchetype: narrative.narrative_archetype || '',
+  niche: narrative.tagline || '',
+  revenue: 'Series B+',
+  businessType: 'SaaS',
+  country: narrative.headquarters || 'United States',
+  startedAt: narrative.founded_year || '2020',
+  growthMethod: 'Product-Led Growth',
+  businessModel: 'Subscription',
+  founders: '1-3',
+  employees: narrative.employee_count || '50-200',
+  funding: narrative.funding_raised || 'Series B',
+  customer: 'B2B',
+  involvement: 'High',
+  narrativeFocus: 'Market Creation',
+  fundingStrategy: 'VC-Backed'
+});
 
 export const useCaseStudiesFilter = (companyId?: string) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -9,6 +43,32 @@ export const useCaseStudiesFilter = (companyId?: string) => {
     companyId ? { 'Company': [companyId] } : {}
   );
   const { isLoggedIn } = useAuth();
+  
+  // Create filters for the founder narratives query
+  const narrativeFilters = useMemo(() => {
+    const filters: any = {};
+    
+    if (activeFilters['Industry']?.length) {
+      filters.industry = activeFilters['Industry'][0];
+    }
+    if (activeFilters['Transformation Type']?.length) {
+      filters.transformationType = activeFilters['Transformation Type'][0];
+    }
+    if (activeFilters['Narrative Archetype']?.length) {
+      filters.narrativeArchetype = activeFilters['Narrative Archetype'][0];
+    }
+    if (activeFilters['Market Themes']?.length) {
+      filters.marketThemes = activeFilters['Market Themes'];
+    }
+    if (activeFilters['Strategic Patterns']?.length) {
+      filters.strategicPatterns = activeFilters['Strategic Patterns'];
+    }
+    
+    return filters;
+  }, [activeFilters]);
+
+  // Fetch founder narratives with filters
+  const { data: founderNarratives = [], isLoading } = useFounderNarratives(narrativeFilters);
   
   const handleFilterChange = (group: string, value: string) => {
     setActiveFilters(prev => {
@@ -42,9 +102,25 @@ export const useCaseStudiesFilter = (companyId?: string) => {
       : allCaseStudies;
   }, [companyId]);
   
-  // Apply filters and search - memoized to prevent unnecessary recalculations
+  // Transform founder narratives to case study format
+  const narrativeBasedCaseStudies = useMemo(() => {
+    return founderNarratives.map(transformNarrativeToCase);
+  }, [founderNarratives]);
+  
+  // Combine traditional case studies with founder narratives
+  const allAvailableCaseStudies = useMemo(() => {
+    // If we're filtering by a specific company, only show traditional case studies
+    if (companyId) {
+      return initialCaseStudies;
+    }
+    
+    // Otherwise, combine both traditional and narrative-based case studies
+    return [...narrativeBasedCaseStudies, ...initialCaseStudies];
+  }, [initialCaseStudies, narrativeBasedCaseStudies, companyId]);
+  
+  // Apply search and other filters
   const filteredCaseStudies = useMemo(() => {
-    return initialCaseStudies.filter(study => {
+    return allAvailableCaseStudies.filter(study => {
       // Search filter - check company name, lingo, and niche
       if (searchQuery) {
         const searchLower = searchQuery.toLowerCase();
@@ -61,9 +137,14 @@ export const useCaseStudiesFilter = (companyId?: string) => {
         }
       }
       
-      // Check if all active filters match
+      // Check if all active filters match (excluding the ones we already handled in narrativeFilters)
       for (const [group, values] of Object.entries(activeFilters)) {
         if (values.length === 0) continue; // Skip if no filter in this group
+        
+        // Skip filters that are handled by the founder narratives query
+        if (['Industry', 'Transformation Type', 'Narrative Archetype', 'Market Themes', 'Strategic Patterns'].includes(group)) {
+          continue;
+        }
         
         // Special handling for Company filter
         if (group === "Company") {
@@ -80,35 +161,6 @@ export const useCaseStudiesFilter = (companyId?: string) => {
             studyNiche.includes(value.toLowerCase()) || value.toLowerCase().includes(studyNiche)
           );
           if (!hasMatch) return false;
-          continue;
-        }
-
-        // Special handling for Market Intelligence array fields
-        if (group === "Market Themes") {
-          const studyThemes = study.marketThemes || [];
-          const hasMatch = values.some(value => studyThemes.includes(value));
-          if (!hasMatch) return false;
-          continue;
-        }
-
-        if (group === "Strategic Patterns") {
-          const studyPatterns = study.strategicPatterns || [];
-          const hasMatch = values.some(value => studyPatterns.includes(value));
-          if (!hasMatch) return false;
-          continue;
-        }
-
-        if (group === "Transformation Type") {
-          if (!values.includes(study.transformationType)) {
-            return false;
-          }
-          continue;
-        }
-
-        if (group === "Narrative Archetype") {
-          if (!values.includes(study.narrativeArchetype)) {
-            return false;
-          }
           continue;
         }
         
@@ -128,7 +180,6 @@ export const useCaseStudiesFilter = (companyId?: string) => {
           "Narrative Focus": "narrativeFocus",
           "Funding Strategy": "fundingStrategy",
           "Narrative Type": "narrativeType",
-          "Industry": "industry",
           "Stage": "stage",
           "Lingo Style": "lingoStyle",
           "Target Audience": "targetAudience"
@@ -150,7 +201,7 @@ export const useCaseStudiesFilter = (companyId?: string) => {
       
       return true;
     });
-  }, [initialCaseStudies, searchQuery, activeFilters]);
+  }, [allAvailableCaseStudies, searchQuery, activeFilters]);
 
   // Memoize the visible and locked case studies to prevent unnecessary calculations
   const visibleCaseStudies = useMemo(() => {
@@ -168,6 +219,7 @@ export const useCaseStudiesFilter = (companyId?: string) => {
     handleFilterChange,
     clearFilters,
     visibleCaseStudies,
-    lockedCaseStudies
+    lockedCaseStudies,
+    isLoading
   };
 };

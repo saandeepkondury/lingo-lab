@@ -21,9 +21,10 @@ const CaseStudies = () => {
     handleFilterChange,
     clearFilters,
     visibleCaseStudies,
-    lockedCaseStudies
+    lockedCaseStudies,
+    isLoading
   } = useCaseStudiesFilter();
-  const { isLoggedIn, isLoading } = useAuth();
+  const { isLoggedIn, isLoading: authLoading } = useAuth();
   const { subscribed, loading } = useSubscription();
   const { toast } = useToast();
   const location = useLocation();
@@ -31,10 +32,10 @@ const CaseStudies = () => {
 
   // Redirect to home if not logged in
   useEffect(() => {
-    if (!isLoading && !isLoggedIn) {
+    if (!authLoading && !isLoggedIn) {
       navigate('/');
     }
-  }, [isLoggedIn, isLoading, navigate]);
+  }, [isLoggedIn, authLoading, navigate]);
 
   // Check if user just signed in/up and show appropriate message
   useEffect(() => {
@@ -56,8 +57,8 @@ const CaseStudies = () => {
     }
   }, [location.state, toast, subscribed]);
 
-  // Show loading state while checking auth
-  if (isLoading) {
+  // Show loading state while checking auth or loading data
+  if (authLoading || isLoading) {
     return (
       <Layout>
         <section className="py-12">
@@ -127,6 +128,11 @@ const CaseStudies = () => {
                 <Link to="/saved">
                   <Bookmark className="h-4 w-4" />
                   Saved Case Studies
+                </Link>
+              </Button>
+              <Button variant="outline" className="flex items-center gap-2" asChild>
+                <Link to="/submit-narrative">
+                  Submit Your Story
                 </Link>
               </Button>
             </div>

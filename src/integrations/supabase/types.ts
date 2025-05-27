@@ -36,6 +36,105 @@ export type Database = {
         }
         Relationships: []
       }
+      founder_narratives: {
+        Row: {
+          company: string
+          competitive_advantage: string
+          created_at: string
+          employee_count: string | null
+          founded_year: string | null
+          founder_insight: string
+          founder_name: string
+          founder_title: string
+          funding_raised: string | null
+          headquarters: string | null
+          id: string
+          industry: string
+          key_phrase: string
+          market_before: string
+          market_landscape: Json | null
+          market_themes: string[] | null
+          market_transformation: string
+          meta_description: string | null
+          meta_title: string | null
+          metrics: Json | null
+          narrative_archetype: string | null
+          published: boolean | null
+          slug: string | null
+          strategic_insights: string[] | null
+          strategic_patterns: string[] | null
+          strategic_vision: string
+          tagline: string | null
+          transformation_type: string | null
+          updated_at: string
+          valuation: string | null
+        }
+        Insert: {
+          company: string
+          competitive_advantage: string
+          created_at?: string
+          employee_count?: string | null
+          founded_year?: string | null
+          founder_insight: string
+          founder_name: string
+          founder_title: string
+          funding_raised?: string | null
+          headquarters?: string | null
+          id?: string
+          industry: string
+          key_phrase: string
+          market_before: string
+          market_landscape?: Json | null
+          market_themes?: string[] | null
+          market_transformation: string
+          meta_description?: string | null
+          meta_title?: string | null
+          metrics?: Json | null
+          narrative_archetype?: string | null
+          published?: boolean | null
+          slug?: string | null
+          strategic_insights?: string[] | null
+          strategic_patterns?: string[] | null
+          strategic_vision: string
+          tagline?: string | null
+          transformation_type?: string | null
+          updated_at?: string
+          valuation?: string | null
+        }
+        Update: {
+          company?: string
+          competitive_advantage?: string
+          created_at?: string
+          employee_count?: string | null
+          founded_year?: string | null
+          founder_insight?: string
+          founder_name?: string
+          founder_title?: string
+          funding_raised?: string | null
+          headquarters?: string | null
+          id?: string
+          industry?: string
+          key_phrase?: string
+          market_before?: string
+          market_landscape?: Json | null
+          market_themes?: string[] | null
+          market_transformation?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          metrics?: Json | null
+          narrative_archetype?: string | null
+          published?: boolean | null
+          slug?: string | null
+          strategic_insights?: string[] | null
+          strategic_patterns?: string[] | null
+          strategic_vision?: string
+          tagline?: string | null
+          transformation_type?: string | null
+          updated_at?: string
+          valuation?: string | null
+        }
+        Relationships: []
+      }
       subscribers: {
         Row: {
           billing_frequency: string | null
@@ -86,7 +185,28 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_published_narratives: {
+        Args: {
+          industry_filter?: string
+          transformation_type_filter?: string
+          narrative_archetype_filter?: string
+          market_themes_filter?: string[]
+          strategic_patterns_filter?: string[]
+        }
+        Returns: {
+          id: string
+          company: string
+          founder_name: string
+          industry: string
+          key_phrase: string
+          transformation_type: string
+          narrative_archetype: string
+          market_themes: string[]
+          strategic_patterns: string[]
+          slug: string
+          created_at: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
