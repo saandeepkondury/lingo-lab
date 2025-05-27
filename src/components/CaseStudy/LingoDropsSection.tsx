@@ -8,20 +8,22 @@ interface LingoDropsSectionProps {
 }
 
 const LingoDropsSection = ({ narrative }: LingoDropsSectionProps) => {
+  const beforeAfter = narrative.before_after_positioning || { before: '', after: '' };
+  
   const lingoDrop = {
-    term: narrative.keyPhrase,
-    founder: narrative.founderName,
+    term: narrative.key_phrase,
+    founder: narrative.founder_name,
     company: narrative.company,
-    whatTheySaid: `"${narrative.founderInsight}"`,
-    whyItWorked: narrative.competitiveAdvantage,
+    whatTheySaid: narrative.lingo_evolution || `"${narrative.tagline || 'Strategic positioning statement'}"`,
+    whyItWorked: narrative.why_it_worked || "This narrative resonated because it addressed a fundamental market need and positioned the company as an essential infrastructure provider.",
     evolution: {
-      before: narrative.marketBefore,
-      after: narrative.marketTransformation
+      before: beforeAfter.before || "Market was fragmented with complex solutions",
+      after: beforeAfter.after || "New category emerged with simplified approach"
     },
     marketResponse: {
       adoption: "Industry-wide adoption within 18 months",
       competitorShift: "Forced competitors to reframe their positioning",
-      talentAttraction: "Attracted top engineering talent with infrastructure vision"
+      talentAttraction: "Attracted top talent with clear vision"
     }
   };
 
@@ -42,6 +44,79 @@ const LingoDropsSection = ({ narrative }: LingoDropsSectionProps) => {
           </p>
         </div>
 
+        {/* Scale & Impact Metrics */}
+        {narrative.metrics && (narrative.metrics.scale || narrative.metrics.impact) && (
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            {narrative.metrics.scale && (
+              <Card className="border-blue-200 bg-blue-50 dark:bg-blue-900/20">
+                <CardHeader>
+                  <CardTitle className="text-blue-700 dark:text-blue-300">Scale Metrics</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {narrative.metrics.scale.revenue && (
+                    <div className="flex justify-between">
+                      <span>Revenue:</span>
+                      <span className="font-semibold">{narrative.metrics.scale.revenue}</span>
+                    </div>
+                  )}
+                  {narrative.metrics.scale.users && (
+                    <div className="flex justify-between">
+                      <span>Users:</span>
+                      <span className="font-semibold">{narrative.metrics.scale.users}</span>
+                    </div>
+                  )}
+                  {narrative.metrics.scale.market_share && (
+                    <div className="flex justify-between">
+                      <span>Market Share:</span>
+                      <span className="font-semibold">{narrative.metrics.scale.market_share}</span>
+                    </div>
+                  )}
+                  {narrative.metrics.scale.geographic_reach && (
+                    <div className="flex justify-between">
+                      <span>Geographic Reach:</span>
+                      <span className="font-semibold">{narrative.metrics.scale.geographic_reach}</span>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
+            {narrative.metrics.impact && (
+              <Card className="border-green-200 bg-green-50 dark:bg-green-900/20">
+                <CardHeader>
+                  <CardTitle className="text-green-700 dark:text-green-300">Impact Metrics</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {narrative.metrics.impact.revenue && (
+                    <div className="flex justify-between">
+                      <span>Revenue Impact:</span>
+                      <span className="font-semibold">{narrative.metrics.impact.revenue}</span>
+                    </div>
+                  )}
+                  {narrative.metrics.impact.users && (
+                    <div className="flex justify-between">
+                      <span>User Impact:</span>
+                      <span className="font-semibold">{narrative.metrics.impact.users}</span>
+                    </div>
+                  )}
+                  {narrative.metrics.impact.market_share && (
+                    <div className="flex justify-between">
+                      <span>Market Impact:</span>
+                      <span className="font-semibold">{narrative.metrics.impact.market_share}</span>
+                    </div>
+                  )}
+                  {narrative.metrics.impact.geographic_reach && (
+                    <div className="flex justify-between">
+                      <span>Geographic Impact:</span>
+                      <span className="font-semibold">{narrative.metrics.impact.geographic_reach}</span>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        )}
+
         {/* What They Said */}
         <Card className="mb-8 border-l-4 border-l-indigo-500">
           <CardHeader>
@@ -55,10 +130,51 @@ const LingoDropsSection = ({ narrative }: LingoDropsSectionProps) => {
               {lingoDrop.whatTheySaid}
             </blockquote>
             <footer className="mt-4 text-sm text-muted-foreground">
-              — {lingoDrop.founder}, {narrative.founderTitle} at {lingoDrop.company}
+              — {lingoDrop.founder}, {narrative.founder_title} at {lingoDrop.company}
             </footer>
           </CardContent>
         </Card>
+
+        {/* Market Intelligence */}
+        {(narrative.market_themes || narrative.strategic_patterns) && (
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-purple-500" />
+                Market Intelligence
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-6">
+                {narrative.market_themes && narrative.market_themes.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-3">Market Themes</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {narrative.market_themes.map((theme: string, index: number) => (
+                        <Badge key={index} variant="outline" className="bg-purple-50">
+                          {theme}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {narrative.strategic_patterns && narrative.strategic_patterns.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-3">Strategic Patterns</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {narrative.strategic_patterns.map((pattern: string, index: number) => (
+                        <Badge key={index} variant="outline" className="bg-blue-50">
+                          {pattern}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Before vs After */}
         <div className="grid md:grid-cols-2 gap-8 mb-8">

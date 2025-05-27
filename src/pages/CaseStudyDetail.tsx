@@ -9,95 +9,29 @@ import LingoDropsSection from '@/components/CaseStudy/LingoDropsSection';
 import CaseStudyDetailHeader from '@/components/CaseStudy/CaseStudyDetailHeader';
 import CaseStudyMetadata from '@/components/CaseStudy/CaseStudyMetadata';
 import CaseStudyNotFound from '@/components/CaseStudy/CaseStudyNotFound';
-
-// Simplified narrative data structure designed for form input
-const narrativeData: Record<string, any> = {
-  "stripe-financial-infrastructure": {
-    // Basic Company Information (from form)
-    company: "Stripe",
-    founderName: "Patrick Collison",
-    founderTitle: "CEO & Co-founder",
-    fundingRaised: "$2.2B",
-    valuation: "$95B",
-    industry: "Fintech",
-    foundedYear: "2010",
-    employeeCount: "4,000+",
-    headquarters: "San Francisco, CA",
-    
-    // Publication Details
-    publishDate: "2024-10-15T09:00:00Z",
-    modifiedDate: "2024-10-15T09:00:00Z",
-    readTime: "8 min read",
-    
-    // Core Narrative (from form responses)
-    keyPhrase: "Financial Infrastructure",
-    tagline: "Building the economic infrastructure for the internet",
-    
-    // Form Responses - Market Context
-    marketBefore: "Before Stripe, online payments were fragmented and complex. Developers had to integrate with multiple payment processors, handle compliance manually, and deal with different APIs for different regions. The market treated payments as a necessary evil - a commodity service that businesses had to endure rather than leverage for growth.",
-    
-    founderInsight: "We realized that payments weren't just about moving money - they were about enabling commerce itself. Every online business needed the same foundational infrastructure, but they were all building it from scratch. We saw an opportunity to make payments as simple and powerful as cloud computing had made servers.",
-    
-    marketTransformation: "We're not just processing payments; we're building the economic infrastructure for the internet. Just as AWS abstracted away server management, we're abstracting away financial complexity. This means developers can focus on their core product while we handle everything from fraud detection to global compliance.",
-    
-    strategicVision: "The future of commerce is programmable. Every business will have financial services embedded directly into their product experience. We're building the rails that will power the next generation of internet businesses - from marketplaces to SaaS platforms to the creator economy.",
-    
-    competitiveAdvantage: "While others see payments as transactions, we see infrastructure. While they compete on pricing, we compete on enabling new business models. Our competitors are building payment processors; we're building the financial operating system for the internet.",
-    
-    // Market Intelligence (form checkboxes/dropdowns)
-    marketThemes: ["API Economy", "Developer Experience", "Financial Infrastructure"],
-    strategicPatterns: ["Platform Strategy", "Developer-First GTM", "Category Creation"],
-    transformationType: "Market Redefinition",
-    narrativeArchetype: "Infrastructure Play",
-    
-    // Metrics (from form)
-    metrics: {
-      scale: {
-        revenue: "$7.4B annually",
-        users: "7M+ businesses globally",
-        marketShare: "Leading developer payment platform",
-        geographicReach: "120+ countries"
-      },
-      speed: {
-        categoryDefinition: "2 years to establish 'financial infrastructure' narrative",
-        marketLeadership: "5 years to become category leader", 
-        globalExpansion: "3 years to achieve global scale"
-      },
-      adoption: {
-        industryStandard: "Infrastructure terminology now industry standard",
-        competitorResponse: "Competitors adopted similar positioning within 18 months",
-        marketEducation: "Transformed how developers think about payments"
-      }
-    },
-    
-    // Strategic Takeaways (from form)
-    strategicInsights: [
-      "Reframe commodity services as essential infrastructure to command premium valuations",
-      "Target developers first to create viral adoption through superior technical experience", 
-      "Expand TAM by positioning beyond core product into adjacent service categories",
-      "Use narrative timing to establish category leadership before competitors catch up"
-    ],
-    
-    // Market Landscape (from form)
-    marketLandscape: {
-      beforeCompany: "Fragmented payment processors competing on pricing",
-      companyPosition: "Unified financial infrastructure platform",
-      competitorResponse: "Industry shift toward developer-centric solutions",
-      futureState: "Programmable financial services as standard"
-    }
-  }
-};
+import { useFounderNarrativeBySlug } from '@/hooks/useFounderNarratives';
 
 const CaseStudyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const narrative = slug ? narrativeData[slug] : null;
   const { isLoggedIn } = useAuth();
+  
+  const { data: narrative, isLoading, error } = useFounderNarrativeBySlug(slug || '');
   
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [slug]);
   
-  if (!narrative || !slug) {
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="container max-w-4xl mx-auto px-6 py-20">
+          <div className="text-center">Loading...</div>
+        </div>
+      </Layout>
+    );
+  }
+  
+  if (error || !narrative || !slug) {
     return <CaseStudyNotFound slug={slug} />;
   }
 
@@ -105,16 +39,16 @@ const CaseStudyDetail = () => {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": `${narrative.company} Strategic Narrative: ${narrative.keyPhrase}`,
-    "description": `Discover how ${narrative.founderName} of ${narrative.company} transformed ${narrative.industry} with their "${narrative.keyPhrase}" strategic narrative.`,
+    "headline": `${narrative.company} Strategic Narrative: ${narrative.key_phrase}`,
+    "description": `Discover how ${narrative.founder_name} of ${narrative.company} transformed ${narrative.industry} with their "${narrative.key_phrase}" strategic narrative.`,
     "image": `${window.location.origin}/placeholder.svg`,
     "url": `${window.location.origin}/case-studies/${slug}`,
-    "datePublished": narrative.publishDate,
-    "dateModified": narrative.modifiedDate,
+    "datePublished": narrative.created_at,
+    "dateModified": narrative.updated_at,
     "author": {
       "@type": "Person",
-      "name": narrative.founderName,
-      "jobTitle": narrative.founderTitle,
+      "name": narrative.founder_name,
+      "jobTitle": narrative.founder_title,
       "worksFor": {
         "@type": "Organization",
         "name": narrative.company
@@ -132,12 +66,12 @@ const CaseStudyDetail = () => {
       "@id": `${window.location.origin}/case-studies/${slug}`
     },
     "articleSection": "Strategic Narrative",
-    "keywords": `${narrative.company}, ${narrative.founderName}, strategic narrative, ${narrative.industry}, ${narrative.keyPhrase}`,
+    "keywords": `${narrative.company}, ${narrative.founder_name}, strategic narrative, ${narrative.industry}, ${narrative.key_phrase}`,
     "about": {
       "@type": "Organization",
       "name": narrative.company,
-      "description": `${narrative.company} - ${narrative.tagline}`,
-      "foundingDate": narrative.foundedYear,
+      "description": `${narrative.company} - ${narrative.tagline || ''}`,
+      "foundingDate": narrative.founded_year,
       "industry": narrative.industry
     }
   };
@@ -145,14 +79,14 @@ const CaseStudyDetail = () => {
   return (
     <Layout>
       <SEOHead
-        title={`${narrative.company} Strategic Narrative: ${narrative.keyPhrase} | LingoLab`}
-        description={`Discover how ${narrative.founderName} of ${narrative.company} transformed ${narrative.industry} with their "${narrative.keyPhrase}" strategic narrative. Learn the market insights that drove their success.`}
-        keywords={`${narrative.company}, ${narrative.founderName}, strategic narrative, ${narrative.industry}, ${narrative.keyPhrase}, market positioning, startup growth`}
+        title={`${narrative.company} Strategic Narrative: ${narrative.key_phrase} | LingoLab`}
+        description={`Discover how ${narrative.founder_name} of ${narrative.company} transformed ${narrative.industry} with their "${narrative.key_phrase}" strategic narrative. Learn the market insights that drove their success.`}
+        keywords={`${narrative.company}, ${narrative.founder_name}, strategic narrative, ${narrative.industry}, ${narrative.key_phrase}, market positioning, startup growth`}
         canonicalUrl={`${window.location.origin}/case-studies/${slug}`}
         type="article"
-        author={{ name: narrative.founderName }}
-        publishDate={narrative.publishDate}
-        modifiedDate={narrative.modifiedDate}
+        author={{ name: narrative.founder_name }}
+        publishDate={narrative.created_at}
+        modifiedDate={narrative.updated_at}
         structuredData={structuredData}
       />
       

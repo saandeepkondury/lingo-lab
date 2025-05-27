@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -16,18 +15,14 @@ export interface FounderNarrative {
   headquarters: string | null;
   key_phrase: string;
   tagline: string | null;
-  market_before: string;
-  founder_insight: string;
-  market_transformation: string;
-  strategic_vision: string;
-  competitive_advantage: string;
+  lingo_evolution: string | null;
+  why_it_worked: string | null;
+  before_after_positioning: any;
   market_themes: string[] | null;
   strategic_patterns: string[] | null;
   transformation_type: string | null;
   narrative_archetype: string | null;
   metrics: any;
-  strategic_insights: string[] | null;
-  market_landscape: any;
   published: boolean;
   slug: string | null;
   created_at: string;

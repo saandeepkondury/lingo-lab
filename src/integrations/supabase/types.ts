@@ -38,12 +38,11 @@ export type Database = {
       }
       founder_narratives: {
         Row: {
+          before_after_positioning: Json | null
           company: string
-          competitive_advantage: string
           created_at: string
           employee_count: string | null
           founded_year: string | null
-          founder_insight: string
           founder_name: string
           founder_title: string
           funding_raised: string | null
@@ -51,31 +50,27 @@ export type Database = {
           id: string
           industry: string
           key_phrase: string
-          market_before: string
-          market_landscape: Json | null
+          lingo_evolution: string | null
           market_themes: string[] | null
-          market_transformation: string
           meta_description: string | null
           meta_title: string | null
           metrics: Json | null
           narrative_archetype: string | null
           published: boolean | null
           slug: string | null
-          strategic_insights: string[] | null
           strategic_patterns: string[] | null
-          strategic_vision: string
           tagline: string | null
           transformation_type: string | null
           updated_at: string
           valuation: string | null
+          why_it_worked: string | null
         }
         Insert: {
+          before_after_positioning?: Json | null
           company: string
-          competitive_advantage: string
           created_at?: string
           employee_count?: string | null
           founded_year?: string | null
-          founder_insight: string
           founder_name: string
           founder_title: string
           funding_raised?: string | null
@@ -83,31 +78,27 @@ export type Database = {
           id?: string
           industry: string
           key_phrase: string
-          market_before: string
-          market_landscape?: Json | null
+          lingo_evolution?: string | null
           market_themes?: string[] | null
-          market_transformation: string
           meta_description?: string | null
           meta_title?: string | null
           metrics?: Json | null
           narrative_archetype?: string | null
           published?: boolean | null
           slug?: string | null
-          strategic_insights?: string[] | null
           strategic_patterns?: string[] | null
-          strategic_vision: string
           tagline?: string | null
           transformation_type?: string | null
           updated_at?: string
           valuation?: string | null
+          why_it_worked?: string | null
         }
         Update: {
+          before_after_positioning?: Json | null
           company?: string
-          competitive_advantage?: string
           created_at?: string
           employee_count?: string | null
           founded_year?: string | null
-          founder_insight?: string
           founder_name?: string
           founder_title?: string
           funding_raised?: string | null
@@ -115,23 +106,20 @@ export type Database = {
           id?: string
           industry?: string
           key_phrase?: string
-          market_before?: string
-          market_landscape?: Json | null
+          lingo_evolution?: string | null
           market_themes?: string[] | null
-          market_transformation?: string
           meta_description?: string | null
           meta_title?: string | null
           metrics?: Json | null
           narrative_archetype?: string | null
           published?: boolean | null
           slug?: string | null
-          strategic_insights?: string[] | null
           strategic_patterns?: string[] | null
-          strategic_vision?: string
           tagline?: string | null
           transformation_type?: string | null
           updated_at?: string
           valuation?: string | null
+          why_it_worked?: string | null
         }
         Relationships: []
       }
