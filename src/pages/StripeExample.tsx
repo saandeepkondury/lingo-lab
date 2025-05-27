@@ -3,36 +3,29 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import Layout from '@/components/Layout';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/context/AuthContext';
 
 const StripeExample = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const { isLoggedIn } = useAuth();
 
   const handleOneTimePayment = async () => {
-    if (!isLoggedIn) {
-      toast({
-        title: "Authentication required",
-        description: "Please log in to make a payment.",
-        variant: "destructive"
-      });
-      return;
-    }
-
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('create-payment', {
-        body: { amount: 4999, description: 'One-time purchase example' }
+      // Hardcoded response simulation
+      const mockUrl = 'https://checkout.stripe.com/pay/cs_test_example123';
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Open mock Stripe checkout in a new tab
+      window.open(mockUrl, '_blank');
+      
+      toast({
+        title: "Redirecting to Stripe",
+        description: "Opening payment checkout in a new tab..."
       });
-
-      if (error) throw error;
-
-      // Open Stripe checkout in a new tab
-      window.open(data.url, '_blank');
     } catch (error) {
       console.error('Payment error:', error);
       toast({
@@ -46,25 +39,21 @@ const StripeExample = () => {
   };
 
   const handleSubscription = async (planType: string, amount: number) => {
-    if (!isLoggedIn) {
-      toast({
-        title: "Authentication required",
-        description: "Please log in to subscribe.",
-        variant: "destructive"
-      });
-      return;
-    }
-
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { planType, billingFrequency: 'month' }
+      // Hardcoded response simulation
+      const mockUrl = `https://checkout.stripe.com/pay/cs_test_subscription_${planType}_example123`;
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Open mock Stripe checkout in a new tab
+      window.open(mockUrl, '_blank');
+      
+      toast({
+        title: "Redirecting to Stripe",
+        description: `Opening ${planType} subscription checkout in a new tab...`
       });
-
-      if (error) throw error;
-
-      // Open Stripe checkout in a new tab
-      window.open(data.url, '_blank');
     } catch (error) {
       console.error('Subscription error:', error);
       toast({
@@ -87,20 +76,18 @@ const StripeExample = () => {
           </p>
         </div>
 
-        {!isLoggedIn && (
-          <Card className="mb-8 border-amber-200 bg-amber-50">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className="bg-amber-100 text-amber-800 border-amber-300">
-                  Notice
-                </Badge>
-                <span className="text-amber-800">
-                  You need to be logged in to test payment functionality.
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+        <Card className="mb-8 border-amber-200 bg-amber-50">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="bg-amber-100 text-amber-800 border-amber-300">
+                Demo Mode
+              </Badge>
+              <span className="text-amber-800">
+                This is a demonstration with hardcoded data. No actual payments will be processed.
+              </span>
+            </div>
+          </CardContent>
+        </Card>
 
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           {/* One-time Payment */}
@@ -126,7 +113,7 @@ const StripeExample = () => {
               </ul>
               <Button 
                 onClick={handleOneTimePayment}
-                disabled={isLoading || !isLoggedIn}
+                disabled={isLoading}
                 className="w-full"
               >
                 {isLoading ? "Processing..." : "Buy Now"}
@@ -157,7 +144,7 @@ const StripeExample = () => {
               </ul>
               <Button 
                 onClick={() => handleSubscription('basic', 999)}
-                disabled={isLoading || !isLoggedIn}
+                disabled={isLoading}
                 className="w-full"
               >
                 {isLoading ? "Processing..." : "Subscribe"}
