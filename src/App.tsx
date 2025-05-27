@@ -12,9 +12,9 @@ import Join from "./pages/Join";
 import CaseStudies from "./pages/CaseStudies";
 import CaseStudyDetail from "./pages/CaseStudyDetail";
 import Submit from "./pages/Submit";
+import SubmitNarrative from "./pages/SubmitNarrative";
 import Newsletter from "./pages/Newsletter";
 import Pricing from "./pages/Pricing";
-import StripeExample from "./pages/StripeExample";
 import NotFound from "./pages/NotFound";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
@@ -40,9 +40,9 @@ const App = () => (
                 <Route path="/companies/:slug" element={<Navigate to="/case-studies" replace />} />
                 <Route path="/search" element={<Navigate to="/case-studies" replace />} />
                 <Route path="/submit" element={<Submit />} />
+                <Route path="/submit-narrative" element={<SubmitNarrative />} />
                 <Route path="/newsletter" element={<Newsletter />} />
                 <Route path="/pricing" element={<Pricing />} />
-                <Route path="/stripe-example" element={<StripeExample />} />
                 <Route path="/saved" element={<SavedCaseStudies />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
