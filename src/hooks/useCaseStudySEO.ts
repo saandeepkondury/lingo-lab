@@ -1,15 +1,15 @@
 
-interface CaseStudySEOData {
+interface NarrativeSEOData {
   title: string;
   description: string;
   keywords: string;
   canonicalUrl: string;
 }
 
-export const useCaseStudySEO = (caseStudy: any, slug: string): CaseStudySEOData => {
-  const seoTitle = `${caseStudy.company}: ${caseStudy.lingo} Case Study | LingoLab`;
-  const seoDescription = `Learn how ${caseStudy.company} used "${caseStudy.lingo}" to ${caseStudy.tagline.toLowerCase()}. Strategic narrative case study with AI-powered insights.`;
-  const seoKeywords = `${caseStudy.company}, ${caseStudy.lingo}, strategic narrative, case study, ${caseStudy.industry}, ${caseStudy.narrativeType}`;
+export const useCaseStudySEO = (narrative: any, slug: string): NarrativeSEOData => {
+  const seoTitle = `${narrative.company} Founder Narrative: ${narrative.founderName} | LingoLab`;
+  const seoDescription = `Discover how ${narrative.founderName} of ${narrative.company} is transforming ${narrative.industry} with their strategic vision and market insights.`;
+  const seoKeywords = `${narrative.company}, ${narrative.founderName}, strategic narrative, ${narrative.industry}, founder insights, market transformation`;
   const canonicalUrl = `${window.location.origin}/case-studies/${slug}`;
 
   return {

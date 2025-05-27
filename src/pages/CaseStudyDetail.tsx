@@ -4,106 +4,63 @@ import { useParams, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import SEOHead from '@/components/SEOHead';
-import PricingPopup from '@/components/PricingPopup';
 import { useAuth } from '@/context/AuthContext';
-
-// Modern components
-import CaseStudyHero from '@/components/CaseStudy/modern/CaseStudyHero';
-import CaseStudyTabs from '@/components/CaseStudy/CaseStudyTabs';
-import CaseStudyBreadcrumbs from '@/components/CaseStudy/CaseStudyBreadcrumbs';
-
-// Hooks
+import ArticleHeader from '@/components/Article/ArticleHeader';
+import ArticleContent from '@/components/Article/ArticleContent';
+import ShareOptions from '@/components/ShareOptions';
 import { useCaseStudySEO } from '@/hooks/useCaseStudySEO';
 
-// Sample case studies data (this would come from Supabase in a real app)
-const caseStudiesData: Record<string, any> = {
+// Sample narrative data structure (this would come from Supabase)
+const narrativeData: Record<string, any> = {
   "stripe-financial-infrastructure": {
     company: "Stripe",
-    lingo: "Financial Infrastructure",
-    tagline: "How Stripe Coined 'Financial Infrastructure' and Raised $600M at $95B Valuation",
-    overview: {
-      industry: "Fintech",
-      stage: "Series H",
-      keyPhrase: "Financial Infrastructure",
-      outcome: "$600M raised at $95B valuation",
-      revenue: "$7.4B annual revenue",
-      employees: "7,000+"
-    },
-    author: {
-      name: "Jamie Smith",
-      role: "Narrative Strategist",
-      image: "/placeholder.svg",
-      twitter: "@jamiesmith"
-    },
-    publishDate: "October 15, 2024",
-    narrativeType: "Market Creation",
+    founderName: "Patrick Collison",
+    founderTitle: "CEO & Co-founder",
+    fundingRaised: "$2.2B",
+    valuation: "$95B",
     industry: "Fintech",
-    content: {
-      lingoExplanation: "Stripe started as a simple payments API but strategically repositioned itself as 'Financial Infrastructure for the Internet'. This narrative shift away from 'payments' (commoditized, low-margin) to 'infrastructure' (essential, high-value) was pivotal to its massive valuation and market dominance.",
-      originStory: "The term was first used in 2018 by Stripe CEO Patrick Collison in a blog post explaining their vision beyond payments. By 2020, it had become the central narrative throughout their fundraising, PR, and product launches.",
-      channelBreakdown: "Stripe's repositioning was systematically deployed across: 1) Investor decks emphasizing total addressable market expansion, 2) Engineering blog posts about infrastructure challenges, 3) Executive interviews consistently using infrastructure framing, 4) Product launches aligned to infrastructure narrative.",
-      tippingPoint: "When AWS and Microsoft partnered with Stripe for 'financial infrastructure' integrations, the market fully embraced the redefinition. Competitors were forced to respond to Stripe's strategic narrative rather than the other way around.",
-      founderQuote: "\"We think of Stripe as building economic infrastructure for the internet. We help businesses of every size accept payments from anyone, in any currency.\" - Patrick Collison, CEO",
-      narrativeArchitecture: {
-        problem: "Businesses struggle with the complexity of global payment systems and financial operations.",
-        promise: "Stripe provides the infrastructure layer that makes money movement as simple and programmable as computing resources.",
-        proof: "Processing billions in payments annually for millions of businesses in 120+ countries."
-      },
-      rippleEffects: "The 'infrastructure' framing led to entirely new product categories (Stripe Treasury, Stripe Issuing) and forced competitors to reposition themselves. The narrative also attracted engineering talent who wanted to work on 'infrastructure' rather than 'payments'.",
-      expertSummary: "Stripe's greatest narrative achievement was making payments seem like just the beginning of their TAM rather than its limitation. By positioning as infrastructure, they justifiably command SaaS multiples rather than financial services multiples."
-    },
-    relatedCaseStudies: [
-      {
-        id: "plaid-financial-connectivity",
-        company: "Plaid",
-        lingo: "Financial Connectivity",
-        impact: "Grew to $13.4B valuation by positioning as the crucial connection layer for fintech",
-        narrativeType: "Market Creation",
-        industry: "Fintech"
-      },
-      {
-        id: "square-economic-empowerment",
-        company: "Square/Block",
-        lingo: "Economic Empowerment",
-        impact: "Expanded from payments to multiple financial products under a unified mission",
-        narrativeType: "Mission Narrative",
-        industry: "Fintech"
-      }
-    ]
+    publishDate: "October 15, 2024",
+    readTime: "8 min read",
+    
+    // Core narrative content
+    marketBefore: "Before Stripe, online payments were fragmented and complex. Developers had to integrate with multiple payment processors, handle compliance manually, and deal with different APIs for different regions. The market treated payments as a necessary evil - a commodity service that businesses had to endure rather than leverage for growth.",
+    
+    founderInsight: "We realized that payments weren't just about moving money - they were about enabling commerce itself. Every online business needed the same foundational infrastructure, but they were all building it from scratch. We saw an opportunity to make payments as simple and powerful as cloud computing had made servers.",
+    
+    marketTransformation: "We're not just processing payments; we're building the economic infrastructure for the internet. Just as AWS abstracted away server management, we're abstracting away financial complexity. This means developers can focus on their core product while we handle everything from fraud detection to global compliance.",
+    
+    strategicVision: "The future of commerce is programmable. Every business will have financial services embedded directly into their product experience. We're building the rails that will power the next generation of internet businesses - from marketplaces to SaaS platforms to the creator economy.",
+    
+    competitiveNarrative: "While others see payments as transactions, we see infrastructure. While they compete on pricing, we compete on enabling new business models. Our competitors are building payment processors; we're building the financial operating system for the internet.",
+    
+    // Additional context
+    keyMetrics: {
+      revenue: "$7.4B annually",
+      customers: "7M+ businesses",
+      countries: "120+ countries"
+    }
   }
 };
 
 const CaseStudyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const caseStudy = slug ? caseStudiesData[slug] : null;
-  const [showPricingPopup, setShowPricingPopup] = useState(false);
-  
+  const narrative = slug ? narrativeData[slug] : null;
   const { isLoggedIn } = useAuth();
-  const seoData = caseStudy && slug ? useCaseStudySEO(caseStudy, slug) : null;
+  const seoData = narrative && slug ? useCaseStudySEO(narrative, slug) : null;
   
   useEffect(() => {
     window.scrollTo(0, 0);
-    
-    // Show pricing popup for non-logged in users after scrolling
-    const handleScroll = () => {
-      if (!isLoggedIn && window.scrollY > 800) {
-        setShowPricingPopup(true);
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [slug, isLoggedIn]);
+  }, [slug]);
   
-  if (!caseStudy || !slug) {
+  if (!narrative || !slug) {
     return (
       <Layout>
         <div className="container max-w-4xl mx-auto px-6 py-20">
           <div className="text-center">
-            <h1 className="text-2xl font-semibold mb-4">Case study not found</h1>
-            <p className="mb-8">The case study you're looking for doesn't exist or has been removed.</p>
+            <h1 className="text-2xl font-semibold mb-4">Narrative not found</h1>
+            <p className="mb-8">The founder narrative you're looking for doesn't exist or has been removed.</p>
             <Button asChild>
-              <Link to="/case-studies">Back to Case Studies</Link>
+              <Link to="/case-studies">Back to Narratives</Link>
             </Button>
           </div>
         </div>
@@ -115,35 +72,47 @@ const CaseStudyDetail = () => {
     <Layout>
       {seoData && (
         <SEOHead
-          title={seoData.title}
-          description={seoData.description}
-          keywords={seoData.keywords}
+          title={`${narrative.company} Founder Narrative: ${narrative.founderName} | LingoLab`}
+          description={`Discover how ${narrative.founderName} of ${narrative.company} is transforming ${narrative.industry} with their strategic vision and market insights.`}
+          keywords={`${narrative.company}, ${narrative.founderName}, strategic narrative, ${narrative.industry}, founder insights`}
           canonicalUrl={seoData.canonicalUrl}
           type="article"
         />
       )}
       
-      <article>
-        {/* Hero Section */}
-        <CaseStudyHero caseStudy={caseStudy} />
+      <article className="bg-white dark:bg-gray-900">
+        {/* Article Header */}
+        <ArticleHeader narrative={narrative} />
         
-        {/* Main Content */}
-        <div className="container max-w-7xl mx-auto px-6 py-12">
-          {/* Breadcrumbs & Save Button */}
-          <CaseStudyBreadcrumbs caseStudy={caseStudy} slug={slug} />
-
-          {/* Tabbed Content */}
-          <CaseStudyTabs 
-            caseStudy={caseStudy}
-            isLoggedIn={isLoggedIn}
-            showLockOverlay={showPricingPopup}
-            contentRef={{ current: null }}
+        {/* Share Button - Fixed Position */}
+        <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-40 hidden lg:block">
+          <ShareOptions 
+            caseStudy={{
+              company: narrative.company,
+              lingo: `${narrative.founderName}'s Market Vision`,
+              id: slug
+            }}
           />
         </div>
+        
+        {/* Article Content */}
+        <div className="container max-w-4xl mx-auto px-6 py-12">
+          <ArticleContent narrative={narrative} />
+          
+          {/* Mobile Share Button */}
+          <div className="lg:hidden mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex justify-center">
+              <ShareOptions 
+                caseStudy={{
+                  company: narrative.company,
+                  lingo: `${narrative.founderName}'s Market Vision`,
+                  id: slug
+                }}
+              />
+            </div>
+          </div>
+        </div>
       </article>
-      
-      {/* Show pricing popup when user scrolls to locked content */}
-      {showPricingPopup && !isLoggedIn && <PricingPopup forceShow={true} />}
     </Layout>
   );
 };
