@@ -109,11 +109,11 @@ const ArticleContent = ({ narrative }: ArticleContentProps) => {
               <div className="space-y-3 text-sm">
                 <div>
                   <span className="font-medium text-gray-600 dark:text-gray-400">Before:</span>
-                  <p className="text-gray-700 dark:text-gray-300 mt-1">{narrative.marketLandscape.beforeStipe}</p>
+                  <p className="text-gray-700 dark:text-gray-300 mt-1">{narrative.marketLandscape.beforeCompany}</p>
                 </div>
                 <div>
                   <span className="font-medium text-gray-600 dark:text-gray-400">{narrative.company}'s Position:</span>
-                  <p className="text-gray-700 dark:text-gray-300 mt-1">{narrative.marketLandscape.stripePosition}</p>
+                  <p className="text-gray-700 dark:text-gray-300 mt-1">{narrative.marketLandscape.companyPosition}</p>
                 </div>
               </div>
             </CardContent>
@@ -124,7 +124,7 @@ const ArticleContent = ({ narrative }: ArticleContentProps) => {
               <div className="space-y-3 text-sm">
                 <div>
                   <span className="font-medium text-gray-600 dark:text-gray-400">Competitive Response:</span>
-                  <p className="text-gray-700 dark:text-gray-300 mt-1">{narrative.marketLandscape.competitiveResponse}</p>
+                  <p className="text-gray-700 dark:text-gray-300 mt-1">{narrative.marketLandscape.competitorResponse}</p>
                 </div>
                 <div>
                   <span className="font-medium text-gray-600 dark:text-gray-400">Future State:</span>
@@ -190,25 +190,25 @@ const ArticleContent = ({ narrative }: ArticleContentProps) => {
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-teal-600 dark:text-teal-400 mb-1">
-                    {narrative.scaleAchieved.revenue}
+                    {narrative.metrics.scale.revenue}
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">Annual Revenue</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">
-                    {narrative.scaleAchieved.users}
+                    {narrative.metrics.scale.users}
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">Businesses Served</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">
-                    {narrative.scaleAchieved.geographicReach}
+                    {narrative.metrics.scale.geographicReach}
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">Global Reach</div>
                 </div>
                 <div className="text-center">
                   <div className="text-sm font-medium text-green-700 dark:text-green-300 mb-1">
-                    {narrative.scaleAchieved.marketShare}
+                    {narrative.metrics.scale.marketShare}
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">Market Position</div>
                 </div>
@@ -226,15 +226,15 @@ const ArticleContent = ({ narrative }: ArticleContentProps) => {
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
                   <div className="font-semibold text-orange-700 dark:text-orange-300 mb-2">Category Definition</div>
-                  <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.speedToMarket.categoryDefinition}</div>
+                  <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.metrics.speed.categoryDefinition}</div>
                 </div>
                 <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
                   <div className="font-semibold text-orange-700 dark:text-orange-300 mb-2">Market Leadership</div>
-                  <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.speedToMarket.marketLeadership}</div>
+                  <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.metrics.speed.marketLeadership}</div>
                 </div>
                 <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
                   <div className="font-semibold text-orange-700 dark:text-orange-300 mb-2">Global Expansion</div>
-                  <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.speedToMarket.globalExpansion}</div>
+                  <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.metrics.speed.globalExpansion}</div>
                 </div>
               </div>
             </CardContent>
@@ -252,21 +252,21 @@ const ArticleContent = ({ narrative }: ArticleContentProps) => {
                   <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2"></div>
                   <div>
                     <div className="font-medium text-gray-900 dark:text-white">Industry Standard</div>
-                    <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.narrativeAdoption.industryStandard}</div>
+                    <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.metrics.adoption.industryStandard}</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2"></div>
                   <div>
                     <div className="font-medium text-gray-900 dark:text-white">Competitive Response</div>
-                    <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.narrativeAdoption.competitorResponse}</div>
+                    <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.metrics.adoption.competitorResponse}</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2"></div>
                   <div>
                     <div className="font-medium text-gray-900 dark:text-white">Market Education</div>
-                    <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.narrativeAdoption.marketEducation}</div>
+                    <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.metrics.adoption.marketEducation}</div>
                   </div>
                 </div>
               </div>
@@ -294,14 +294,14 @@ const ArticleContent = ({ narrative }: ArticleContentProps) => {
         </div>
       </section>
 
-      {/* Competitive Narrative */}
+      {/* Competitive Advantage */}
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           Redefining the Competitive Landscape
         </h2>
         <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border">
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed m-0">
-            {narrative.competitiveNarrative}
+            {narrative.competitiveAdvantage}
           </p>
         </div>
       </section>
