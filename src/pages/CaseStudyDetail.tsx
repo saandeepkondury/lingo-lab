@@ -7,6 +7,7 @@ import { useAuth } from '@/context/AuthContext';
 import ArticleHeader from '@/components/Article/ArticleHeader';
 import ArticleContent from '@/components/Article/ArticleContent';
 import ShareOptions from '@/components/ShareOptions';
+import LingoDropsSection from '@/components/CaseStudy/LingoDropsSection';
 
 // Simplified narrative data structure designed for form input
 const narrativeData: Record<string, any> = {
@@ -185,6 +186,9 @@ const CaseStudyDetail = () => {
             }}
           />
         </div>
+        
+        {/* Lingo Drops Section - Featured prominently */}
+        <LingoDropsSection narrative={narrative} />
         
         {/* Article Content */}
         <div className="container max-w-4xl mx-auto px-6 py-12">
