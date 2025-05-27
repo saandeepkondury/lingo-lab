@@ -1,3 +1,4 @@
+
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import Layout from '@/components/Layout';
@@ -11,6 +12,8 @@ import SearchArea from '@/components/CaseStudies/SearchArea';
 import CaseStudiesList from '@/components/CaseStudies/CaseStudiesList';
 import { Bookmark } from 'lucide-react';
 import { useSubscription } from '@/hooks/useSubscription';
+import SEOHead from '@/components/SEOHead';
+
 const CaseStudies = () => {
   const {
     searchQuery,
@@ -96,6 +99,7 @@ const CaseStudies = () => {
   const isPaidUser = subscribed;
   const displayVisibleCaseStudies = isPaidUser ? visibleCaseStudies : visibleCaseStudies.slice(0, 2);
   const displayLockedCaseStudies = isPaidUser ? [] : [...visibleCaseStudies.slice(2), ...lockedCaseStudies];
+  
   const handleLockedCaseStudyClick = () => {
     toast({
       title: "Premium Case Study",
@@ -105,7 +109,17 @@ const CaseStudies = () => {
         </Button>
     });
   };
-  return <Layout>
+
+  return (
+    <Layout>
+      <SEOHead
+        title="Strategic Narrative Case Studies | LingoLab"
+        description="Explore how the world's most successful startups used strategic narrative to drive growth. Learn from Stripe, Notion, Figma and more."
+        keywords="strategic narrative, case studies, startup growth, positioning, market creation, fintech, saas"
+        canonicalUrl={`${window.location.origin}/case-studies`}
+        type="website"
+      />
+      
       <section className="py-12">
         <div className="container max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
@@ -114,17 +128,16 @@ const CaseStudies = () => {
               Explore how the world's most successful startups used strategic narrative to drive growth
             </p>
             <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
-              {!isPaidUser && <Button className="bg-teal-500 hover:bg-teal-600 text-white" asChild>
+              {!isPaidUser && (
+                <Button className="bg-teal-500 hover:bg-teal-600 text-white" asChild>
                   <Link to="/pricing">Upgrade to Unlock All Case Studies</Link>
-                </Button>}
+                </Button>
+              )}
               <Button variant="outline" className="flex items-center gap-2" asChild>
                 <Link to="/saved">
                   <Bookmark className="h-4 w-4" />
                   Saved Case Studies
                 </Link>
-              </Button>
-              <Button variant="outline" className="flex items-center gap-2" asChild>
-                
               </Button>
             </div>
           </div>
@@ -133,7 +146,12 @@ const CaseStudies = () => {
             {/* Filters - shown as sidebar on desktop, drawer on mobile */}
             <div className="md:w-64 flex-shrink-0">
               <div className="md:sticky md:top-20">
-                <FiltersPanel filters={filterGroups} activeFilters={activeFilters} onFilterChange={handleFilterChange} clearFilters={clearFilters} />
+                <FiltersPanel 
+                  filters={filterGroups} 
+                  activeFilters={activeFilters} 
+                  onFilterChange={handleFilterChange} 
+                  clearFilters={clearFilters} 
+                />
               </div>
             </div>
             
@@ -151,11 +169,18 @@ const CaseStudies = () => {
               </div>
               
               {/* Results grid */}
-              <CaseStudiesList visibleCaseStudies={displayVisibleCaseStudies} lockedCaseStudies={displayLockedCaseStudies} handleLockedCaseStudyClick={handleLockedCaseStudyClick} clearFilters={clearFilters} />
+              <CaseStudiesList 
+                visibleCaseStudies={displayVisibleCaseStudies} 
+                lockedCaseStudies={displayLockedCaseStudies} 
+                handleLockedCaseStudyClick={handleLockedCaseStudyClick} 
+                clearFilters={clearFilters} 
+              />
             </div>
           </div>
         </div>
       </section>
-    </Layout>;
+    </Layout>
+  );
 };
+
 export default CaseStudies;

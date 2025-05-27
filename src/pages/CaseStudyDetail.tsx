@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -8,7 +7,6 @@ import { useAuth } from '@/context/AuthContext';
 import ArticleHeader from '@/components/Article/ArticleHeader';
 import ArticleContent from '@/components/Article/ArticleContent';
 import ShareOptions from '@/components/ShareOptions';
-import { useCaseStudySEO } from '@/hooks/useCaseStudySEO';
 
 // Simplified narrative data structure designed for form input
 const narrativeData: Record<string, any> = {
@@ -25,7 +23,8 @@ const narrativeData: Record<string, any> = {
     headquarters: "San Francisco, CA",
     
     // Publication Details
-    publishDate: "October 15, 2024",
+    publishDate: "2024-10-15T09:00:00Z",
+    modifiedDate: "2024-10-15T09:00:00Z",
     readTime: "8 min read",
     
     // Core Narrative (from form responses)
@@ -91,7 +90,6 @@ const CaseStudyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const narrative = slug ? narrativeData[slug] : null;
   const { isLoggedIn } = useAuth();
-  const seoData = narrative && slug ? useCaseStudySEO(narrative, slug) : null;
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -100,6 +98,11 @@ const CaseStudyDetail = () => {
   if (!narrative || !slug) {
     return (
       <Layout>
+        <SEOHead
+          title="Narrative Not Found | LingoLab"
+          description="The founder narrative you're looking for doesn't exist or has been removed."
+          canonicalUrl={`${window.location.origin}/case-studies/${slug || 'not-found'}`}
+        />
         <div className="container max-w-4xl mx-auto px-6 py-20">
           <div className="text-center">
             <h1 className="text-2xl font-semibold mb-4">Narrative not found</h1>
@@ -112,18 +115,61 @@ const CaseStudyDetail = () => {
       </Layout>
     );
   }
+
+  // Generate structured data for the article
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": `${narrative.company} Strategic Narrative: ${narrative.keyPhrase}`,
+    "description": `Discover how ${narrative.founderName} of ${narrative.company} transformed ${narrative.industry} with their "${narrative.keyPhrase}" strategic narrative.`,
+    "image": `${window.location.origin}/placeholder.svg`,
+    "url": `${window.location.origin}/case-studies/${slug}`,
+    "datePublished": narrative.publishDate,
+    "dateModified": narrative.modifiedDate,
+    "author": {
+      "@type": "Person",
+      "name": narrative.founderName,
+      "jobTitle": narrative.founderTitle,
+      "worksFor": {
+        "@type": "Organization",
+        "name": narrative.company
+      }
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "LingoLab",
+      "description": "Strategic narrative case studies and insights for startups",
+      "url": window.location.origin,
+      "logo": `${window.location.origin}/placeholder.svg`
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `${window.location.origin}/case-studies/${slug}`
+    },
+    "articleSection": "Strategic Narrative",
+    "keywords": `${narrative.company}, ${narrative.founderName}, strategic narrative, ${narrative.industry}, ${narrative.keyPhrase}`,
+    "about": {
+      "@type": "Organization",
+      "name": narrative.company,
+      "description": `${narrative.company} - ${narrative.tagline}`,
+      "foundingDate": narrative.foundedYear,
+      "industry": narrative.industry
+    }
+  };
   
   return (
     <Layout>
-      {seoData && (
-        <SEOHead
-          title={`${narrative.company} Founder Narrative: ${narrative.founderName} | LingoLab`}
-          description={`Discover how ${narrative.founderName} of ${narrative.company} is transforming ${narrative.industry} with their strategic vision and market insights.`}
-          keywords={`${narrative.company}, ${narrative.founderName}, strategic narrative, ${narrative.industry}, founder insights`}
-          canonicalUrl={seoData.canonicalUrl}
-          type="article"
-        />
-      )}
+      <SEOHead
+        title={`${narrative.company} Strategic Narrative: ${narrative.keyPhrase} | LingoLab`}
+        description={`Discover how ${narrative.founderName} of ${narrative.company} transformed ${narrative.industry} with their "${narrative.keyPhrase}" strategic narrative. Learn the market insights that drove their success.`}
+        keywords={`${narrative.company}, ${narrative.founderName}, strategic narrative, ${narrative.industry}, ${narrative.keyPhrase}, market positioning, startup growth`}
+        canonicalUrl={`${window.location.origin}/case-studies/${slug}`}
+        type="article"
+        author={{ name: narrative.founderName }}
+        publishDate={narrative.publishDate}
+        modifiedDate={narrative.modifiedDate}
+        structuredData={structuredData}
+      />
       
       <article className="bg-white dark:bg-gray-900">
         {/* Article Header */}
