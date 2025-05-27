@@ -1,4 +1,3 @@
-
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import Layout from '@/components/Layout';
@@ -12,7 +11,6 @@ import SearchArea from '@/components/CaseStudies/SearchArea';
 import CaseStudiesList from '@/components/CaseStudies/CaseStudiesList';
 import { Bookmark } from 'lucide-react';
 import { useSubscription } from '@/hooks/useSubscription';
-
 const CaseStudies = () => {
   const {
     searchQuery,
@@ -24,9 +22,17 @@ const CaseStudies = () => {
     lockedCaseStudies,
     isLoading
   } = useCaseStudiesFilter();
-  const { isLoggedIn, isLoading: authLoading } = useAuth();
-  const { subscribed, loading } = useSubscription();
-  const { toast } = useToast();
+  const {
+    isLoggedIn,
+    isLoading: authLoading
+  } = useAuth();
+  const {
+    subscribed,
+    loading
+  } = useSubscription();
+  const {
+    toast
+  } = useToast();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -43,24 +49,21 @@ const CaseStudies = () => {
       toast({
         title: "Welcome to LingoLab!",
         description: "You can see a preview of our case studies. Subscribe to unlock them all!",
-        action: (
-          <Button className="bg-teal-500 hover:bg-teal-600 text-white" size="sm" asChild>
+        action: <Button className="bg-teal-500 hover:bg-teal-600 text-white" size="sm" asChild>
             <Link to="/pricing">View Plans</Link>
           </Button>
-        )
       });
     } else if (location.state?.justSignedIn) {
       toast({
         title: "Welcome back!",
-        description: subscribed ? "Enjoy full access to our case study library." : "Subscribe to unlock our full case study library.",
+        description: subscribed ? "Enjoy full access to our case study library." : "Subscribe to unlock our full case study library."
       });
     }
   }, [location.state, toast, subscribed]);
 
   // Show loading state while checking auth or loading data
   if (authLoading || isLoading) {
-    return (
-      <Layout>
+    return <Layout>
         <section className="py-12">
           <div className="container max-w-6xl mx-auto px-6">
             <div className="text-center">
@@ -68,8 +71,7 @@ const CaseStudies = () => {
             </div>
           </div>
         </section>
-      </Layout>
-    );
+      </Layout>;
   }
 
   // Don't render anything if not logged in (will redirect)
@@ -79,8 +81,7 @@ const CaseStudies = () => {
 
   // Show loading state while checking subscription
   if (loading) {
-    return (
-      <Layout>
+    return <Layout>
         <section className="py-12">
           <div className="container max-w-6xl mx-auto px-6">
             <div className="text-center">
@@ -88,29 +89,23 @@ const CaseStudies = () => {
             </div>
           </div>
         </section>
-      </Layout>
-    );
+      </Layout>;
   }
 
   // Use actual subscription status instead of random demo logic
   const isPaidUser = subscribed;
   const displayVisibleCaseStudies = isPaidUser ? visibleCaseStudies : visibleCaseStudies.slice(0, 2);
   const displayLockedCaseStudies = isPaidUser ? [] : [...visibleCaseStudies.slice(2), ...lockedCaseStudies];
-
   const handleLockedCaseStudyClick = () => {
     toast({
       title: "Premium Case Study",
       description: "Subscribe to access our full library of case studies.",
-      action: (
-        <Button className="bg-teal-500 hover:bg-teal-600 text-white" size="sm" asChild>
+      action: <Button className="bg-teal-500 hover:bg-teal-600 text-white" size="sm" asChild>
           <Link to="/pricing">View Plans</Link>
         </Button>
-      )
     });
   };
-
-  return (
-    <Layout>
+  return <Layout>
       <section className="py-12">
         <div className="container max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
@@ -119,11 +114,9 @@ const CaseStudies = () => {
               Explore how the world's most successful startups used strategic narrative to drive growth
             </p>
             <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
-              {!isPaidUser && (
-                <Button className="bg-teal-500 hover:bg-teal-600 text-white" asChild>
+              {!isPaidUser && <Button className="bg-teal-500 hover:bg-teal-600 text-white" asChild>
                   <Link to="/pricing">Upgrade to Unlock All Case Studies</Link>
-                </Button>
-              )}
+                </Button>}
               <Button variant="outline" className="flex items-center gap-2" asChild>
                 <Link to="/saved">
                   <Bookmark className="h-4 w-4" />
@@ -131,9 +124,7 @@ const CaseStudies = () => {
                 </Link>
               </Button>
               <Button variant="outline" className="flex items-center gap-2" asChild>
-                <Link to="/submit-narrative">
-                  Submit Your Story
-                </Link>
+                
               </Button>
             </div>
           </div>
@@ -142,12 +133,7 @@ const CaseStudies = () => {
             {/* Filters - shown as sidebar on desktop, drawer on mobile */}
             <div className="md:w-64 flex-shrink-0">
               <div className="md:sticky md:top-20">
-                <FiltersPanel 
-                  filters={filterGroups} 
-                  activeFilters={activeFilters} 
-                  onFilterChange={handleFilterChange} 
-                  clearFilters={clearFilters} 
-                />
+                <FiltersPanel filters={filterGroups} activeFilters={activeFilters} onFilterChange={handleFilterChange} clearFilters={clearFilters} />
               </div>
             </div>
             
@@ -165,18 +151,11 @@ const CaseStudies = () => {
               </div>
               
               {/* Results grid */}
-              <CaseStudiesList 
-                visibleCaseStudies={displayVisibleCaseStudies} 
-                lockedCaseStudies={displayLockedCaseStudies} 
-                handleLockedCaseStudyClick={handleLockedCaseStudyClick} 
-                clearFilters={clearFilters} 
-              />
+              <CaseStudiesList visibleCaseStudies={displayVisibleCaseStudies} lockedCaseStudies={displayLockedCaseStudies} handleLockedCaseStudyClick={handleLockedCaseStudyClick} clearFilters={clearFilters} />
             </div>
           </div>
         </div>
       </section>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default CaseStudies;
