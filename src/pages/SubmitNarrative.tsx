@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -71,13 +72,19 @@ const SubmitNarrative = () => {
   };
 
   const handleNestedChange = (section: string, field: string, value: any) => {
-    setFormData(prev => ({
-      ...prev,
-      [section]: {
-        ...prev[section as keyof FounderFormData],
-        [field]: value
+    setFormData(prev => {
+      const currentSection = prev[section as keyof FounderFormData];
+      if (typeof currentSection === 'object' && currentSection !== null) {
+        return {
+          ...prev,
+          [section]: {
+            ...currentSection,
+            [field]: value
+          }
+        };
       }
-    }));
+      return prev;
+    });
   };
 
   const handleArrayChange = (field: string, index: number, value: string) => {
