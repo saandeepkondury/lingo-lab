@@ -15,6 +15,7 @@ import Submit from "./pages/Submit";
 import SubmitNarrative from "./pages/SubmitNarrative";
 import Newsletter from "./pages/Newsletter";
 import Pricing from "./pages/Pricing";
+import StripeExample from "./pages/StripeExample";
 import NotFound from "./pages/NotFound";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
