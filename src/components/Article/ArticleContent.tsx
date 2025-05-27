@@ -1,15 +1,13 @@
-
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, Target, Lightbulb, Rocket, BarChart3, Clock, Zap, MapPin } from 'lucide-react';
-
 interface ArticleContentProps {
   narrative: any;
 }
-
-const ArticleContent = ({ narrative }: ArticleContentProps) => {
-  return (
-    <div className="prose prose-lg dark:prose-invert max-w-none">
+const ArticleContent = ({
+  narrative
+}: ArticleContentProps) => {
+  return <div className="prose prose-lg dark:prose-invert max-w-none">
       {/* Introduction */}
       <div className="mb-12">
         <p className="text-xl leading-relaxed text-gray-700 dark:text-gray-300 font-medium">
@@ -27,21 +25,17 @@ const ArticleContent = ({ narrative }: ArticleContentProps) => {
             <div>
               <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Market Themes</div>
               <div className="flex flex-wrap gap-2">
-                {narrative.marketThemes.map((theme: string, index: number) => (
-                  <Badge key={index} variant="outline" className="text-xs">
+                {narrative.marketThemes.map((theme: string, index: number) => <Badge key={index} variant="outline" className="text-xs">
                     {theme}
-                  </Badge>
-                ))}
+                  </Badge>)}
               </div>
             </div>
             <div>
               <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Strategic Patterns</div>
               <div className="flex flex-wrap gap-2">
-                {narrative.strategicPatterns.map((pattern: string, index: number) => (
-                  <Badge key={index} variant="outline" className="text-xs bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                {narrative.strategicPatterns.map((pattern: string, index: number) => <Badge key={index} variant="outline" className="text-xs bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
                     {pattern}
-                  </Badge>
-                ))}
+                  </Badge>)}
               </div>
             </div>
             <div>
@@ -218,26 +212,7 @@ const ArticleContent = ({ narrative }: ArticleContentProps) => {
 
           {/* Speed to Market */}
           <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <Clock className="h-5 w-5 text-orange-500" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Speed to Market</h3>
-              </div>
-              <div className="grid md:grid-cols-3 gap-4">
-                <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
-                  <div className="font-semibold text-orange-700 dark:text-orange-300 mb-2">Category Definition</div>
-                  <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.metrics.speed.categoryDefinition}</div>
-                </div>
-                <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
-                  <div className="font-semibold text-orange-700 dark:text-orange-300 mb-2">Market Leadership</div>
-                  <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.metrics.speed.marketLeadership}</div>
-                </div>
-                <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
-                  <div className="font-semibold text-orange-700 dark:text-orange-300 mb-2">Global Expansion</div>
-                  <div className="text-sm text-gray-700 dark:text-gray-300">{narrative.metrics.speed.globalExpansion}</div>
-                </div>
-              </div>
-            </CardContent>
+            
           </Card>
 
           {/* Narrative Adoption */}
@@ -282,14 +257,12 @@ const ArticleContent = ({ narrative }: ArticleContentProps) => {
         </h2>
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-xl border border-blue-200 dark:border-blue-700">
           <div className="space-y-4">
-            {narrative.strategicInsights.map((insight: string, index: number) => (
-              <div key={index} className="flex items-start gap-3">
+            {narrative.strategicInsights.map((insight: string, index: number) => <div key={index} className="flex items-start gap-3">
                 <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0">
                   {index + 1}
                 </div>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{insight}</p>
-              </div>
-            ))}
+              </div>)}
           </div>
         </div>
       </section>
@@ -318,8 +291,6 @@ const ArticleContent = ({ narrative }: ArticleContentProps) => {
           in their markets; they fundamentally reshape how those markets think about themselves.
         </p>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default ArticleContent;
