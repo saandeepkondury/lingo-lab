@@ -176,36 +176,28 @@ const CaseStudyDetail = () => {
         {/* Article Header */}
         <ArticleHeader narrative={narrative} />
         
-        {/* Share Button - Fixed Position */}
-        <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-40 hidden lg:block">
-          <ShareOptions 
-            caseStudy={{
-              company: narrative.company,
-              lingo: `${narrative.founderName}'s Market Vision`,
-              id: slug
-            }}
-          />
+        {/* Share Button - Prominent position at top */}
+        <div className="container max-w-4xl mx-auto px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex justify-between items-center">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {narrative.readTime} • Published {new Date(narrative.publishDate).toLocaleDateString()}
+            </div>
+            <ShareOptions 
+              caseStudy={{
+                company: narrative.company,
+                lingo: `${narrative.founderName}'s Market Vision`,
+                id: slug
+              }}
+            />
+          </div>
         </div>
         
         {/* Lingo Drops Section - Featured prominently */}
         <LingoDropsSection narrative={narrative} />
         
-        {/* Article Content */}
+        {/* Article Content - Streamlined */}
         <div className="container max-w-4xl mx-auto px-6 py-12">
           <ArticleContent narrative={narrative} />
-          
-          {/* Mobile Share Button */}
-          <div className="lg:hidden mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
-            <div className="flex justify-center">
-              <ShareOptions 
-                caseStudy={{
-                  company: narrative.company,
-                  lingo: `${narrative.founderName}'s Market Vision`,
-                  id: slug
-                }}
-              />
-            </div>
-          </div>
         </div>
       </article>
     </Layout>
