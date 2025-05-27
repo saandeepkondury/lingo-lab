@@ -51,7 +51,9 @@ export const useCaseStudiesFilter = (companyId?: string) => {
         const searchableFields = [
           study.companyName,
           study.lingo,
-          study.niche || ''
+          study.niche || '',
+          ...(study.marketThemes || []),
+          ...(study.strategicPatterns || [])
         ].join(' ').toLowerCase();
         
         if (!searchableFields.includes(searchLower)) {
@@ -78,6 +80,35 @@ export const useCaseStudiesFilter = (companyId?: string) => {
             studyNiche.includes(value.toLowerCase()) || value.toLowerCase().includes(studyNiche)
           );
           if (!hasMatch) return false;
+          continue;
+        }
+
+        // Special handling for Market Intelligence array fields
+        if (group === "Market Themes") {
+          const studyThemes = study.marketThemes || [];
+          const hasMatch = values.some(value => studyThemes.includes(value));
+          if (!hasMatch) return false;
+          continue;
+        }
+
+        if (group === "Strategic Patterns") {
+          const studyPatterns = study.strategicPatterns || [];
+          const hasMatch = values.some(value => studyPatterns.includes(value));
+          if (!hasMatch) return false;
+          continue;
+        }
+
+        if (group === "Transformation Type") {
+          if (!values.includes(study.transformationType)) {
+            return false;
+          }
+          continue;
+        }
+
+        if (group === "Narrative Archetype") {
+          if (!values.includes(study.narrativeArchetype)) {
+            return false;
+          }
           continue;
         }
         

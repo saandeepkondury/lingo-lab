@@ -1,5 +1,5 @@
 
-// Sample case studies data
+// Sample case studies data with enhanced market intelligence
 export const allCaseStudies = [
   {
     id: "stripe-financial-infrastructure",
@@ -27,7 +27,12 @@ export const allCaseStudies = [
     customer: "B2B",
     involvement: "Full-time",
     narrativeFocus: "Tech Innovator",
-    fundingStrategy: "VC-led"
+    fundingStrategy: "VC-led",
+    // New market intelligence fields
+    marketThemes: ["API Economy", "Developer Experience", "Financial Infrastructure"],
+    strategicPatterns: ["Platform Strategy", "Developer-First GTM", "Category Creation"],
+    transformationType: "Market Redefinition",
+    narrativeArchetype: "Infrastructure Play"
   },
   {
     id: "notion-all-in-one-workspace",
@@ -55,7 +60,11 @@ export const allCaseStudies = [
     customer: "B2B",
     involvement: "Full-time",
     narrativeFocus: "Category Creator",
-    fundingStrategy: "VC-led"
+    fundingStrategy: "VC-led",
+    marketThemes: ["Future of Work", "Tool Consolidation", "User Empowerment"],
+    strategicPatterns: ["Community-Led Growth", "Product Virality", "User-Generated Content"],
+    transformationType: "Category Unification",
+    narrativeArchetype: "Consolidation Play"
   },
   {
     id: "figma-multiplayer-design",
@@ -83,7 +92,11 @@ export const allCaseStudies = [
     customer: "B2B",
     involvement: "Full-time",
     narrativeFocus: "Disruptor",
-    fundingStrategy: "VC-led"
+    fundingStrategy: "VC-led",
+    marketThemes: ["Real-time Collaboration", "Browser-based Tools", "Design Democracy"],
+    strategicPatterns: ["Incumbent Disruption", "Platform Migration", "Collaborative UX"],
+    transformationType: "Workflow Revolution",
+    narrativeArchetype: "Collaborative Play"
   },
   {
     id: "open-ai-chatgpt",
@@ -111,7 +124,11 @@ export const allCaseStudies = [
     customer: "B2C",
     involvement: "Full-time",
     narrativeFocus: "Category Creator",
-    fundingStrategy: "VC-led"
+    fundingStrategy: "VC-led",
+    marketThemes: ["Artificial General Intelligence", "Human-AI Interaction", "Democratized AI"],
+    strategicPatterns: ["Viral Launch", "Freemium Adoption", "Platform Ecosystem"],
+    transformationType: "Technology Breakthrough",
+    narrativeArchetype: "Intelligence Play"
   },
   {
     id: "airbnb-belong-anywhere",
@@ -139,7 +156,11 @@ export const allCaseStudies = [
     customer: "B2C",
     involvement: "Full-time",
     narrativeFocus: "Market Leader",
-    fundingStrategy: "VC-led"
+    fundingStrategy: "VC-led",
+    marketThemes: ["Sharing Economy", "Cultural Exchange", "Local Experiences"],
+    strategicPatterns: ["Two-Sided Marketplace", "Trust Building", "Community Effects"],
+    transformationType: "Industry Disruption",
+    narrativeArchetype: "Experience Play"
   },
   {
     id: "slack-where-work-happens",
@@ -167,11 +188,15 @@ export const allCaseStudies = [
     customer: "B2B",
     involvement: "Full-time",
     narrativeFocus: "Category Creator",
-    fundingStrategy: "VC-led"
+    fundingStrategy: "VC-led",
+    marketThemes: ["Future of Work", "Team Collaboration", "Digital Headquarters"],
+    strategicPatterns: ["Bottom-up Adoption", "Integration Ecosystem", "Habit Formation"],
+    transformationType: "Communication Revolution",
+    narrativeArchetype: "Workflow Play"
   }
 ];
 
-// Updated filter groups with new filters and Company filter
+// Updated filter groups with new market intelligence filters
 export const filterGroups = [
   {
     name: "Company",
@@ -182,6 +207,52 @@ export const filterGroups = [
       { value: "openai", label: "OpenAI" },
       { value: "airbnb", label: "Airbnb" },
       { value: "slack", label: "Slack" }
+    ]
+  },
+  {
+    name: "Market Themes",
+    options: [
+      { value: "API Economy", label: "API Economy" },
+      { value: "Developer Experience", label: "Developer Experience" },
+      { value: "Financial Infrastructure", label: "Financial Infrastructure" },
+      { value: "Future of Work", label: "Future of Work" },
+      { value: "Real-time Collaboration", label: "Real-time Collaboration" },
+      { value: "Artificial General Intelligence", label: "Artificial General Intelligence" },
+      { value: "Sharing Economy", label: "Sharing Economy" }
+    ]
+  },
+  {
+    name: "Strategic Patterns",
+    options: [
+      { value: "Platform Strategy", label: "Platform Strategy" },
+      { value: "Developer-First GTM", label: "Developer-First GTM" },
+      { value: "Category Creation", label: "Category Creation" },
+      { value: "Community-Led Growth", label: "Community-Led Growth" },
+      { value: "Incumbent Disruption", label: "Incumbent Disruption" },
+      { value: "Viral Launch", label: "Viral Launch" },
+      { value: "Two-Sided Marketplace", label: "Two-Sided Marketplace" }
+    ]
+  },
+  {
+    name: "Transformation Type",
+    options: [
+      { value: "Market Redefinition", label: "Market Redefinition" },
+      { value: "Category Unification", label: "Category Unification" },
+      { value: "Workflow Revolution", label: "Workflow Revolution" },
+      { value: "Technology Breakthrough", label: "Technology Breakthrough" },
+      { value: "Industry Disruption", label: "Industry Disruption" },
+      { value: "Communication Revolution", label: "Communication Revolution" }
+    ]
+  },
+  {
+    name: "Narrative Archetype",
+    options: [
+      { value: "Infrastructure Play", label: "Infrastructure Play" },
+      { value: "Consolidation Play", label: "Consolidation Play" },
+      { value: "Collaborative Play", label: "Collaborative Play" },
+      { value: "Intelligence Play", label: "Intelligence Play" },
+      { value: "Experience Play", label: "Experience Play" },
+      { value: "Workflow Play", label: "Workflow Play" }
     ]
   },
   {
@@ -378,12 +449,20 @@ export const getFilterOptions = () => {
   const stages = new Set(allCaseStudies.map(study => study.stage).filter(Boolean));
   const lingoStyles = new Set(allCaseStudies.map(study => study.lingoStyle).filter(Boolean));
   const targetAudiences = new Set(allCaseStudies.map(study => study.targetAudience).filter(Boolean));
+  const marketThemes = new Set(allCaseStudies.flatMap(study => study.marketThemes || []));
+  const strategicPatterns = new Set(allCaseStudies.flatMap(study => study.strategicPatterns || []));
+  const transformationTypes = new Set(allCaseStudies.map(study => study.transformationType).filter(Boolean));
+  const narrativeArchetypes = new Set(allCaseStudies.map(study => study.narrativeArchetype).filter(Boolean));
   
   return {
     narrativeTypes: Array.from(narrativeTypes),
     industries: Array.from(industries),
     stages: Array.from(stages),
     lingoStyles: Array.from(lingoStyles),
-    targetAudiences: Array.from(targetAudiences)
+    targetAudiences: Array.from(targetAudiences),
+    marketThemes: Array.from(marketThemes),
+    strategicPatterns: Array.from(strategicPatterns),
+    transformationTypes: Array.from(transformationTypes),
+    narrativeArchetypes: Array.from(narrativeArchetypes)
   };
 };

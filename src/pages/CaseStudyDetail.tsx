@@ -10,7 +10,7 @@ import ArticleContent from '@/components/Article/ArticleContent';
 import ShareOptions from '@/components/ShareOptions';
 import { useCaseStudySEO } from '@/hooks/useCaseStudySEO';
 
-// Sample narrative data structure (this would come from Supabase)
+// Enhanced narrative data structure with market intelligence
 const narrativeData: Record<string, any> = {
   "stripe-financial-infrastructure": {
     company: "Stripe",
@@ -21,6 +21,38 @@ const narrativeData: Record<string, any> = {
     industry: "Fintech",
     publishDate: "October 15, 2024",
     readTime: "8 min read",
+    
+    // Market Intelligence Tags
+    marketThemes: ["API Economy", "Developer Experience", "Financial Infrastructure"],
+    strategicPatterns: ["Platform Strategy", "Developer-First GTM", "Category Creation"],
+    transformationType: "Market Redefinition",
+    narrativeArchetype: "Infrastructure Play",
+    
+    // Universal Metrics Framework
+    scaleAchieved: {
+      revenue: "$7.4B annually",
+      users: "7M+ businesses globally",
+      marketShare: "Leading developer payment platform",
+      geographicReach: "120+ countries"
+    },
+    speedToMarket: {
+      categoryDefinition: "2 years to establish 'financial infrastructure' narrative",
+      marketLeadership: "5 years to become category leader",
+      globalExpansion: "3 years to achieve global scale"
+    },
+    narrativeAdoption: {
+      industryStandard: "Infrastructure terminology now industry standard",
+      competitorResponse: "Competitors adopted similar positioning within 18 months",
+      marketEducation: "Transformed how developers think about payments"
+    },
+    
+    // Market Landscape
+    marketLandscape: {
+      beforeStipe: "Fragmented payment processors competing on pricing",
+      stripePosition: "Unified financial infrastructure platform",
+      competitiveResponse: "Industry shift toward developer-centric solutions",
+      futureState: "Programmable financial services as standard"
+    },
     
     // Core narrative content
     marketBefore: "Before Stripe, online payments were fragmented and complex. Developers had to integrate with multiple payment processors, handle compliance manually, and deal with different APIs for different regions. The market treated payments as a necessary evil - a commodity service that businesses had to endure rather than leverage for growth.",
@@ -33,12 +65,13 @@ const narrativeData: Record<string, any> = {
     
     competitiveNarrative: "While others see payments as transactions, we see infrastructure. While they compete on pricing, we compete on enabling new business models. Our competitors are building payment processors; we're building the financial operating system for the internet.",
     
-    // Additional context
-    keyMetrics: {
-      revenue: "$7.4B annually",
-      customers: "7M+ businesses",
-      countries: "120+ countries"
-    }
+    // Strategic Insights (actionable takeaways)
+    strategicInsights: [
+      "Reframe commodity services as essential infrastructure to command premium valuations",
+      "Target developers first to create viral adoption through superior technical experience",
+      "Expand TAM by positioning beyond core product into adjacent service categories",
+      "Use narrative timing to establish category leadership before competitors catch up"
+    ]
   }
 };
 
