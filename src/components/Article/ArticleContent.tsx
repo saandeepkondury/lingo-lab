@@ -24,25 +24,25 @@ const ArticleContent = ({ narrative }: ArticleContentProps) => {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-teal-600 dark:text-teal-400 mb-1">
-                  {narrative.metrics.scale.revenue}
+                  {narrative.metrics?.scale?.revenue || 'N/A'}
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">Annual Revenue</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">
-                  {narrative.metrics.scale.users}
+                  {narrative.metrics?.scale?.users || 'N/A'}
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">Businesses Served</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">
-                  {narrative.metrics.scale.geographicReach}
+                  {narrative.metrics?.scale?.geographicReach || 'N/A'}
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">Global Reach</div>
               </div>
               <div className="text-center">
                 <div className="text-sm font-medium text-green-700 dark:text-green-300 mb-1">
-                  {narrative.metrics.scale.marketShare}
+                  {narrative.metrics?.scale?.marketShare || 'N/A'}
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">Market Position</div>
               </div>
@@ -59,7 +59,7 @@ const ArticleContent = ({ narrative }: ArticleContentProps) => {
             <div>
               <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Market Themes</div>
               <div className="flex flex-wrap gap-2">
-                {narrative.marketThemes.map((theme: string, index: number) => 
+                {(narrative.market_themes || []).map((theme: string, index: number) => 
                   <Badge key={index} variant="outline" className="text-xs">
                     {theme}
                   </Badge>
@@ -69,7 +69,7 @@ const ArticleContent = ({ narrative }: ArticleContentProps) => {
             <div>
               <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Strategic Patterns</div>
               <div className="flex flex-wrap gap-2">
-                {narrative.strategicPatterns.map((pattern: string, index: number) => 
+                {(narrative.strategic_patterns || []).map((pattern: string, index: number) => 
                   <Badge key={index} variant="outline" className="text-xs bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
                     {pattern}
                   </Badge>
@@ -79,7 +79,7 @@ const ArticleContent = ({ narrative }: ArticleContentProps) => {
             <div>
               <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">Transformation Type</div>
               <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                {narrative.transformationType}
+                {narrative.transformation_type || 'N/A'}
               </Badge>
             </div>
           </div>
@@ -94,7 +94,7 @@ const ArticleContent = ({ narrative }: ArticleContentProps) => {
         <p className="text-gray-700 dark:text-gray-300 leading-relaxed m-0">
           {narrative.company}'s success isn't just about building great products—it's about 
           articulating a compelling vision of the future and consistently executing against that narrative. 
-          As {narrative.founderName} demonstrates, the most successful companies don't just participate 
+          As {narrative.founder_name} demonstrates, the most successful companies don't just participate 
           in their markets; they fundamentally reshape how those markets think about themselves.
         </p>
       </section>
