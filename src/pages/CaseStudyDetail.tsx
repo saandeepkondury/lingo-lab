@@ -4,11 +4,11 @@ import { useParams } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import SEOHead from '@/components/SEOHead';
 import { useAuth } from '@/context/AuthContext';
-import ArticleContent from '@/components/Article/ArticleContent';
-import LingoDropsSection from '@/components/CaseStudy/LingoDropsSection';
-import CaseStudyDetailHeader from '@/components/CaseStudy/CaseStudyDetailHeader';
-import CaseStudyMetadata from '@/components/CaseStudy/CaseStudyMetadata';
 import CaseStudyNotFound from '@/components/CaseStudy/CaseStudyNotFound';
+import NewCaseStudyDetailHeader from '@/components/CaseStudy/NewCaseStudyDetailHeader';
+import BeforeAfterSection from '@/components/CaseStudy/BeforeAfterSection';
+import StorySection from '@/components/CaseStudy/StorySection';
+import LockedContentSection from '@/components/CaseStudy/LockedContentSection';
 import { useFounderNarrativeBySlug } from '@/hooks/useFounderNarratives';
 
 const CaseStudyDetail = () => {
@@ -91,19 +91,17 @@ const CaseStudyDetail = () => {
       />
       
       <article className="bg-white dark:bg-gray-900">
-        {/* Article Header */}
-        <CaseStudyDetailHeader narrative={narrative} slug={slug} />
+        {/* New Header Format */}
+        <NewCaseStudyDetailHeader narrative={narrative} slug={slug} />
         
-        {/* Metadata */}
-        <CaseStudyMetadata narrative={narrative} />
+        {/* Before/After Section - Open to all */}
+        <BeforeAfterSection narrative={narrative} />
         
-        {/* Lingo Drops Section - Featured prominently */}
-        <LingoDropsSection narrative={narrative} />
+        {/* Story Section - Open to all */}
+        <StorySection narrative={narrative} />
         
-        {/* Article Content - Streamlined */}
-        <div className="container max-w-4xl mx-auto px-6 py-12">
-          <ArticleContent narrative={narrative} />
-        </div>
+        {/* Locked Content Section - Requires subscription */}
+        <LockedContentSection narrative={narrative} />
       </article>
     </Layout>
   );
