@@ -2,7 +2,6 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge } from "@/components/ui/badge";
-import { Eye, TrendingUp, Building2 } from 'lucide-react';
 
 interface CaseStudyCardProps {
   id: string;
@@ -32,80 +31,68 @@ const CaseStudyCard = ({
   year,
   disableLinks = false,
   fundingRaised,
-  viewCount = Math.floor(Math.random() * 50000) + 5000, // Ensure never 0
+  viewCount = 0,
   marketThemes = [],
   strategicPatterns = []
 }: CaseStudyCardProps) => {
   const cardContent = (
-    <div className="group bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-2xl hover:shadow-teal-500/10 transition-all duration-500 h-full flex flex-col hover:-translate-y-1 relative overflow-hidden">
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-      
-      {/* Header with company and funding */}
-      <div className="relative z-10 flex justify-between items-start mb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-teal-100 to-blue-100 dark:from-teal-900 dark:to-blue-900 rounded-xl flex items-center justify-center">
-            <Building2 className="h-6 w-6 text-teal-600 dark:text-teal-400" />
-          </div>
-          <div>
-            {disableLinks ? (
-              <span className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-teal-600 transition-colors">
-                {companyName}
-              </span>
-            ) : (
-              <Link 
-                to={`/case-studies/${id}`} 
-                className="text-xl font-bold text-gray-900 dark:text-white hover:text-teal-600 transition-colors"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {companyName}
-              </Link>
-            )}
-          </div>
+    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-all duration-300 h-full flex flex-col">
+      {/* Header with company name and funding */}
+      <div className="flex justify-between items-start mb-3">
+        <div className="flex-1">
+          {disableLinks ? (
+            <span className="text-xl font-bold text-gray-900 dark:text-white">
+              {companyName}
+            </span>
+          ) : (
+            <Link 
+              to={`/case-studies/${id}`} 
+              className="text-xl font-bold text-gray-900 dark:text-white hover:text-teal-600"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {companyName}
+            </Link>
+          )}
         </div>
         {fundingRaised && (
-          <div className="flex items-center gap-1 text-sm font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1.5 rounded-full">
-            <TrendingUp className="h-3 w-3" />
+          <div className="text-sm font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded">
             {fundingRaised}
           </div>
         )}
       </div>
       
       {/* Title (Lingo) */}
-      <h3 className="relative z-10 text-lg font-bold text-gray-800 dark:text-gray-200 mb-3 line-clamp-2 group-hover:text-teal-700 dark:group-hover:text-teal-300 transition-colors">
+      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2 line-clamp-2">
         "{lingo}"
       </h3>
       
-      {/* Impact description */}
-      <p className="relative z-10 text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-3 flex-grow leading-relaxed">
+      {/* One-liner */}
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2 flex-grow">
         {impact}
       </p>
 
-      {/* View count with enhanced styling */}
-      <div className="relative z-10 mb-4">
-        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-500 bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-lg">
-          <Eye className="h-3 w-3" />
-          <span className="font-medium">
-            Viewed by {viewCount.toLocaleString()} founders
-          </span>
-        </div>
+      {/* View count */}
+      <div className="mb-4">
+        <p className="text-xs text-gray-500 dark:text-gray-500">
+          📊 Viewed by {viewCount.toLocaleString()} founders
+        </p>
       </div>
       
-      {/* Enhanced tags with better spacing and colors */}
-      <div className="relative z-10 flex flex-wrap gap-2 mt-auto">
-        <Badge variant="outline" className="bg-gradient-to-r from-teal-50 to-teal-100 text-teal-700 hover:from-teal-100 hover:to-teal-200 border-teal-200 text-xs px-3 py-1 font-medium">
+      {/* Tags */}
+      <div className="flex flex-wrap gap-1.5 mt-auto">
+        <Badge variant="outline" className="bg-teal-50 text-teal-700 hover:bg-teal-100 border-teal-200 text-xs px-2 py-0.5">
           {narrativeType}
         </Badge>
-        <Badge variant="outline" className="bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 hover:from-blue-100 hover:to-blue-200 border-blue-200 text-xs px-3 py-1 font-medium">
+        <Badge variant="outline" className="bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200 text-xs px-2 py-0.5">
           {industry}
         </Badge>
         {marketThemes.slice(0, 1).map((theme, index) => (
-          <Badge key={index} variant="outline" className="bg-gradient-to-r from-purple-50 to-purple-100 text-purple-700 hover:from-purple-100 hover:to-purple-200 border-purple-200 text-xs px-3 py-1 font-medium">
+          <Badge key={index} variant="outline" className="bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200 text-xs px-2 py-0.5">
             {theme}
           </Badge>
         ))}
         {strategicPatterns.slice(0, 1).map((pattern, index) => (
-          <Badge key={index} variant="outline" className="bg-gradient-to-r from-orange-50 to-orange-100 text-orange-700 hover:from-orange-100 hover:to-orange-200 border-orange-200 text-xs px-3 py-1 font-medium">
+          <Badge key={index} variant="outline" className="bg-orange-50 text-orange-700 hover:bg-orange-100 border-orange-200 text-xs px-2 py-0.5">
             {pattern}
           </Badge>
         ))}
@@ -118,7 +105,7 @@ const CaseStudyCard = ({
   }
 
   return (
-    <Link to={`/case-studies/${id}`} className="block h-full">
+    <Link to={`/case-studies/${id}`} className="block">
       {cardContent}
     </Link>
   );
