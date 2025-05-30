@@ -9,7 +9,7 @@ const transformNarrativeToCase = (narrative: FounderNarrative) => ({
   company: narrative.company.toLowerCase().replace(/\s+/g, '-'),
   companyName: narrative.company,
   lingo: narrative.key_phrase,
-  impact: `${narrative.founder_name} shares how "${narrative.key_phrase}" helped transform ${narrative.industry.toLowerCase()}`,
+  impact: narrative.tagline || `${narrative.founder_name} shares how "${narrative.key_phrase}" helped transform ${narrative.industry.toLowerCase()}`,
   rating: 5,
   narrativeType: narrative.transformation_type || 'Market Creation',
   industry: narrative.industry,
@@ -34,7 +34,9 @@ const transformNarrativeToCase = (narrative: FounderNarrative) => ({
   customer: 'B2B',
   involvement: 'High',
   narrativeFocus: 'Market Creation',
-  fundingStrategy: 'VC-Backed'
+  fundingStrategy: 'VC-Backed',
+  fundingRaised: narrative.funding_raised,
+  viewCount: Math.floor(Math.random() * 50000) + 10000 // Mock view count
 });
 
 export const useCaseStudiesFilter = (companyId?: string) => {
@@ -42,7 +44,6 @@ export const useCaseStudiesFilter = (companyId?: string) => {
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
     companyId ? { 'Company': [companyId] } : {}
   );
-  const { isLoggedIn } = useAuth();
   
   // Create filters for the founder narratives query
   const narrativeFilters = useMemo(() => {
@@ -203,23 +204,13 @@ export const useCaseStudiesFilter = (companyId?: string) => {
     });
   }, [allAvailableCaseStudies, searchQuery, activeFilters]);
 
-  // Memoize the visible and locked case studies to prevent unnecessary calculations
-  const visibleCaseStudies = useMemo(() => {
-    return isLoggedIn ? filteredCaseStudies : filteredCaseStudies.slice(0, 4);
-  }, [isLoggedIn, filteredCaseStudies]);
-
-  const lockedCaseStudies = useMemo(() => {
-    return !isLoggedIn ? filteredCaseStudies.slice(4) : [];
-  }, [isLoggedIn, filteredCaseStudies]);
-    
   return {
     searchQuery,
     setSearchQuery,
     activeFilters,
     handleFilterChange,
     clearFilters,
-    visibleCaseStudies,
-    lockedCaseStudies,
+    caseStudies: filteredCaseStudies,
     isLoading
   };
 };

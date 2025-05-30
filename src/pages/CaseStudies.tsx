@@ -21,8 +21,7 @@ const CaseStudies = () => {
     activeFilters,
     handleFilterChange,
     clearFilters,
-    visibleCaseStudies,
-    lockedCaseStudies,
+    caseStudies,
     isLoading
   } = useCaseStudiesFilter();
   const {
@@ -51,7 +50,7 @@ const CaseStudies = () => {
     if (location.state?.justSignedUp) {
       toast({
         title: "Welcome to LingoLab!",
-        description: "You can see a preview of our case studies. Subscribe to unlock them all!",
+        description: "Explore our case study library and see how founders built successful narratives.",
         action: <Button className="bg-teal-500 hover:bg-teal-600 text-white" size="sm" asChild>
             <Link to="/pricing">View Plans</Link>
           </Button>
@@ -59,7 +58,7 @@ const CaseStudies = () => {
     } else if (location.state?.justSignedIn) {
       toast({
         title: "Welcome back!",
-        description: subscribed ? "Enjoy full access to our case study library." : "Subscribe to unlock our full case study library."
+        description: subscribed ? "Enjoy full access to our case study library." : "Subscribe to unlock premium insights and analysis."
       });
     }
   }, [location.state, toast, subscribed]);
@@ -95,21 +94,6 @@ const CaseStudies = () => {
       </Layout>;
   }
 
-  // Use actual subscription status instead of random demo logic
-  const isPaidUser = subscribed;
-  const displayVisibleCaseStudies = isPaidUser ? visibleCaseStudies : visibleCaseStudies.slice(0, 2);
-  const displayLockedCaseStudies = isPaidUser ? [] : [...visibleCaseStudies.slice(2), ...lockedCaseStudies];
-  
-  const handleLockedCaseStudyClick = () => {
-    toast({
-      title: "Premium Case Study",
-      description: "Subscribe to access our full library of case studies.",
-      action: <Button className="bg-teal-500 hover:bg-teal-600 text-white" size="sm" asChild>
-          <Link to="/pricing">View Plans</Link>
-        </Button>
-    });
-  };
-
   return (
     <Layout>
       <SEOHead
@@ -128,9 +112,9 @@ const CaseStudies = () => {
               Explore how the world's most successful startups used strategic narrative to drive growth
             </p>
             <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center items-center">
-              {!isPaidUser && (
+              {!subscribed && (
                 <Button className="bg-teal-500 hover:bg-teal-600 text-white" asChild>
-                  <Link to="/pricing">Upgrade to Unlock All Case Studies</Link>
+                  <Link to="/pricing">Upgrade for Premium Insights</Link>
                 </Button>
               )}
               <Button variant="outline" className="flex items-center gap-2" asChild>
@@ -163,16 +147,13 @@ const CaseStudies = () => {
               {/* Results count */}
               <div className="mb-6">
                 <p className="text-sm text-muted-foreground">
-                  Showing {displayVisibleCaseStudies.length + displayLockedCaseStudies.length} case studies
-                  {displayLockedCaseStudies.length > 0 && ` (${displayLockedCaseStudies.length} locked)`}
+                  Showing {caseStudies.length} case studies
                 </p>
               </div>
               
               {/* Results grid */}
               <CaseStudiesList 
-                visibleCaseStudies={displayVisibleCaseStudies} 
-                lockedCaseStudies={displayLockedCaseStudies} 
-                handleLockedCaseStudyClick={handleLockedCaseStudyClick} 
+                caseStudies={caseStudies} 
                 clearFilters={clearFilters} 
               />
             </div>

@@ -1,9 +1,7 @@
 
 import { memo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import CaseStudyCard from '@/components/CaseStudyCard';
-import LockedCaseStudy from './LockedCaseStudy';
 
 // Create type for case study
 type CaseStudy = {
@@ -19,46 +17,37 @@ type CaseStudy = {
   lingoStyle?: string;
   year?: number;
   targetAudience?: string;
+  fundingRaised?: string;
+  viewCount?: number;
+  marketThemes?: string[];
+  strategicPatterns?: string[];
 };
 
 interface CaseStudiesListProps {
-  visibleCaseStudies: CaseStudy[];
-  lockedCaseStudies: CaseStudy[];
-  handleLockedCaseStudyClick: () => void;
+  caseStudies: CaseStudy[];
   clearFilters: () => void;
 }
 
 // Memoized CaseStudyCard component to prevent unnecessary re-renders
 const MemoizedCaseStudyCard = memo(CaseStudyCard);
 
-// Memoized LockedCaseStudy component
-const MemoizedLockedCaseStudy = memo(LockedCaseStudy);
-
 const CaseStudiesList = ({ 
-  visibleCaseStudies, 
-  lockedCaseStudies, 
-  handleLockedCaseStudyClick, 
+  caseStudies, 
   clearFilters 
 }: CaseStudiesListProps) => {
-  const navigate = useNavigate();
-  
   return (
     <div className="grid md:grid-cols-2 gap-6">
-      {visibleCaseStudies.length > 0 ? (
-        <>
-          {visibleCaseStudies.map((study) => (
-            <MemoizedCaseStudyCard key={study.id} {...study} />
-          ))}
-          
-          {/* Locked case studies */}
-          {lockedCaseStudies.map((study) => (
-            <MemoizedLockedCaseStudy 
-              key={study.id}
-              study={study}
-              onClick={handleLockedCaseStudyClick}
-            />
-          ))}
-        </>
+      {caseStudies.length > 0 ? (
+        caseStudies.map((study) => (
+          <MemoizedCaseStudyCard 
+            key={study.id} 
+            {...study}
+            fundingRaised={study.fundingRaised}
+            viewCount={study.viewCount || Math.floor(Math.random() * 10000) + 1000}
+            marketThemes={study.marketThemes}
+            strategicPatterns={study.strategicPatterns}
+          />
+        ))
       ) : (
         <div className="col-span-2 py-20 text-center">
           <p className="text-lg text-muted-foreground">No case studies found matching your filters</p>
