@@ -16,18 +16,21 @@ const PricingHeader = ({ billingFrequency, setBillingFrequency }: PricingHeaderP
       {isFromSignup && (
         <div className="mb-6 p-4 bg-teal-50 dark:bg-teal-900/30 border border-teal-200 dark:border-teal-700 rounded-lg">
           <p className="text-teal-800 dark:text-teal-200 font-medium">
-            🎉 Account created successfully! Choose a plan to complete your setup and start exploring case studies.
+            🎉 Account created successfully! Choose a plan to start your strategic narrative journey.
           </p>
         </div>
       )}
       <h1 className="text-4xl md:text-5xl font-semibold mb-6 text-foreground">
-        {isFromSignup ? 'Complete Your Account Setup' : 'Pricing Plans'}
+        {isFromSignup ? 'Start Your Narrative Journey' : 'Transform Your Strategic Narrative'}
       </h1>
-      <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+      <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-4">
         {isFromSignup 
-          ? 'Choose the plan that fits your strategic narrative needs to activate your account'
-          : 'Choose the plan that fits your strategic narrative needs'
+          ? 'Learn from successful founders, then transform your own narrative with our proven methodology'
+          : 'Learn from the best case studies, then work with us to completely transform your strategic narrative'
         }
+      </p>
+      <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        From studying success stories to implementing your own winning narrative strategy
       </p>
       
       <BillingFrequencySelector 

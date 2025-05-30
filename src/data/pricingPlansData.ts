@@ -15,51 +15,52 @@ export interface PricingPlan {
 export const pricingPlansData: PricingPlan[] = [
   {
     name: "Basic",
-    description: "For founders and startup teams",
+    description: "For founders exploring strategic narratives",
     price: 49,
     frequency: "quarter",
     features: [
-      { included: true, text: "Unlimited case studies" },
+      { included: true, text: "Unlimited case studies access" },
       { included: true, text: "Advanced search functionality" },
-      { included: true, text: "Weekly newsletter" },
+      { included: true, text: "Weekly narrative insights" },
       { included: true, text: "Full case study library" },
       { included: false, text: "Private Slack community" },
       { included: false, text: "Founder interviews" },
-      { included: false, text: "Private mentorship sessions" },
+      { included: false, text: "Custom lingo strategy session" },
     ],
-    cta: "Start Basic"
+    cta: "Start Learning"
   },
   {
     name: "Pro",
-    description: "For serious founders and marketers",
+    description: "For serious founders building their narrative",
     price: 99,
     frequency: "quarter",
     popular: true,
     features: [
-      { included: true, text: "Unlimited case studies" },
+      { included: true, text: "Everything in Basic" },
       { included: true, text: "Advanced search & filters" },
       { included: true, text: "Save to personal library" },
       { included: true, text: "Exclusive founder interviews" },
       { included: true, text: "Monthly trend reports" },
-      { included: false, text: "Private mentorship sessions" },
+      { included: true, text: "Narrative framework templates" },
+      { included: false, text: "Custom lingo strategy session" },
     ],
-    cta: "Start Pro"
+    cta: "Start Building"
   },
   {
-    name: "Investor",
-    description: "For VCs and strategic investors",
+    name: "Lingo Strategy",
+    description: "3-month complete narrative transformation",
     price: 4999,
     oneTime: true,
     features: [
-      { included: true, text: "All Pro plan features" },
-      { included: true, text: "Emerging narrative trends" },
-      { included: true, text: "Market category analysis" },
-      { included: true, text: "Dealflow narrative reporting" },
-      { included: true, text: "Strategic narrative workshops" },
-      { included: true, text: "Early access to new trends" },
-      { included: true, text: "Founder matchmaking" },
-      { included: true, text: "Private mentorship sessions" },
+      { included: true, text: "Everything in Pro" },
+      { included: true, text: "Complete lingo strategy overhaul" },
+      { included: true, text: "3-month transformation program" },
+      { included: true, text: "1-on-1 strategic narrative coaching" },
+      { included: true, text: "Custom market positioning analysis" },
+      { included: true, text: "Narrative implementation roadmap" },
+      { included: true, text: "Ongoing support & refinement" },
+      { included: true, text: "Investor deck narrative review" },
     ],
-    cta: "Start Investor"
+    cta: "Transform Your Narrative"
   }
 ];

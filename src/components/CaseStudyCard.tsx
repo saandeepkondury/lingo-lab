@@ -36,8 +36,9 @@ const CaseStudyCard = ({
   strategicPatterns = []
 }: CaseStudyCardProps) => {
   const cardContent = (
-    <div className="apple-card h-full p-6 hover-scale border-t-4 border-t-teal-500 transition-all duration-300">
-      <div className="flex justify-between items-start mb-4">
+    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-all duration-300 h-full flex flex-col">
+      {/* Header with company name and funding */}
+      <div className="flex justify-between items-start mb-3">
         <div className="flex-1">
           {disableLinks ? (
             <span className="text-xl font-bold text-gray-900 dark:text-white">
@@ -54,41 +55,44 @@ const CaseStudyCard = ({
           )}
         </div>
         {fundingRaised && (
-          <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
-            Funds raised: {fundingRaised}
+          <div className="text-sm font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded">
+            {fundingRaised}
           </div>
         )}
       </div>
       
-      <div className="space-y-3 mb-4">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-          "{lingo}"
-        </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-          {impact}
-        </p>
-      </div>
+      {/* Title (Lingo) */}
+      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2 line-clamp-2">
+        "{lingo}"
+      </h3>
+      
+      {/* One-liner */}
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2 flex-grow">
+        {impact}
+      </p>
 
+      {/* View count */}
       <div className="mb-4">
-        <p className="text-sm text-gray-500 dark:text-gray-500">
-          📊 Viewed by {viewCount.toLocaleString()}
+        <p className="text-xs text-gray-500 dark:text-gray-500">
+          📊 Viewed by {viewCount.toLocaleString()} founders
         </p>
       </div>
       
-      <div className="flex flex-wrap gap-2">
-        <Badge variant="outline" className="bg-teal-50 text-teal-700 hover:bg-teal-100 border-teal-200 text-xs">
+      {/* Tags */}
+      <div className="flex flex-wrap gap-1.5 mt-auto">
+        <Badge variant="outline" className="bg-teal-50 text-teal-700 hover:bg-teal-100 border-teal-200 text-xs px-2 py-0.5">
           {narrativeType}
         </Badge>
-        <Badge variant="outline" className="bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200 text-xs">
+        <Badge variant="outline" className="bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200 text-xs px-2 py-0.5">
           {industry}
         </Badge>
-        {marketThemes.slice(0, 2).map((theme, index) => (
-          <Badge key={index} variant="outline" className="bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200 text-xs">
+        {marketThemes.slice(0, 1).map((theme, index) => (
+          <Badge key={index} variant="outline" className="bg-purple-50 text-purple-700 hover:bg-purple-100 border-purple-200 text-xs px-2 py-0.5">
             {theme}
           </Badge>
         ))}
         {strategicPatterns.slice(0, 1).map((pattern, index) => (
-          <Badge key={index} variant="outline" className="bg-orange-50 text-orange-700 hover:bg-orange-100 border-orange-200 text-xs">
+          <Badge key={index} variant="outline" className="bg-orange-50 text-orange-700 hover:bg-orange-100 border-orange-200 text-xs px-2 py-0.5">
             {pattern}
           </Badge>
         ))}
