@@ -1,3 +1,4 @@
+
 import { Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -39,8 +40,11 @@ const PricingPlan = ({
       createCheckout('basic', billingFrequency);
     } else if (name.toLowerCase() === 'pro') {
       createCheckout('pro', billingFrequency);
+    } else if (name.toLowerCase().includes('lingo strategy')) {
+      // Use investor plan for Lingo Strategy (one-time $4999)
+      createCheckout('investor', billingFrequency);
     } else {
-      // For Lingo Strategy, redirect to contact or special flow
+      // Fallback to contact
       window.open('mailto:hello@lingolab.com?subject=Lingo Strategy Consultation', '_blank');
     }
   };

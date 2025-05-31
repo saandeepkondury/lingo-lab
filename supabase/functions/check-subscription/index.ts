@@ -78,6 +78,7 @@ serve(async (req) => {
         subscription_end: null,
         plan_type: null,
         billing_frequency: null,
+        monthly_case_study_limit: null,
         updated_at: new Date().toISOString(),
       }, { onConflict: 'email' });
       
@@ -106,26 +107,28 @@ serve(async (req) => {
     let subscriptionEnd = null;
     let planType = null;
     let billingFrequency = null;
+    let monthlyLimit = null;
 
-    // Check for one-time payments (for Investor plan)
+    // Check for one-time payments (for Lingo Strategy plan)
     const payments = await stripe.paymentIntents.list({
       customer: customerId,
       limit: 10,
     });
 
-    const successfulInvestorPayment = payments.data.find(payment => 
+    const successfulLingoStrategyPayment = payments.data.find(payment => 
       payment.status === 'succeeded' && 
       payment.amount === 499900 && 
       payment.created > (Date.now() / 1000) - (365 * 24 * 60 * 60) // Within last year
     );
 
-    if (successfulInvestorPayment) {
+    if (successfulLingoStrategyPayment) {
       hasActiveSub = true;
-      subscriptionTier = "Investor";
+      subscriptionTier = "Lingo Strategy";
       planType = "investor";
-      // Investor plan is lifetime, so we set end date far in the future
-      subscriptionEnd = new Date(Date.now() + (10 * 365 * 24 * 60 * 60 * 1000)).toISOString(); // 10 years from now
-      logStep("Found successful Investor payment", { paymentId: successfulInvestorPayment.id });
+      // Lingo Strategy is 3-month access
+      subscriptionEnd = new Date(Date.now() + (90 * 24 * 60 * 60 * 1000)).toISOString(); // 3 months from now
+      monthlyLimit = null; // Unlimited access
+      logStep("Found successful Lingo Strategy payment", { paymentId: successfulLingoStrategyPayment.id });
     } else if (subscriptions.data.length > 0) {
       const subscription = subscriptions.data[0];
       const now = Math.floor(Date.now() / 1000);
@@ -154,14 +157,17 @@ serve(async (req) => {
         if (monthlyAmount <= 5000) { // Around $50/month
           subscriptionTier = "Basic";
           planType = "basic";
+          monthlyLimit = 10; // 10 case studies per month
         } else if (monthlyAmount <= 10000) { // Around $100/month
           subscriptionTier = "Pro";
           planType = "pro";
+          monthlyLimit = null; // Unlimited access
         } else {
           subscriptionTier = "Enterprise";
           planType = "enterprise";
+          monthlyLimit = null; // Unlimited access
         }
-        logStep("Determined subscription tier", { priceId, amount, subscriptionTier, billingFrequency });
+        logStep("Determined subscription tier", { priceId, amount, subscriptionTier, billingFrequency, monthlyLimit });
       } else {
         logStep("Subscription found but expired", { 
           subscriptionId: subscription.id, 
@@ -189,10 +195,11 @@ serve(async (req) => {
       subscription_end: subscriptionEnd,
       plan_type: planType,
       billing_frequency: billingFrequency,
+      monthly_case_study_limit: monthlyLimit,
       updated_at: new Date().toISOString(),
     }, { onConflict: 'email' });
 
-    logStep("Updated database with subscription info", { subscribed: hasActiveSub, subscriptionTier });
+    logStep("Updated database with subscription info", { subscribed: hasActiveSub, subscriptionTier, monthlyLimit });
     
     return new Response(JSON.stringify({
       subscribed: hasActiveSub,

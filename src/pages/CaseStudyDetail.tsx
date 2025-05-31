@@ -10,10 +10,12 @@ import BeforeAfterSection from '@/components/CaseStudy/BeforeAfterSection';
 import StorySection from '@/components/CaseStudy/StorySection';
 import LockedContentSection from '@/components/CaseStudy/LockedContentSection';
 import { useFounderNarrativeBySlug } from '@/hooks/useFounderNarratives';
+import { useCaseStudyAccess } from '@/hooks/useCaseStudyAccess';
 
 const CaseStudyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { isLoggedIn } = useAuth();
+  const { hasAccess } = useCaseStudyAccess();
   
   const { data: narrative, isLoading, error } = useFounderNarrativeBySlug(slug || '');
   
@@ -91,7 +93,7 @@ const CaseStudyDetail = () => {
       />
       
       <article className="bg-white dark:bg-gray-900">
-        {/* New Header Format */}
+        {/* New Header Format with Save Button */}
         <NewCaseStudyDetailHeader narrative={narrative} slug={slug} />
         
         {/* Before/After Section - Open to all */}
@@ -101,7 +103,7 @@ const CaseStudyDetail = () => {
         <StorySection narrative={narrative} />
         
         {/* Locked Content Section - Requires subscription */}
-        <LockedContentSection narrative={narrative} />
+        <LockedContentSection narrative={narrative} hasAccess={hasAccess} />
       </article>
     </Layout>
   );

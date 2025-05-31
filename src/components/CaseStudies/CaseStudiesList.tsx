@@ -35,6 +35,13 @@ const CaseStudiesList = ({
   caseStudies, 
   clearFilters 
 }: CaseStudiesListProps) => {
+  // Generate consistent mock view counts for each case study
+  const generateViewCount = (id: string) => {
+    // Use the id to generate a consistent view count between 1000-15000
+    const seed = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return Math.floor((seed % 14000) + 1000);
+  };
+
   return (
     <div className="grid md:grid-cols-2 gap-6">
       {caseStudies.length > 0 ? (
@@ -43,7 +50,7 @@ const CaseStudiesList = ({
             key={study.id} 
             {...study}
             fundingRaised={study.fundingRaised}
-            viewCount={study.viewCount || Math.floor(Math.random() * 10000) + 1000}
+            viewCount={study.viewCount || generateViewCount(study.id)}
             marketThemes={study.marketThemes}
             strategicPatterns={study.strategicPatterns}
           />

@@ -39,10 +39,14 @@ export type Database = {
       founder_narratives: {
         Row: {
           before_after_positioning: Json | null
+          businesses_benefit: string[] | null
+          common_lingo: string[] | null
           company: string
+          competitive_advantage: string | null
           created_at: string
           employee_count: string | null
           founded_year: string | null
+          founder_insight: string | null
           founder_name: string
           founder_title: string
           funding_raised: string | null
@@ -51,14 +55,21 @@ export type Database = {
           industry: string
           key_phrase: string
           lingo_evolution: string | null
+          market_before: string | null
+          market_impact: Json | null
+          market_landscape: Json | null
           market_themes: string[] | null
+          market_transformation: string | null
           meta_description: string | null
           meta_title: string | null
           metrics: Json | null
           narrative_archetype: string | null
           published: boolean | null
+          similar_companies: string[] | null
           slug: string | null
+          strategic_insights: string[] | null
           strategic_patterns: string[] | null
+          strategic_vision: string | null
           tagline: string | null
           transformation_type: string | null
           updated_at: string
@@ -67,10 +78,14 @@ export type Database = {
         }
         Insert: {
           before_after_positioning?: Json | null
+          businesses_benefit?: string[] | null
+          common_lingo?: string[] | null
           company: string
+          competitive_advantage?: string | null
           created_at?: string
           employee_count?: string | null
           founded_year?: string | null
+          founder_insight?: string | null
           founder_name: string
           founder_title: string
           funding_raised?: string | null
@@ -79,14 +94,21 @@ export type Database = {
           industry: string
           key_phrase: string
           lingo_evolution?: string | null
+          market_before?: string | null
+          market_impact?: Json | null
+          market_landscape?: Json | null
           market_themes?: string[] | null
+          market_transformation?: string | null
           meta_description?: string | null
           meta_title?: string | null
           metrics?: Json | null
           narrative_archetype?: string | null
           published?: boolean | null
+          similar_companies?: string[] | null
           slug?: string | null
+          strategic_insights?: string[] | null
           strategic_patterns?: string[] | null
+          strategic_vision?: string | null
           tagline?: string | null
           transformation_type?: string | null
           updated_at?: string
@@ -95,10 +117,14 @@ export type Database = {
         }
         Update: {
           before_after_positioning?: Json | null
+          businesses_benefit?: string[] | null
+          common_lingo?: string[] | null
           company?: string
+          competitive_advantage?: string | null
           created_at?: string
           employee_count?: string | null
           founded_year?: string | null
+          founder_insight?: string | null
           founder_name?: string
           founder_title?: string
           funding_raised?: string | null
@@ -107,14 +133,21 @@ export type Database = {
           industry?: string
           key_phrase?: string
           lingo_evolution?: string | null
+          market_before?: string | null
+          market_impact?: Json | null
+          market_landscape?: Json | null
           market_themes?: string[] | null
+          market_transformation?: string | null
           meta_description?: string | null
           meta_title?: string | null
           metrics?: Json | null
           narrative_archetype?: string | null
           published?: boolean | null
+          similar_companies?: string[] | null
           slug?: string | null
+          strategic_insights?: string[] | null
           strategic_patterns?: string[] | null
+          strategic_vision?: string | null
           tagline?: string | null
           transformation_type?: string | null
           updated_at?: string
@@ -127,8 +160,10 @@ export type Database = {
         Row: {
           billing_frequency: string | null
           created_at: string
+          current_month_usage: number | null
           email: string
           id: string
+          monthly_case_study_limit: number | null
           plan_type: string | null
           stripe_customer_id: string | null
           stripe_subscription_id: string | null
@@ -136,13 +171,16 @@ export type Database = {
           subscription_end: string | null
           subscription_tier: string | null
           updated_at: string
+          usage_reset_date: string | null
           user_id: string | null
         }
         Insert: {
           billing_frequency?: string | null
           created_at?: string
+          current_month_usage?: number | null
           email: string
           id?: string
+          monthly_case_study_limit?: number | null
           plan_type?: string | null
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
@@ -150,13 +188,16 @@ export type Database = {
           subscription_end?: string | null
           subscription_tier?: string | null
           updated_at?: string
+          usage_reset_date?: string | null
           user_id?: string | null
         }
         Update: {
           billing_frequency?: string | null
           created_at?: string
+          current_month_usage?: number | null
           email?: string
           id?: string
+          monthly_case_study_limit?: number | null
           plan_type?: string | null
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
@@ -164,6 +205,31 @@ export type Database = {
           subscription_end?: string | null
           subscription_tier?: string | null
           updated_at?: string
+          usage_reset_date?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_case_study_access: {
+        Row: {
+          accessed_at: string | null
+          case_study_id: string
+          created_at: string | null
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          accessed_at?: string | null
+          case_study_id: string
+          created_at?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          accessed_at?: string | null
+          case_study_id?: string
+          created_at?: string | null
+          id?: string
           user_id?: string | null
         }
         Relationships: []

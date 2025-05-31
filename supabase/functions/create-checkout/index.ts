@@ -76,7 +76,7 @@ serve(async (req) => {
 
     let session;
     if (planType === "investor") {
-      // One-time payment for Investor plan
+      // One-time payment for Lingo Strategy plan at $4999
       session = await stripe.checkout.sessions.create({
         customer: customerId,
         customer_email: customerId ? undefined : user.email,
@@ -84,14 +84,14 @@ serve(async (req) => {
           {
             price_data: {
               currency: "usd",
-              product_data: { name: "Investor Plan - LingoLab" },
+              product_data: { name: "Lingo Strategy - 3 Month Program" },
               unit_amount: 499900, // $4999 in cents
             },
             quantity: 1,
           },
         ],
         mode: "payment",
-        success_url: `${origin}/pricing?success=true&plan=investor`,
+        success_url: `${origin}/pricing?success=true&plan=lingo-strategy`,
         cancel_url: `${origin}/pricing?canceled=true`,
         metadata: {
           user_id: user.id,
@@ -99,7 +99,7 @@ serve(async (req) => {
           billing_frequency: billingFrequency,
         },
       });
-      logStep("One-time payment session created", { sessionId: session.id });
+      logStep("Lingo Strategy payment session created", { sessionId: session.id });
     } else {
       // Recurring subscription for Basic/Pro plans
       const planPrices = {
