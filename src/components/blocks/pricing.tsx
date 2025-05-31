@@ -65,7 +65,7 @@ export function Pricing({
           </Label>
         </label>
         <span className="font-semibold">
-          Annual <span className="text-primary">(Save 20%)</span>
+          Annual <span className="text-primary">(Save 10%)</span>
         </span>
       </div>
 
@@ -123,7 +123,6 @@ export function Pricing({
                       minimumFractionDigits: 0,
                       maximumFractionDigits: 0,
                     }}
-                    formatter={(value) => `$${value}`}
                     transformTiming={{
                       duration: 500,
                       easing: "ease-out",

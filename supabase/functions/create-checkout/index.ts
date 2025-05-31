@@ -103,8 +103,10 @@ serve(async (req) => {
     } else {
       // Recurring subscription for Basic/Pro plans
       const planPrices = {
-        basic: billingFrequency === 'year' ? 4410 : 4900, // $44.10/month annually or $49/month quarterly
-        pro: billingFrequency === 'year' ? 8910 : 9900,   // $89.10/month annually or $99/month quarterly
+        // Basic: $49/quarter ($147) or $528/year 
+        basic: billingFrequency === 'year' ? 52800 : 14700, // $528 annually or $147 quarterly
+        // Pro: $99/quarter ($297) or $1080/year
+        pro: billingFrequency === 'year' ? 108000 : 29700,   // $1080 annually or $297 quarterly
       };
 
       const planNames = {
@@ -112,10 +114,9 @@ serve(async (req) => {
         pro: "Pro Plan - LingoLab",
       };
 
-      const intervalCount = billingFrequency === 'year' ? 12 : 3;
-      const unitAmount = billingFrequency === 'year' 
-        ? planPrices[planType as keyof typeof planPrices] * 12
-        : planPrices[planType as keyof typeof planPrices] * 3;
+      const interval = billingFrequency === 'year' ? "year" : "month";
+      const intervalCount = billingFrequency === 'year' ? 1 : 3; // 3 months for quarterly
+      const unitAmount = planPrices[planType as keyof typeof planPrices];
 
       session = await stripe.checkout.sessions.create({
         customer: customerId,
@@ -126,7 +127,7 @@ serve(async (req) => {
               currency: "usd",
               product_data: { name: planNames[planType as keyof typeof planNames] },
               unit_amount: unitAmount,
-              recurring: { interval: "month", interval_count: intervalCount },
+              recurring: { interval: interval, interval_count: intervalCount },
             },
             quantity: 1,
           },

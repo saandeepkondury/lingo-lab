@@ -143,22 +143,24 @@ serve(async (req) => {
         const priceId = subscription.items.data[0].price.id;
         const price = await stripe.prices.retrieve(priceId);
         const amount = price.unit_amount || 0;
-        const interval = price.recurring?.interval_count || 1;
+        const interval = price.recurring?.interval || 'month';
+        const intervalCount = price.recurring?.interval_count || 1;
         
-        // Determine billing frequency and tier
-        if (interval >= 12) {
+        // Determine billing frequency
+        if (interval === 'year' || intervalCount >= 12) {
           billingFrequency = "year";
         } else {
           billingFrequency = "quarter";
         }
         
-        // Determine tier based on monthly equivalent
-        const monthlyAmount = billingFrequency === "year" ? amount / 12 : amount / 3;
-        if (monthlyAmount <= 5000) { // Around $50/month
+        // Determine tier based on amount
+        // Basic: $147 quarterly ($14700 cents) or $528 annually ($52800 cents)
+        // Pro: $297 quarterly ($29700 cents) or $1080 annually ($108000 cents)
+        if (amount <= 52800) { // Basic plan (quarterly $14700 or annual $52800)
           subscriptionTier = "Basic";
           planType = "basic";
           monthlyLimit = 10; // 10 case studies per month
-        } else if (monthlyAmount <= 10000) { // Around $100/month
+        } else if (amount <= 108000) { // Pro plan (quarterly $29700 or annual $108000)
           subscriptionTier = "Pro";
           planType = "pro";
           monthlyLimit = null; // Unlimited access

@@ -47,10 +47,10 @@ const PricingPage = () => {
     {
       name: "BASIC",
       price: "49",
-      yearlyPrice: "172.5", // 49 * 3.5
+      yearlyPrice: "44", // 10% discount: $528/12 = $44/month
       period: "quarter",
       features: [
-        "Unlimited case studies access",
+        "10 case studies per month",
         "Advanced search functionality", 
         "Weekly narrative insights",
         "Full case study library",
@@ -64,10 +64,11 @@ const PricingPage = () => {
     {
       name: "PROFESSIONAL", 
       price: "99",
-      yearlyPrice: "346.5", // 99 * 3.5
+      yearlyPrice: "90", // 10% discount: $1080/12 = $90/month
       period: "quarter",
       features: [
         "Everything in Basic",
+        "Unlimited case studies access",
         "Advanced search & filters",
         "Save to personal library", 
         "Exclusive founder interviews",
