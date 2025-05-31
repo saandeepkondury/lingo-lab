@@ -2,20 +2,21 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Layout from '@/components/Layout';
-import PricingHeader from '@/components/pricing/PricingHeader';
-import PricingPlan from '@/components/pricing/PricingPlan';
+import { Pricing } from '@/components/blocks/pricing';
 import Testimonials from '@/components/pricing/Testimonials';
 import FAQ from '@/components/pricing/FAQ';
 import ContactSection from '@/components/pricing/ContactSection';
-import { pricingPlansData } from '@/data/pricingPlansData';
 import { useToast } from '@/components/ui/use-toast';
 import { useSubscription } from '@/hooks/useSubscription';
+import { useLocation } from 'react-router-dom';
 
-const Pricing = () => {
+const PricingPage = () => {
   const [billingFrequency, setBillingFrequency] = useState<'quarter' | 'year'>('quarter');
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
-  const { checkSubscription } = useSubscription();
+  const { checkSubscription, createCheckout, loading } = useSubscription();
+  const location = useLocation();
+  const isFromSignup = location.state?.fromSignup || document.referrer.includes('/join');
   
   useEffect(() => {
     const success = searchParams.get('success');
@@ -37,25 +38,92 @@ const Pricing = () => {
       });
     }
   }, [searchParams, toast, checkSubscription]);
+
+  const handleSubscribe = (planType: 'basic' | 'pro' | 'investor') => {
+    createCheckout(planType, billingFrequency);
+  };
+
+  const plans = [
+    {
+      name: "BASIC",
+      price: "49",
+      yearlyPrice: "172.5", // 49 * 3.5
+      period: "quarter",
+      features: [
+        "Unlimited case studies access",
+        "Advanced search functionality", 
+        "Weekly narrative insights",
+        "Full case study library",
+        "Community support",
+      ],
+      description: "Perfect for founders exploring strategic narratives",
+      buttonText: loading ? "Processing..." : "Start Learning",
+      isPopular: false,
+      onSubscribe: () => handleSubscribe('basic')
+    },
+    {
+      name: "PROFESSIONAL", 
+      price: "99",
+      yearlyPrice: "346.5", // 99 * 3.5
+      period: "quarter",
+      features: [
+        "Everything in Basic",
+        "Advanced search & filters",
+        "Save to personal library", 
+        "Exclusive founder interviews",
+        "Monthly trend reports",
+        "Narrative framework templates",
+        "Priority support",
+      ],
+      description: "Ideal for serious founders building their narrative",
+      buttonText: loading ? "Processing..." : "Start Building",
+      isPopular: true,
+      onSubscribe: () => handleSubscribe('pro')
+    },
+    {
+      name: "LINGO STRATEGY",
+      price: "4999",
+      yearlyPrice: "4999",
+      period: "one-time",
+      features: [
+        "Everything in Professional",
+        "Complete lingo strategy overhaul",
+        "3-month transformation program",
+        "1-on-1 strategic narrative coaching",
+        "Custom market positioning analysis", 
+        "Narrative implementation roadmap",
+        "Ongoing support & refinement",
+        "Investor deck narrative review",
+      ],
+      description: "For large organizations with specific needs",
+      buttonText: loading ? "Processing..." : "Transform Your Narrative",
+      isPopular: false,
+      onSubscribe: () => handleSubscribe('investor')
+    },
+  ];
+
+  const title = isFromSignup ? 'Start Your Narrative Journey' : 'Transform Your Strategic Narrative';
+  const description = isFromSignup 
+    ? 'Learn from successful founders, then transform your own narrative with our proven methodology\nFrom studying success stories to implementing your own winning narrative strategy'
+    : 'Learn from the best case studies, then work with us to completely transform your strategic narrative\nFrom studying success stories to implementing your own winning narrative strategy';
   
   return (
     <Layout>
       <section className="py-16 md:py-24 bg-background dark:bg-background">
         <div className="container max-w-6xl mx-auto px-6">
-          <PricingHeader 
-            billingFrequency={billingFrequency}
-            setBillingFrequency={setBillingFrequency}
-          />
+          {isFromSignup && (
+            <div className="mb-6 p-4 bg-teal-50 dark:bg-teal-900/30 border border-teal-200 dark:border-teal-700 rounded-lg text-center">
+              <p className="text-teal-800 dark:text-teal-200 font-medium">
+                🎉 Account created successfully! Choose a plan to start your strategic narrative journey.
+              </p>
+            </div>
+          )}
           
-          <div className="grid md:grid-cols-3 gap-8">
-            {pricingPlansData.map((plan, index) => (
-              <PricingPlan
-                key={index}
-                {...plan}
-                billingFrequency={billingFrequency}
-              />
-            ))}
-          </div>
+          <Pricing 
+            plans={plans}
+            title={title}
+            description={description}
+          />
           
           <Testimonials />
           <FAQ />
@@ -66,4 +134,4 @@ const Pricing = () => {
   );
 };
 
-export default Pricing;
+export default PricingPage;
