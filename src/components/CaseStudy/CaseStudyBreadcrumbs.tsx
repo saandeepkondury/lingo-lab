@@ -16,6 +16,9 @@ const CaseStudyBreadcrumbs = ({ caseStudy, slug }: CaseStudyBreadcrumbsProps) =>
   const { isSaved, saveCaseStudy, removeCaseStudy } = useSavedCaseStudies();
   const { toast } = useToast();
 
+  // Use the case study ID for saving
+  const caseStudyId = caseStudy.id || slug;
+
   const handleSaveToggle = () => {
     if (!isLoggedIn) {
       toast({
@@ -26,14 +29,14 @@ const CaseStudyBreadcrumbs = ({ caseStudy, slug }: CaseStudyBreadcrumbsProps) =>
       return;
     }
 
-    if (isSaved(slug)) {
-      removeCaseStudy(slug);
+    if (isSaved(caseStudyId)) {
+      removeCaseStudy(caseStudyId);
       toast({
         title: "Case study removed",
         description: "Removed from your saved case studies."
       });
     } else {
-      saveCaseStudy(slug);
+      saveCaseStudy(caseStudyId);
       toast({
         title: "Case study saved",
         description: "Added to your saved case studies."
@@ -54,7 +57,7 @@ const CaseStudyBreadcrumbs = ({ caseStudy, slug }: CaseStudyBreadcrumbsProps) =>
         onClick={handleSaveToggle}
         className="flex items-center gap-2"
       >
-        {isSaved(slug) ? (
+        {isSaved(caseStudyId) ? (
           <>
             <BookmarkCheck className="h-4 w-4" />
             Saved

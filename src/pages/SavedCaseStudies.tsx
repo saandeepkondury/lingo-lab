@@ -30,8 +30,9 @@ const SavedCaseStudies = () => {
     );
   }
 
+  // Find saved case studies by matching both ID and slug
   const savedCaseStudyData = allCaseStudies.filter(study => 
-    savedCaseStudies.includes(study.id)
+    savedCaseStudies.includes(study.id) || savedCaseStudies.includes(study.company.toLowerCase())
   );
 
   return (

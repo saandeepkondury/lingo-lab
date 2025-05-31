@@ -13,34 +13,34 @@ const SavedCaseStudiesContext = createContext<SavedCaseStudiesContextType | unde
 
 export const SavedCaseStudiesProvider = ({ children }: { children: ReactNode }) => {
   const [savedCaseStudies, setSavedCaseStudies] = useState<string[]>([]);
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, user } = useAuth();
 
   // Load saved case studies from localStorage when user logs in
   useEffect(() => {
-    if (isLoggedIn) {
-      const saved = localStorage.getItem('savedCaseStudies');
+    if (isLoggedIn && user) {
+      const saved = localStorage.getItem(`savedCaseStudies_${user.id}`);
       if (saved) {
         setSavedCaseStudies(JSON.parse(saved));
       }
     } else {
       setSavedCaseStudies([]);
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, user]);
 
   const saveCaseStudy = (caseStudyId: string) => {
-    if (!isLoggedIn) return;
+    if (!isLoggedIn || !user) return;
     
     const newSaved = [...savedCaseStudies, caseStudyId];
     setSavedCaseStudies(newSaved);
-    localStorage.setItem('savedCaseStudies', JSON.stringify(newSaved));
+    localStorage.setItem(`savedCaseStudies_${user.id}`, JSON.stringify(newSaved));
   };
 
   const removeCaseStudy = (caseStudyId: string) => {
-    if (!isLoggedIn) return;
+    if (!isLoggedIn || !user) return;
     
     const newSaved = savedCaseStudies.filter(id => id !== caseStudyId);
     setSavedCaseStudies(newSaved);
-    localStorage.setItem('savedCaseStudies', JSON.stringify(newSaved));
+    localStorage.setItem(`savedCaseStudies_${user.id}`, JSON.stringify(newSaved));
   };
 
   const isSaved = (caseStudyId: string) => {
