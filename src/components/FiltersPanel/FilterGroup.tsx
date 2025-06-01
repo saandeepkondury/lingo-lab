@@ -56,10 +56,10 @@ const FilterGroup = ({ group, isExpanded, activeFilters, onToggleExpanded, onFil
     <div className="space-y-2">
       <Button 
         variant="ghost" 
-        className="w-full flex justify-between items-center px-2 py-1 h-auto text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+        className="w-full flex justify-between items-center px-3 py-2 h-auto text-teal-700 dark:text-teal-300 hover:bg-teal-50 dark:hover:bg-teal-950 hover:text-teal-800 dark:hover:text-teal-200 font-medium"
         onClick={onToggleExpanded}
       >
-        <span className="font-medium">{group.name}</span>
+        <span>{group.name}</span>
         <ChevronDown 
           className={`h-4 w-4 transition-transform ${
             isExpanded ? 'transform rotate-180' : ''
@@ -73,7 +73,7 @@ const FilterGroup = ({ group, isExpanded, activeFilters, onToggleExpanded, onFil
         </div>
       )}
       
-      <Separator className="mt-2 bg-sidebar-border" />
+      <Separator className="mt-3 bg-teal-100 dark:bg-teal-800" />
     </div>
   );
 };

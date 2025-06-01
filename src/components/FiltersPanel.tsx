@@ -39,8 +39,8 @@ const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: 
   };
   
   const FiltersPanelContent = () => (
-    <div className="w-full md:w-64 space-y-6">
-      <div className="text-sm font-medium text-sidebar-foreground">Filter By</div>
+    <div className="w-full md:w-64 space-y-4">
+      <div className="text-sm font-semibold text-teal-700 dark:text-teal-300 mb-4">Filter By</div>
       
       {filters.map((group) => (
         <FilterGroup
@@ -55,7 +55,7 @@ const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: 
       
       <Button 
         variant="outline" 
-        className="w-full mt-4 text-sidebar-foreground border-sidebar-border hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+        className="w-full mt-6 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-700 hover:bg-teal-50 dark:hover:bg-teal-950 hover:text-teal-800 dark:hover:text-teal-200"
         onClick={clearFilters}
       >
         Clear all filters
@@ -63,13 +63,13 @@ const FiltersPanel = ({ filters, activeFilters, onFilterChange, clearFilters }: 
     </div>
   );
 
-  // Use drawer for mobile view with solid background
+  // Use drawer for mobile view
   if (isMobile) {
     return (
       <>
         <Drawer>
           <DrawerTrigger asChild>
-            <Button variant="outline" className="mb-4 w-full flex items-center gap-2">
+            <Button variant="outline" className="mb-4 w-full flex items-center gap-2 border-teal-200 dark:border-teal-700 hover:bg-teal-50 dark:hover:bg-teal-950">
               <Filter className="h-4 w-4" />
               <span>Filters</span>
             </Button>
