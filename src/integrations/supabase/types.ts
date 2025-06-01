@@ -39,6 +39,7 @@ export type Database = {
       founder_narratives: {
         Row: {
           before_after_positioning: Json | null
+          business_metrics: Json | null
           businesses_benefit: string[] | null
           common_lingo: string[] | null
           company: string
@@ -54,12 +55,14 @@ export type Database = {
           id: string
           industry: string
           key_phrase: string
+          key_strategic_breakthrough: string | null
           lingo_evolution: string | null
           market_before: string | null
           market_impact: Json | null
           market_landscape: Json | null
           market_themes: string[] | null
           market_transformation: string | null
+          markets_impacted: string[] | null
           meta_description: string | null
           meta_title: string | null
           metrics: Json | null
@@ -67,7 +70,9 @@ export type Database = {
           published: boolean | null
           similar_companies: string[] | null
           slug: string | null
+          strategic_influences: string[] | null
           strategic_insights: string[] | null
+          strategic_language: string[] | null
           strategic_patterns: string[] | null
           strategic_vision: string | null
           tagline: string | null
@@ -78,6 +83,7 @@ export type Database = {
         }
         Insert: {
           before_after_positioning?: Json | null
+          business_metrics?: Json | null
           businesses_benefit?: string[] | null
           common_lingo?: string[] | null
           company: string
@@ -93,12 +99,14 @@ export type Database = {
           id?: string
           industry: string
           key_phrase: string
+          key_strategic_breakthrough?: string | null
           lingo_evolution?: string | null
           market_before?: string | null
           market_impact?: Json | null
           market_landscape?: Json | null
           market_themes?: string[] | null
           market_transformation?: string | null
+          markets_impacted?: string[] | null
           meta_description?: string | null
           meta_title?: string | null
           metrics?: Json | null
@@ -106,7 +114,9 @@ export type Database = {
           published?: boolean | null
           similar_companies?: string[] | null
           slug?: string | null
+          strategic_influences?: string[] | null
           strategic_insights?: string[] | null
+          strategic_language?: string[] | null
           strategic_patterns?: string[] | null
           strategic_vision?: string | null
           tagline?: string | null
@@ -117,6 +127,7 @@ export type Database = {
         }
         Update: {
           before_after_positioning?: Json | null
+          business_metrics?: Json | null
           businesses_benefit?: string[] | null
           common_lingo?: string[] | null
           company?: string
@@ -132,12 +143,14 @@ export type Database = {
           id?: string
           industry?: string
           key_phrase?: string
+          key_strategic_breakthrough?: string | null
           lingo_evolution?: string | null
           market_before?: string | null
           market_impact?: Json | null
           market_landscape?: Json | null
           market_themes?: string[] | null
           market_transformation?: string | null
+          markets_impacted?: string[] | null
           meta_description?: string | null
           meta_title?: string | null
           metrics?: Json | null
@@ -145,7 +158,9 @@ export type Database = {
           published?: boolean | null
           similar_companies?: string[] | null
           slug?: string | null
+          strategic_influences?: string[] | null
           strategic_insights?: string[] | null
+          strategic_language?: string[] | null
           strategic_patterns?: string[] | null
           strategic_vision?: string | null
           tagline?: string | null
