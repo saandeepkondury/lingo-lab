@@ -14,7 +14,7 @@ const PricingPage = () => {
   const [billingFrequency, setBillingFrequency] = useState<'quarter' | 'year'>('quarter');
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
-  const { checkSubscription, createCheckout, loading } = useSubscription();
+  const { checkSubscription, createCheckout, loading, subscription_tier } = useSubscription();
   const location = useLocation();
   const isFromSignup = location.state?.fromSignup || document.referrer.includes('/join');
   
@@ -64,7 +64,7 @@ const PricingPage = () => {
         "Community support",
       ],
       description: "Perfect for founders exploring strategic narratives",
-      buttonText: "Get Started Free",
+      buttonText: subscription_tier === 'Basic' ? "Your Current Plan" : "Get Started Free",
       isPopular: false,
       onSubscribe: () => handleSubscribe('basic')
     },

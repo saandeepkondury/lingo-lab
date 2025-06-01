@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { Mail, Twitter, Linkedin } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -25,16 +26,19 @@ const Footer = () => {
             </Button>
           </div>
           
-          {isLoggedIn && (
-            <div>
-              <h3 className="font-medium text-lg mb-4">Resources</h3>
-              <ul className="space-y-2">
-                <li><Link to="/saved" className="text-muted-foreground hover:text-foreground transition-colors">Saved Case Studies</Link></li>
-                <li><Link to="/submit" className="text-muted-foreground hover:text-foreground transition-colors">Submit Lingo</Link></li>
-                <li><Link to="/newsletter" className="text-muted-foreground hover:text-foreground transition-colors">Newsletter</Link></li>
-              </ul>
-            </div>
-          )}
+          <div>
+            <h3 className="font-medium text-lg mb-4">Resources</h3>
+            <ul className="space-y-2">
+              <li><Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">Pricing</Link></li>
+              {isLoggedIn && (
+                <>
+                  <li><Link to="/saved" className="text-muted-foreground hover:text-foreground transition-colors">Saved Case Studies</Link></li>
+                  <li><Link to="/submit" className="text-muted-foreground hover:text-foreground transition-colors">Submit Lingo</Link></li>
+                  <li><Link to="/newsletter" className="text-muted-foreground hover:text-foreground transition-colors">Newsletter</Link></li>
+                </>
+              )}
+            </ul>
+          </div>
         </div>
         
         <div className="border-t border-border/40 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">

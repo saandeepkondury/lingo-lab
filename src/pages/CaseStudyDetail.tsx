@@ -9,6 +9,7 @@ import NewCaseStudyDetailHeader from '@/components/CaseStudy/NewCaseStudyDetailH
 import BeforeAfterSection from '@/components/CaseStudy/BeforeAfterSection';
 import StorySection from '@/components/CaseStudy/StorySection';
 import LockedContentSection from '@/components/CaseStudy/LockedContentSection';
+import CaseStudyAccessGate from '@/components/CaseStudy/CaseStudyAccessGate';
 import { useFounderNarrativeBySlug } from '@/hooks/useFounderNarratives';
 import { useCaseStudyAccess } from '@/hooks/useCaseStudyAccess';
 
@@ -102,8 +103,10 @@ const CaseStudyDetail = () => {
         {/* Story Section - Open to all */}
         <StorySection narrative={narrative} />
         
-        {/* Locked Content Section - Requires subscription */}
-        <LockedContentSection narrative={narrative} hasAccess={hasAccess} />
+        {/* Gated Content Section - Access controlled */}
+        <CaseStudyAccessGate caseStudyId={narrative.id}>
+          <LockedContentSection narrative={narrative} hasAccess={hasAccess} />
+        </CaseStudyAccessGate>
       </article>
     </Layout>
   );

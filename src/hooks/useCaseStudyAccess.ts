@@ -13,7 +13,7 @@ export const useCaseStudyAccess = () => {
   const [loading, setLoading] = useState(false);
 
   const checkAccessLimit = async () => {
-    if (!isLoggedIn || !user) return false;
+    if (!isLoggedIn || !user) return true; // Allow anonymous access
 
     // Pro and Lingo Strategy users have unlimited access
     if (subscription_tier === 'Pro' || subscription_tier === 'Lingo Strategy') {
@@ -52,8 +52,8 @@ export const useCaseStudyAccess = () => {
       return true;
     }
 
-    // Non-subscribers (shouldn't happen with new system, but fallback)
-    return false;
+    // Non-subscribers get limited access
+    return true;
   };
 
   const recordAccess = async (caseStudyId: string) => {
@@ -72,7 +72,15 @@ export const useCaseStudyAccess = () => {
   };
 
   const hasAccess = async (caseStudyId: string) => {
-    if (!isLoggedIn) return true; // Allow anonymous access to content
+    if (!isLoggedIn) {
+      // Show upgrade prompt for anonymous users
+      toast({
+        title: "Sign up required",
+        description: "Create a free account to access case studies!",
+        variant: "destructive"
+      });
+      return false;
+    }
     
     const canAccess = await checkAccessLimit();
     if (canAccess && subscription_tier === 'Basic') {
@@ -82,11 +90,40 @@ export const useCaseStudyAccess = () => {
     return canAccess;
   };
 
+  const checkIfCaseStudyAccessed = async (caseStudyId: string) => {
+    if (!isLoggedIn || !user) return false;
+    
+    // Pro and Lingo Strategy users always have access
+    if (subscription_tier === 'Pro' || subscription_tier === 'Lingo Strategy') {
+      return true;
+    }
+
+    // For Basic users, check if they've already accessed this specific case study
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
+    const { data, error } = await supabase
+      .from('user_case_study_access')
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('case_study_id', caseStudyId)
+      .gte('accessed_at', startOfMonth.toISOString());
+
+    if (error) {
+      console.error('Error checking case study access:', error);
+      return false;
+    }
+
+    return data && data.length > 0;
+  };
+
   return {
     hasAccess,
     accessCount,
     loading,
     checkAccessLimit,
+    checkIfCaseStudyAccessed,
     isBasicUser: subscription_tier === 'Basic',
     isProUser: subscription_tier === 'Pro' || subscription_tier === 'Lingo Strategy'
   };
