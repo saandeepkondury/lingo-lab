@@ -13,46 +13,7 @@ export const useCaseStudyAccess = () => {
   const [loading, setLoading] = useState(false);
 
   const checkAccessLimit = async () => {
-    if (!isLoggedIn || !user) return true; // Allow anonymous access
-
-    // Pro and Lingo Strategy users have unlimited access
-    if (subscription_tier === 'Pro' || subscription_tier === 'Lingo Strategy') {
-      return true;
-    }
-
-    // Basic users have 10 case studies per month
-    if (subscription_tier === 'Basic') {
-      const startOfMonth = new Date();
-      startOfMonth.setDate(1);
-      startOfMonth.setHours(0, 0, 0, 0);
-
-      const { data, error } = await supabase
-        .from('user_case_study_access')
-        .select('id')
-        .eq('user_id', user.id)
-        .gte('accessed_at', startOfMonth.toISOString());
-
-      if (error) {
-        console.error('Error checking access limit:', error);
-        return false;
-      }
-
-      const currentCount = data?.length || 0;
-      setAccessCount(currentCount);
-      
-      if (currentCount >= 10) {
-        toast({
-          title: "Monthly limit reached",
-          description: "You've read 10 case studies this month. Upgrade to Pro for unlimited access!",
-          variant: "destructive"
-        });
-        return false;
-      }
-      
-      return true;
-    }
-
-    // Non-subscribers get limited access
+    // Always allow access - no more pay locks
     return true;
   };
 
@@ -72,50 +33,13 @@ export const useCaseStudyAccess = () => {
   };
 
   const hasAccess = async (caseStudyId: string) => {
-    if (!isLoggedIn) {
-      // Show upgrade prompt for anonymous users
-      toast({
-        title: "Sign up required",
-        description: "Create a free account to access case studies!",
-        variant: "destructive"
-      });
-      return false;
-    }
-    
-    const canAccess = await checkAccessLimit();
-    if (canAccess && subscription_tier === 'Basic') {
-      await recordAccess(caseStudyId);
-    }
-    
-    return canAccess;
+    // Always return true - no more restrictions
+    return true;
   };
 
   const checkIfCaseStudyAccessed = async (caseStudyId: string) => {
-    if (!isLoggedIn || !user) return false;
-    
-    // Pro and Lingo Strategy users always have access
-    if (subscription_tier === 'Pro' || subscription_tier === 'Lingo Strategy') {
-      return true;
-    }
-
-    // For Basic users, check if they've already accessed this specific case study
-    const startOfMonth = new Date();
-    startOfMonth.setDate(1);
-    startOfMonth.setHours(0, 0, 0, 0);
-
-    const { data, error } = await supabase
-      .from('user_case_study_access')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('case_study_id', caseStudyId)
-      .gte('accessed_at', startOfMonth.toISOString());
-
-    if (error) {
-      console.error('Error checking case study access:', error);
-      return false;
-    }
-
-    return data && data.length > 0;
+    // Always return true - all content is accessible
+    return true;
   };
 
   return {

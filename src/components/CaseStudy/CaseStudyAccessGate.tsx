@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { useCaseStudyAccess } from '@/hooks/useCaseStudyAccess';
+import { useSubscription } from '@/hooks/useSubscription';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Lock, ArrowRight } from 'lucide-react';
+import { Lock, ArrowRight, Crown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface CaseStudyAccessGateProps {
@@ -14,63 +14,34 @@ interface CaseStudyAccessGateProps {
 
 const CaseStudyAccessGate = ({ caseStudyId, children }: CaseStudyAccessGateProps) => {
   const { isLoggedIn } = useAuth();
-  const { hasAccess, checkIfCaseStudyAccessed, isBasicUser, accessCount } = useCaseStudyAccess();
-  const [canAccess, setCanAccess] = useState(false);
-  const [hasAccessedBefore, setHasAccessedBefore] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { subscribed, subscription_tier } = useSubscription();
 
-  useEffect(() => {
-    const checkAccess = async () => {
-      setLoading(true);
-      
-      if (!isLoggedIn) {
-        setCanAccess(false);
-        setLoading(false);
-        return;
-      }
+  // Show premium overlay for non-subscribers
+  const showPremiumOverlay = !subscribed && isLoggedIn;
+  const showSignUpPrompt = !isLoggedIn;
 
-      // Check if user has accessed this case study before
-      const accessedBefore = await checkIfCaseStudyAccessed(caseStudyId);
-      setHasAccessedBefore(accessedBefore);
-
-      // If they've accessed it before, always allow access
-      if (accessedBefore) {
-        setCanAccess(true);
-        setLoading(false);
-        return;
-      }
-
-      // Check if they can access new case studies
-      const canAccessNew = await hasAccess(caseStudyId);
-      setCanAccess(canAccessNew);
-      setLoading(false);
-    };
-
-    checkAccess();
-  }, [caseStudyId, isLoggedIn, hasAccess, checkIfCaseStudyAccessed]);
-
-  if (loading) {
+  if (showSignUpPrompt) {
     return (
-      <div className="flex justify-center items-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500"></div>
-      </div>
-    );
-  }
-
-  if (!isLoggedIn) {
-    return (
-      <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-12">
-        <div className="container max-w-4xl mx-auto px-6">
-          <Card className="border-2 border-teal-200 dark:border-teal-700">
+      <div className="relative">
+        {/* Background content - slightly blurred */}
+        <div className="filter blur-sm pointer-events-none">
+          {children}
+        </div>
+        
+        {/* Overlay for sign up prompt */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/95 to-gray-100/95 dark:from-gray-900/95 dark:to-gray-800/95 backdrop-blur-md flex items-center justify-center">
+          <Card className="border-2 border-teal-200 dark:border-teal-700 max-w-md mx-4">
             <CardContent className="p-8 text-center">
-              <Lock className="h-12 w-12 text-teal-500 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold mb-4">Sign Up for Free Access</h3>
+              <Crown className="h-12 w-12 text-teal-500 mx-auto mb-4" />
+              <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
+                Join Elite Founders
+              </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Create a free account to access this case study and 10 more each month.
+                Access strategic narratives from VC-backed success stories. Join thousands of founders learning from the best.
               </p>
-              <Button asChild className="bg-teal-500 hover:bg-teal-600">
+              <Button asChild className="bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white">
                 <Link to="/join">
-                  Get Free Access <ArrowRight className="ml-2 h-4 w-4" />
+                  Start Free <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
             </CardContent>
@@ -80,23 +51,31 @@ const CaseStudyAccessGate = ({ caseStudyId, children }: CaseStudyAccessGateProps
     );
   }
 
-  if (!canAccess && !hasAccessedBefore && isBasicUser) {
+  if (showPremiumOverlay) {
     return (
-      <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-12">
-        <div className="container max-w-4xl mx-auto px-6">
-          <Card className="border-2 border-orange-200 dark:border-orange-700">
+      <div className="relative">
+        {/* Background content - slightly blurred */}
+        <div className="filter blur-sm pointer-events-none">
+          {children}
+        </div>
+        
+        {/* Premium overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/90 to-gray-100/90 dark:from-gray-900/90 dark:to-gray-800/90 backdrop-blur-md flex items-center justify-center">
+          <Card className="border-2 border-gradient-to-r from-purple-200 to-pink-200 dark:from-purple-700 dark:to-pink-700 max-w-md mx-4">
             <CardContent className="p-8 text-center">
-              <Lock className="h-12 w-12 text-orange-500 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold mb-4">Monthly Limit Reached</h3>
+              <Crown className="h-12 w-12 text-purple-500 mx-auto mb-4" />
+              <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                Premium Strategic Insights
+              </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-2">
-                You've accessed {accessCount}/10 case studies this month.
+                Unlock advanced analysis and strategic patterns used by top VC-backed companies.
               </p>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Upgrade to Professional for unlimited access to all case studies.
+                Get unlimited access to all case studies and exclusive founder insights.
               </p>
-              <Button asChild className="bg-orange-500 hover:bg-orange-600">
+              <Button asChild className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white">
                 <Link to="/pricing">
-                  Upgrade to Professional <ArrowRight className="ml-2 h-4 w-4" />
+                  Upgrade to Premium <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
             </CardContent>
@@ -106,6 +85,7 @@ const CaseStudyAccessGate = ({ caseStudyId, children }: CaseStudyAccessGateProps
     );
   }
 
+  // Show full content for subscribers
   return <>{children}</>;
 };
 

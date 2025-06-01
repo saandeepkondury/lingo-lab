@@ -11,12 +11,10 @@ import StorySection from '@/components/CaseStudy/StorySection';
 import LockedContentSection from '@/components/CaseStudy/LockedContentSection';
 import CaseStudyAccessGate from '@/components/CaseStudy/CaseStudyAccessGate';
 import { useFounderNarrativeBySlug } from '@/hooks/useFounderNarratives';
-import { useCaseStudyAccess } from '@/hooks/useCaseStudyAccess';
 
 const CaseStudyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { isLoggedIn } = useAuth();
-  const { hasAccess } = useCaseStudyAccess();
   
   const { data: narrative, isLoading, error } = useFounderNarrativeBySlug(slug || '');
   
@@ -27,8 +25,15 @@ const CaseStudyDetail = () => {
   if (isLoading) {
     return (
       <Layout>
-        <div className="container max-w-4xl mx-auto px-6 py-20">
-          <div className="text-center">Loading...</div>
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50 dark:from-gray-950 dark:via-gray-900 dark:to-teal-950">
+          <div className="container max-w-4xl mx-auto px-6 py-20">
+            <div className="text-center">
+              <div className="animate-pulse">
+                <div className="h-8 bg-gradient-to-r from-teal-200 to-blue-200 rounded-lg w-64 mx-auto mb-4"></div>
+                <div className="h-4 bg-gray-200 rounded w-96 mx-auto"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </Layout>
     );
@@ -60,7 +65,7 @@ const CaseStudyDetail = () => {
     "publisher": {
       "@type": "Organization",
       "name": "LingoLab",
-      "description": "Strategic narrative case studies and insights for startups",
+      "description": "Strategic narrative case studies and insights for VC-backed startups",
       "url": window.location.origin,
       "logo": `${window.location.origin}/placeholder.svg`
     },
@@ -93,21 +98,23 @@ const CaseStudyDetail = () => {
         structuredData={structuredData}
       />
       
-      <article className="bg-white dark:bg-gray-900">
-        {/* New Header Format with Save Button */}
-        <NewCaseStudyDetailHeader narrative={narrative} slug={slug} />
-        
-        {/* Before/After Section - Open to all */}
-        <BeforeAfterSection narrative={narrative} />
-        
-        {/* Story Section - Open to all */}
-        <StorySection narrative={narrative} />
-        
-        {/* Gated Content Section - Access controlled */}
-        <CaseStudyAccessGate caseStudyId={narrative.id}>
-          <LockedContentSection narrative={narrative} hasAccess={hasAccess} />
-        </CaseStudyAccessGate>
-      </article>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50 dark:from-gray-950 dark:via-gray-900 dark:to-teal-950">
+        <article className="bg-transparent">
+          {/* New Header Format with Save Button */}
+          <NewCaseStudyDetailHeader narrative={narrative} slug={slug} />
+          
+          {/* Before/After Section - Open to all */}
+          <BeforeAfterSection narrative={narrative} />
+          
+          {/* Story Section - Open to all */}
+          <StorySection narrative={narrative} />
+          
+          {/* Premium Content Section - Show with overlay for non-subscribers */}
+          <CaseStudyAccessGate caseStudyId={narrative.id}>
+            <LockedContentSection narrative={narrative} />
+          </CaseStudyAccessGate>
+        </article>
+      </div>
     </Layout>
   );
 };
