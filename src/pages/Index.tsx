@@ -1,17 +1,23 @@
 
 import Layout from '@/components/Layout';
 import HeroSection from '@/components/home/HeroSection';
-import FeaturedCaseStudies from '@/components/home/FeaturedCaseStudies';
-import ValueProposition from '@/components/home/ValueProposition';
-import CTASection from '@/components/home/CTASection';
+import IntroSection from '@/components/home/IntroSection';
+import DeliverablesSection from '@/components/home/DeliverablesSection';
+import TestimonialsSection from '@/components/home/TestimonialsSection';
+import PricingSection from '@/components/home/PricingSection';
+import VCFilterSection from '@/components/home/VCFilterSection';
+import NewsletterSection from '@/components/home/NewsletterSection';
 
 const Index = () => {
   return (
     <Layout>
       <HeroSection />
-      <FeaturedCaseStudies />
-      <ValueProposition />
-      <CTASection />
+      <IntroSection />
+      <DeliverablesSection />
+      <TestimonialsSection />
+      <PricingSection />
+      <VCFilterSection />
+      <NewsletterSection />
     </Layout>
   );
 };
