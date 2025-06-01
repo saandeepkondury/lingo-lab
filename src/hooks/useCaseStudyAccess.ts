@@ -15,8 +15,8 @@ export const useCaseStudyAccess = () => {
   const checkAccessLimit = async () => {
     if (!isLoggedIn || !user) return false;
 
-    // Pro users have unlimited access
-    if (subscription_tier === 'Pro' || subscription_tier === 'Investor') {
+    // Pro and Lingo Strategy users have unlimited access
+    if (subscription_tier === 'Pro' || subscription_tier === 'Lingo Strategy') {
       return true;
     }
 
@@ -37,11 +37,22 @@ export const useCaseStudyAccess = () => {
         return false;
       }
 
-      setAccessCount(data?.length || 0);
-      return (data?.length || 0) < 10;
+      const currentCount = data?.length || 0;
+      setAccessCount(currentCount);
+      
+      if (currentCount >= 10) {
+        toast({
+          title: "Monthly limit reached",
+          description: "You've read 10 case studies this month. Upgrade to Pro for unlimited access!",
+          variant: "destructive"
+        });
+        return false;
+      }
+      
+      return true;
     }
 
-    // Non-subscribers can't access locked content
+    // Non-subscribers (shouldn't happen with new system, but fallback)
     return false;
   };
 
@@ -61,7 +72,7 @@ export const useCaseStudyAccess = () => {
   };
 
   const hasAccess = async (caseStudyId: string) => {
-    if (!isLoggedIn) return false;
+    if (!isLoggedIn) return true; // Allow anonymous access to content
     
     const canAccess = await checkAccessLimit();
     if (canAccess && subscription_tier === 'Basic') {
@@ -77,6 +88,6 @@ export const useCaseStudyAccess = () => {
     loading,
     checkAccessLimit,
     isBasicUser: subscription_tier === 'Basic',
-    isProUser: subscription_tier === 'Pro' || subscription_tier === 'Investor'
+    isProUser: subscription_tier === 'Pro' || subscription_tier === 'Lingo Strategy'
   };
 };

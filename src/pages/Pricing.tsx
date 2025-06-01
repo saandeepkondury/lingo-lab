@@ -40,24 +40,31 @@ const PricingPage = () => {
   }, [searchParams, toast, checkSubscription]);
 
   const handleSubscribe = (planType: 'basic' | 'pro' | 'investor') => {
+    if (planType === 'basic') {
+      toast({
+        title: "Welcome to LingoLab!",
+        description: "You're already on our free Basic plan. Start exploring case studies!",
+      });
+      return;
+    }
     createCheckout(planType, billingFrequency);
   };
 
   const plans = [
     {
       name: "BASIC",
-      price: "49",
-      yearlyPrice: "44", // 10% discount: $528/12 = $44/month
-      period: "quarter",
+      price: "0",
+      yearlyPrice: "0",
+      period: "forever",
       features: [
         "10 case studies per month",
+        "Access to full case study library",
         "Advanced search functionality", 
         "Weekly narrative insights",
-        "Full case study library",
         "Community support",
       ],
       description: "Perfect for founders exploring strategic narratives",
-      buttonText: loading ? "Processing..." : "Start Learning",
+      buttonText: "Get Started Free",
       isPopular: false,
       onSubscribe: () => handleSubscribe('basic')
     },
@@ -83,8 +90,8 @@ const PricingPage = () => {
     },
     {
       name: "LINGO STRATEGY",
-      price: "4999",
-      yearlyPrice: "4999",
+      price: "500",
+      yearlyPrice: "500",
       period: "one-time",
       features: [
         "Everything in Professional",
@@ -96,7 +103,7 @@ const PricingPage = () => {
         "Ongoing support & refinement",
         "Investor deck narrative review",
       ],
-      description: "For large organizations with specific needs",
+      description: "For founders ready to transform their narrative",
       buttonText: loading ? "Processing..." : "Transform Your Narrative",
       isPopular: false,
       onSubscribe: () => handleSubscribe('investor')
@@ -105,8 +112,8 @@ const PricingPage = () => {
 
   const title = isFromSignup ? 'Start Your Narrative Journey' : 'Transform Your Strategic Narrative';
   const description = isFromSignup 
-    ? 'Learn from successful founders, then transform your own narrative with our proven methodology\nFrom studying success stories to implementing your own winning narrative strategy'
-    : 'Learn from the best case studies, then work with us to completely transform your strategic narrative\nFrom studying success stories to implementing your own winning narrative strategy';
+    ? 'Start with our free plan and upgrade when you need more\nFrom studying success stories to implementing your own winning narrative strategy'
+    : 'Start with our free plan and upgrade when you need more\nFrom studying success stories to implementing your own winning narrative strategy';
   
   return (
     <Layout>
@@ -115,7 +122,7 @@ const PricingPage = () => {
           {isFromSignup && (
             <div className="mb-6 p-4 bg-teal-50 dark:bg-teal-900/30 border border-teal-200 dark:border-teal-700 rounded-lg text-center">
               <p className="text-teal-800 dark:text-teal-200 font-medium">
-                🎉 Account created successfully! Choose a plan to start your strategic narrative journey.
+                🎉 Account created successfully! You're on our free Basic plan - start exploring case studies!
               </p>
             </div>
           )}

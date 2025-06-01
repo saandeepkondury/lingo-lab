@@ -76,7 +76,7 @@ serve(async (req) => {
 
     let session;
     if (planType === "investor") {
-      // One-time payment for Lingo Strategy plan at $4999
+      // One-time payment for Lingo Strategy plan at $500
       session = await stripe.checkout.sessions.create({
         customer: customerId,
         customer_email: customerId ? undefined : user.email,
@@ -85,7 +85,7 @@ serve(async (req) => {
             price_data: {
               currency: "usd",
               product_data: { name: "Lingo Strategy - 3 Month Program" },
-              unit_amount: 499900, // $4999 in cents
+              unit_amount: 50000, // $500 in cents
             },
             quantity: 1,
           },
@@ -100,17 +100,21 @@ serve(async (req) => {
         },
       });
       logStep("Lingo Strategy payment session created", { sessionId: session.id });
+    } else if (planType === "basic") {
+      // Basic is now free - no checkout needed
+      logStep("Basic plan is free - no checkout needed");
+      return new Response(JSON.stringify({ message: "Basic plan is free" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      });
     } else {
-      // Recurring subscription for Basic/Pro plans
+      // Recurring subscription for Pro plan only
       const planPrices = {
-        // Basic: $49/quarter ($147) or $528/year 
-        basic: billingFrequency === 'year' ? 52800 : 14700, // $528 annually or $147 quarterly
         // Pro: $99/quarter ($297) or $1080/year
         pro: billingFrequency === 'year' ? 108000 : 29700,   // $1080 annually or $297 quarterly
       };
 
       const planNames = {
-        basic: "Basic Plan - LingoLab",
         pro: "Pro Plan - LingoLab",
       };
 

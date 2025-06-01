@@ -57,34 +57,34 @@ serve(async (req) => {
       apiVersion: "2023-10-16",
     });
 
+    // Use service role for database operations
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      { auth: { persistSession: false } }
+    );
+
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
     
     if (customers.data.length === 0) {
-      logStep("No customer found, updating unsubscribed state");
-      
-      // Use service role for database operations
-      const supabaseClient = createClient(
-        Deno.env.get("SUPABASE_URL") ?? "",
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-        { auth: { persistSession: false } }
-      );
+      logStep("No customer found, setting Basic plan as default");
       
       await supabaseClient.from("subscribers").upsert({
         email: user.email,
         user_id: user.id,
         stripe_customer_id: null,
-        subscribed: false,
-        subscription_tier: null,
-        subscription_end: null,
-        plan_type: null,
+        subscribed: true, // Basic is considered "subscribed" but free
+        subscription_tier: "Basic",
+        subscription_end: null, // Basic never expires
+        plan_type: "basic",
         billing_frequency: null,
-        monthly_case_study_limit: null,
+        monthly_case_study_limit: 10,
         updated_at: new Date().toISOString(),
       }, { onConflict: 'email' });
       
       return new Response(JSON.stringify({ 
-        subscribed: false, 
-        subscription_tier: null, 
+        subscribed: true, 
+        subscription_tier: "Basic", 
         subscription_end: null 
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -103,11 +103,11 @@ serve(async (req) => {
     });
     
     let hasActiveSub = false;
-    let subscriptionTier = null;
+    let subscriptionTier = "Basic"; // Default to Basic
     let subscriptionEnd = null;
-    let planType = null;
+    let planType = "basic";
     let billingFrequency = null;
-    let monthlyLimit = null;
+    let monthlyLimit = 10; // Basic plan limit
 
     // Check for one-time payments (for Lingo Strategy plan)
     const payments = await stripe.paymentIntents.list({
@@ -117,7 +117,7 @@ serve(async (req) => {
 
     const successfulLingoStrategyPayment = payments.data.find(payment => 
       payment.status === 'succeeded' && 
-      payment.amount === 499900 && 
+      payment.amount === 50000 && // $500 in cents
       payment.created > (Date.now() / 1000) - (365 * 24 * 60 * 60) // Within last year
     );
 
@@ -153,14 +153,8 @@ serve(async (req) => {
           billingFrequency = "quarter";
         }
         
-        // Determine tier based on amount
-        // Basic: $147 quarterly ($14700 cents) or $528 annually ($52800 cents)
-        // Pro: $297 quarterly ($29700 cents) or $1080 annually ($108000 cents)
-        if (amount <= 52800) { // Basic plan (quarterly $14700 or annual $52800)
-          subscriptionTier = "Basic";
-          planType = "basic";
-          monthlyLimit = 10; // 10 case studies per month
-        } else if (amount <= 108000) { // Pro plan (quarterly $29700 or annual $108000)
+        // Determine tier based on amount (Pro only since Basic is free)
+        if (amount <= 108000) { // Pro plan (quarterly $29700 or annual $108000)
           subscriptionTier = "Pro";
           planType = "pro";
           monthlyLimit = null; // Unlimited access
@@ -171,22 +165,21 @@ serve(async (req) => {
         }
         logStep("Determined subscription tier", { priceId, amount, subscriptionTier, billingFrequency, monthlyLimit });
       } else {
-        logStep("Subscription found but expired", { 
+        logStep("Subscription found but expired, reverting to Basic", { 
           subscriptionId: subscription.id, 
           endDate: subscription.current_period_end,
           now: now 
         });
+        // Expired subscription - revert to Basic
+        hasActiveSub = true; // Basic is always "active"
+        subscriptionTier = "Basic";
+        planType = "basic";
+        monthlyLimit = 10;
       }
     } else {
-      logStep("No active subscription found");
+      logStep("No active subscription found, setting Basic as default");
+      hasActiveSub = true; // Basic is always "active"
     }
-
-    // Use service role for database operations
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-      { auth: { persistSession: false } }
-    );
 
     await supabaseClient.from("subscribers").upsert({
       email: user.email,
